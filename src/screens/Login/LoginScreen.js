@@ -8,6 +8,7 @@ import ButtonComponent from '../../components/Button/Button';
 import LoginAPI from '../../api/Login/LoginAPI';
 import Validation from '../../validation/Login/LoginValidation';
 import Toast, {DURATION} from 'react-native-easy-toast';
+import { LOGO } from '../../assets/index';
 
 class LoginScreen extends Component {
   state = {
@@ -37,9 +38,9 @@ class LoginScreen extends Component {
       <View style={styles.containerStyle}>
         <StatusBarComponent styleType={0} />
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <Image source={require('../../assets/images/logo.png')} />
+          <Image source={LOGO} />
         </View>
-        <Label labelValue="Username" style={{}} />
+        <Label labelValue="Username" />
         <TextBox
           placeHolderValue="Username"
           textValue={this.state.UserName}
