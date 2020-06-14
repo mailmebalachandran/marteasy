@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         padding:10
     },
     cardContainer: {
-        height: 300,
+        height: 200,
     },
     cardTitle: {
         color: "black",
@@ -19,11 +19,12 @@ const styles = StyleSheet.create({
     cardContentContainer: {
         padding:0,
         margin: 0,
-        height: 150,
+        height: 100,
     },
     productImage: {
         height: 100,
         width: 100,
+        marginTop: "-10%"
     },
     pricingContainer: {
         padding: 0,
@@ -31,9 +32,18 @@ const styles = StyleSheet.create({
         shadowColor: 'white',
         shadowOpacity: 0,
         borderWidth: 0,
+        height: 70,
+        marginTop: "-40%"
     },
     pricingTitle: {
         height: 0,
+    },
+    priceText: {
+        fontSize: 20,
+        marginTop: "-1%"
+    },
+    description: {
+        marginTop: "-5%",
     }
 });
 

@@ -1,1 +1,1 @@
-export const NO_PRODUCTS = "Store Hasn't Products To Display"
+export const NO_PRODUCTS = "Store Has No Products To Display"

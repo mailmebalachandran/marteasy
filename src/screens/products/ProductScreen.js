@@ -79,11 +79,12 @@ class ProductScreen extends Component {
                                     subtitle={<PricingCard
                                         containerStyle={styles.pricingContainer}
                                         titleStyle={styles.pricingTitle}
-                                        color="#4f9deb"
                                         price={"Rs." + item.price}
+                                        pricingStyle={styles.priceText}
                                         info={[
                                             getItemTransformedItemDesc(item.short_description)
                                         ]}
+                                        infoStyle={styles.description}
                                         button={{ title: 'ADD', icon: 'shopping-cart' }}
                                         color={ThemeColor.DarkColor}
                                     />
