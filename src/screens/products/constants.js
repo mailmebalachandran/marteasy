@@ -1,0 +1,1 @@
+export const NO_PRODUCTS = "Store Hasn't Products To Display"

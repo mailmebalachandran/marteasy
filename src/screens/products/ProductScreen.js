@@ -1,59 +1,101 @@
 import React, { Component } from 'react';
-import axios from "axios"
-import { View, Text, Image, SafeAreaView, FlatList } from 'react-native';
+import { SafeAreaView, FlatList } from 'react-native';
 import styles from './styles';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
-import { LOGO } from "../../assets"
+import { Card, ListItem, Text, PricingCard } from 'react-native-elements';
 import ProductAPI from '../../api/Products/ProductAPI';
 import Header from '../../components/Header/Header';
+import { getItemTransformedItemDesc } from "./utils";
+import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
+import * as ThemeColor from "../../themes/colors";
+import { NO_PRODUCTS } from "./constants";
 
 class ProductScreen extends Component {
     state = {
         productList: [],
         message: "",
+        isLoading: false,
+        infoMessage: NO_PRODUCTS
     };
     componentDidMount = async () => {
-        const productList = await ProductAPI("2");
-        this.setState({ productList });
+        this.setState({
+            isLoading: true,
+            productList: [],
+            infoMessage: ""
+        })
+        const productList = await ProductAPI(this.props.route.params.storeId);
+        this.setState({ productList }, () => {
+            this.state.productList.length === 0 &&
+                this.setState({ infoMessage: NO_PRODUCTS })
+            this.setState({ isLoading: false });
+        });
+    }
+    componentDidUpdate = async (prevProps) => {
+        if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
+            this.setState({
+                isLoading: true,
+                productList: [],
+                infoMessage: ""
+            })
+            const productList = await ProductAPI(this.props.route.params.storeId);
+            this.setState({ productList }, () => {
+                this.state.productList.length === 0 &&
+                    this.setState({ infoMessage: NO_PRODUCTS })
+                this.setState({ isLoading: false });
+            });
+        }
+    }
+    componentWillUnmount() {
+        this.setState({ infoMessage: "" })
+    }
+    renderRating = (rating) => {
+        return ""
     }
     render() {
+        const { storeName, storeOpen } = this.props.route.params
         return (
             <SafeAreaView style={styles.container}>
-                   <StatusBarComponent styleType={0} />
-        <Header navigation={this.props.navigation} titleValue="Products" />
                 <StatusBarComponent styleType={0} />
-                <FlatList
-                    data={this.state.productList}
-                    renderItem={({ item }) => (
-                        <Card
-                            style={styles.cardContainer}
-                        >
-                            {/* <View style={styles.imageView}>
-                                <Image
-                                    style={styles.imageStyles}
-                                    resizeMode="cover"
-                                    source={{ uri: item.images[0].src }}
-                                />
-                            </View>
-                            <View style={styles.detailsView}>
-                                <Text>
-                                    {item.short_description}
-                                </Text>
-                            </View> */}
-                            <ListItem
+                <Header navigation={this.props.navigation} titleValue={storeName} />
+                <ActivityContainer isLoading={this.state.isLoading} />
+                {this.state.productList.length === 0 ?
+                    <Text h3>{this.state.infoMessage}</Text> :
+                    <FlatList
+                        data={this.state.productList}
+                        renderItem={({ item }) => (
+                            <Card
+                                containerStyle={styles.cardContainer}
+                                title={item.name.toUpperCase()}
                                 key={item.id}
-                                leftAvatar={{ source: { uri: item.images[0].src } }}
-                                title={item.name}
-                                subtitle={item.short_description}
-                            />
-                        </Card>
+                                titleStyle={styles.cardTitle}
+                                wrapperStyle={styles.cardContentContainer}
+                            >
+                                <ListItem
+                                    key={item.id}
+                                    leftAvatar={{
+                                        source: { uri: item.images[0].src },
+                                        style: styles.productImage
+                                    }}
+                                    subtitle={<PricingCard
+                                        containerStyle={styles.pricingContainer}
+                                        titleStyle={styles.pricingTitle}
+                                        color="#4f9deb"
+                                        price={"Rs." + item.price}
+                                        info={[
+                                            getItemTransformedItemDesc(item.short_description)
+                                        ]}
+                                        button={{ title: 'ADD', icon: 'shopping-cart' }}
+                                        color={ThemeColor.DarkColor}
+                                    />
+                                    }
+                                />
+                            </Card>
 
-                    )
-                    }
-                    keyExtractor={product => product.id}
-                />
-
+                        )
+                        }
+                        keyExtractor={item => item.id}
+                    />
+                }
             </SafeAreaView >
         );
     }

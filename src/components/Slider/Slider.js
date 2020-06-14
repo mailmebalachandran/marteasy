@@ -16,7 +16,7 @@ export default class Slider extends Component {
               ref={(c) => { this._carousel = c; }}
               data={this.props.dataValues}
               renderItem={({item}) => (
-                <Card containerStyle={{padding:0}}>
+                <Card containerStyle={{padding:0, marginLeft: "-43%", marginRight: "43%"}}>
                     <Image
                       source={item.name} style={{height:200,width:'100%'}}
                     />
