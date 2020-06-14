@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <NavigationContainer>
         <Drawer.Navigator
-          initialRouteName="Home"
+          initialRouteName="Logout"
           drawerStyle={{backgroundColor: ThemeColor.LightDrawerColor}}
           drawerContentOptions={{
             activeBackgroundColor: ThemeColor.PrimaryColor,
