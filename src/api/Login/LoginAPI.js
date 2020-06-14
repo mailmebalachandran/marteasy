@@ -11,6 +11,7 @@ const LoginValidation = async userDetails => {
       '{"message":"Logged in successfully", "isValidated":true}'
     );
   } catch (err) {
+    console.log(err);
     return JSON.parse('{"message":"Invalid Credentials", "isValidated":false}');
   }
 };
