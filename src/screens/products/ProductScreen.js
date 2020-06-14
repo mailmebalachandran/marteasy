@@ -6,6 +6,8 @@ import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
 import { LOGO } from "../../assets"
 import ProductAPI from '../../api/Products/ProductAPI';
+import Header from '../../components/Header/Header';
+
 class ProductScreen extends Component {
     state = {
         productList: [],
@@ -18,6 +20,8 @@ class ProductScreen extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                   <StatusBarComponent styleType={0} />
+        <Header navigation={this.props.navigation} titleValue="Products" />
                 <StatusBarComponent styleType={0} />
                 <FlatList
                     data={this.state.productList}

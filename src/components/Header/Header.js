@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text, Image} from 'react-native';
 import {Avatar, Badge} from 'react-native-elements';
-import {LOGO, ADDTOCART} from '../../assets/index';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ThemeColor from '../../themes/colors';
 
@@ -22,13 +21,12 @@ class Header extends Component {
           </TouchableOpacity>
         </View>
         <View style={{flex: 0.5, justifyContent:'center'}}>
-          <Text>Dashboard</Text>
+          <Text>{this.props.titleValue}</Text>
         </View>
         <View style={styles.addToCartContainerStyle}>
           <View>
           <Avatar rounded icon={{ name: 'shopping-cart', size:35 }} />
             <Badge
-              status="success"
               containerStyle={{position: 'absolute', top: -5, right: 15}}
               value="88"
               badgeStyle={{backgroundColor:'red'}}

@@ -1,15 +1,10 @@
 import React, {Component} from 'react';
 import {View, Image, FlatList, SafeAreaView, Text } from 'react-native';
-import Label from '../../components/Label/Label';
-import ShopCardView from '../../components/ShopCardView/ShopCardView';
 import styles from './styles';
-import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import { Card } from 'react-native-elements';
 import * as ThemeColor from '../../themes/colors';
-// import LoginAPI from '../../api/Login/ShopAPI';
 
 class DashboardShopView extends Component {
-
     state = {
         ShopList:[
             {
