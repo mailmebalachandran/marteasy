@@ -26,6 +26,8 @@ class LoginScreen extends Component {
       let result = await LoginAPI.LoginValidation(userDetails);
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
+      }else{
+        this.props.navigation.navigate('Home');
       }
     }
     else{
