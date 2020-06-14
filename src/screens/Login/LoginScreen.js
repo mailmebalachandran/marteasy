@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Image} from 'react-native';
-import TextBox from '../../components/TextBox/TextBox';
+import TextBox from '../../components/Textbox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
