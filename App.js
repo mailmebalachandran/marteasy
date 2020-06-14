@@ -13,13 +13,13 @@ class App extends Component {
     return (
       <NavigationContainer>
         <Drawer.Navigator
-          initialRouteName="Logout"
+          initialRouteName="HomeScreen"
           drawerStyle={{backgroundColor: ThemeColor.LightDrawerColor}}
           drawerContentOptions={{
-            activeBackgroundColor: ThemeColor.PrimaryColor,
+            activeBackgroundColor: ThemeColor.DarkColor,
             activeTintColor: ThemeColor.PrimaryTextColor,
           }}>
-          <Drawer.Screen name="Home" component={HomeScreen} />
+          <Drawer.Screen name="Home" component={HomeScreen} initialParams={{ storeId: null }}/>
           <Drawer.Screen name="Product" component={Product} />
           <Drawer.Screen name="Logout" component={LoginScreen} />
         </Drawer.Navigator>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, ScrollView} from 'react-native';
 import {Text} from 'react-native-elements';
 import Header from '../../components/Header/Header';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
@@ -23,7 +23,6 @@ class HomeScreen extends Component {
 
   getStoresOnLoad = async () => {
     let result = await HomeAPI.GetStores();
-    console.log(result);
     if (result !== undefined) {
       this.setState({ShopList: result});
     }
@@ -48,12 +47,17 @@ class HomeScreen extends Component {
       <SafeAreaView style={{flex: 1, backgroundColor:'white'}}>
         <StatusBarComponent styleType={0} />
         <Header navigation={this.props.navigation} titleValue="Home" />
+        <ScrollView>
         <Slider dataValues={topPicks} />
         <Text style={{backgroundColor:'white', marginLeft:10, marginTop:20}}>Featured Stores</Text>
-        <StoreList dataValues={this.state.ShopList} />
+        <StoreList 
+          dataValues={this.state.ShopList} 
+          navigation={this.props.navigation}
+        />
         <Toast
           ref="toast"
           style={{backgroundColor: '#dfdfdf'}}
+          
           position="top"
           positionValue={100}
           fadeInDuration={750}
@@ -61,6 +65,7 @@ class HomeScreen extends Component {
           opacity={0.8}
           textStyle={{color: 'black'}}
         />
+        </ScrollView>
       </SafeAreaView>
     );
   }

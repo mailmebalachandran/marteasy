@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { PrimaryColor } from '../../themes/colors';
 
 const styles = StyleSheet.create({
     containerStyle:{
@@ -9,21 +10,40 @@ const styles = StyleSheet.create({
         padding:10
     },
     cardContainer: {
-        flex: 1,
-        flexDirection:"row",
+        height: 200,
     },
-    imageView: {
-        flex: 1,
-        width: "50%",
+    cardTitle: {
+        color: "black",
+        fontSize: 25,
     },
-    imageStyles: {
-        width: 100,
+    cardContentContainer: {
+        padding:0,
+        margin: 0,
         height: 100,
     },
-    detailsView: {
-        flex: 2,
-        justifyContent: "flex-end",
-        width: "40%",
+    productImage: {
+        height: 100,
+        width: 100,
+        marginTop: "-10%"
+    },
+    pricingContainer: {
+        padding: 0,
+        margin: 0,
+        shadowColor: 'white',
+        shadowOpacity: 0,
+        borderWidth: 0,
+        height: 70,
+        marginTop: "-40%"
+    },
+    pricingTitle: {
+        height: 0,
+    },
+    priceText: {
+        fontSize: 20,
+        marginTop: "-1%"
+    },
+    description: {
+        marginTop: "-5%",
     }
 });
 
