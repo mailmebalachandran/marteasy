@@ -1,0 +1,1 @@
+export const LoginAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/jwt-auth/v1/token";
