@@ -5,8 +5,7 @@ import {View, TouchableOpacity, Text, Image} from 'react-native';
 import LoginScreen from './src/screens/Login/LoginScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import * as ThemeColor from './src/themes/colors';
-import DashBoardView from './src/screens/Shop/DashboardShopView';
-import Product from './src/screens/products/ProductScreen';
+import Product from './src/screens/Products/ProductScreen';
 
 class App extends Component {
   render() {
@@ -14,17 +13,15 @@ class App extends Component {
     return (
       <NavigationContainer>
         <Drawer.Navigator
-          initialRouteName="Logout"
+          initialRouteName="Home"
           drawerStyle={{backgroundColor: ThemeColor.LightDrawerColor}}
           drawerContentOptions={{
             activeBackgroundColor: ThemeColor.PrimaryColor,
             activeTintColor: ThemeColor.PrimaryTextColor,
           }}>
           <Drawer.Screen name="Home" component={HomeScreen} />
-          <Drawer.Screen name="Logout" component={LoginScreen} />
-          <Drawer.Screen name="DashBoard" component={DashBoardView} />
           <Drawer.Screen name="Product" component={Product} />
-          
+          <Drawer.Screen name="Logout" component={LoginScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
     );

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, ActivityIndicator} from 'react-native';
 import TextBox from '../../components/TextBox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
@@ -9,14 +9,17 @@ import LoginAPI from '../../api/Login/LoginAPI';
 import Validation from '../../validation/Login/LoginValidation';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import { LOGO } from '../../assets/index';
+import * as ThemeColor from '../../themes/colors';
 
 class LoginScreen extends Component {
   state = {
     UserName: '',
     Password: '',
+    IsLoaded: false
   };
 
   onSubmitHandler = async () => {
+    this.setState({IsLoaded: true});
     const userDetails = {
       username: this.state.UserName,
       password: this.state.Password,
@@ -29,15 +32,18 @@ class LoginScreen extends Component {
       }else{
         this.props.navigation.navigate('Home');
       }
+      this.setState({IsLoaded: false});
     }
     else{
       this.refs.toast.show(validationResult.message, DURATION.LENGTH_LONG);
+      this.setState({IsLoaded: false});
     }
   };
 
   render() {
     return (
       <View style={styles.containerStyle}>
+        {this.state.IsLoaded && <ActivityIndicator size='large' color={ThemeColor.DarkColor} />}
         <StatusBarComponent styleType={0} />
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Image source={LOGO} />
