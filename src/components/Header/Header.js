@@ -27,8 +27,8 @@ class Header extends Component {
           <View>
           <Avatar rounded icon={{ name: 'shopping-cart', size:35 }} />
             <Badge
-              containerStyle={{position: 'absolute', top: -5, right: 15}}
-              value="88"
+              containerStyle={{position: 'absolute', top: -5, right: 25}}
+              value="5"
               badgeStyle={{backgroundColor:'red'}}
             />
           </View>
