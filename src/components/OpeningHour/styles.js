@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   containerStyle: {
@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   },
   avatarTitleStyle: {
     fontSize: 10,
+    color: 'black',
   },
   avatarContainerRedStyle: {
     backgroundColor: 'red',
