@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator, DrawerContent} from '@react-navigation/drawer';
-import {View, TouchableOpacity, Text, Image} from 'react-native';
 import LoginScreen from './src/screens/Login/LoginScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import * as ThemeColor from './src/themes/colors';
-import Product from './src/screens/Products/ProductScreen';
-import ProductScreen from './src/screens/Products/ProductScreen';
+import ProductsScreen from './src/screens/Products/ProductsScreen';
 
 class App extends Component {
   render() {
@@ -14,7 +12,7 @@ class App extends Component {
     return (
       <NavigationContainer>
         <Drawer.Navigator
-          initialRouteName="Logout"
+          initialRouteName="Product"
           drawerStyle={{backgroundColor: ThemeColor.LightDrawerColor}}
           drawerContentOptions={{
             activeBackgroundColor: ThemeColor.DarkColor,
@@ -27,7 +25,7 @@ class App extends Component {
           />
           <Drawer.Screen
             name="Product"
-            component={ProductScreen}
+            component={ProductsScreen}
             initialParams={{storeId: '2', storeName: 'singhotel'}}
           />
           <Drawer.Screen name="Support" component={HomeScreen} />

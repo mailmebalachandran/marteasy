@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text, Image} from 'react-native';
-import {Avatar, Badge} from 'react-native-elements';
+import {Avatar, Badge, SearchBar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ThemeColor from '../../themes/colors';
 
@@ -11,7 +11,9 @@ class Header extends Component {
   }
   render() {
     return (
+      
       <View style={styles.containerStyle}>
+        
         <View style={styles.drawerStyle}>
           <TouchableOpacity
             onPress={() => {
