@@ -1,102 +1,41 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import styles from './styles';
-import {Avatar} from 'react-native-elements';
-import {View} from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { View } from 'react-native';
+import { OPENING_HOUR_TITLES } from "./constants";
+import { getIsOpen } from "./utils";
 
 class OpeningHour extends Component {
   constructor(props) {
     super(props);
   }
+  renderBgColor = (day, { time }) => {
+    let color = getIsOpen(day, time)
+      ? styles.avatarContainerGreenStyle
+      : styles.avatarContainerRedStyle;
+    return color;
+  }
+
   render() {
-    const storeTime = this.props.storeTime;
-    let values;
-    if (storeTime !== undefined && storeTime.length > 0) {
-      values = (
-        <View style={styles.containerStyle}>
-          <Avatar
-            size="small"
-            rounded
-            title="Su"
-            titleStyle={styles.avatarTitleStyle}
-            containerStyle={
-              this.props.storeTime === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-          <Avatar
-            size="small"
-            rounded
-            title="Mo"
-            titleStyle={{fontSize: 10}}
-            containerStyle={
-              this.props.storeTime.monday.status === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-          <Avatar
-            size="small"
-            rounded
-            title="Tu"
-            titleStyle={{fontSize: 10}}
-            containerStyle={
-              this.props.storeTime.tuesday.status === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-          <Avatar
-            size="small"
-            rounded
-            title="We"
-            titleStyle={{fontSize: 10}}
-            containerStyle={
-              this.props.storeTime.wednesday.status === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-          <Avatar
-            size="small"
-            rounded
-            title="Th"
-            titleStyle={{fontSize: 10}}
-            containerStyle={
-              this.props.storeTime.thursday.status === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-          <Avatar
-            size="small"
-            rounded
-            title="Fr"
-            titleStyle={{fontSize: 10}}
-            containerStyle={
-              this.props.storeTime.friday.status === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-          <Avatar
-            size="small"
-            rounded
-            title="Sa"
-            titleStyle={{fontSize: 10}}
-            containerStyle={
-              this.props.storeTime.saturday.status === 'open'
-                ? styles.avatarContainerGreenStyle
-                : styles.avatarContainerRedStyle
-            }
-          />
-        </View>
-      );
-    } else {
-      values = null;
-    }
-    return <View>{values}</View>;
+    const { storeDetail } = this.props;
+    console.log("store-->", storeDetail.id);
+    return (
+      <View style={styles.containerStyle}>
+        {
+          OPENING_HOUR_TITLES.map((title) => (<Avatar
+                size="small"
+                rounded
+                title={title}
+                titleStyle={styles.avatarTitleStyle}
+                containerStyle={this.renderBgColor(title, storeDetail.store_open_close)}
+              />
+            )
+          )
+        }
+      </View>
+    )
   }
 }
+
 
 export default OpeningHour;
