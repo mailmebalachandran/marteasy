@@ -27,10 +27,27 @@ class ProductsScreen extends Component {
   }
 
   componentDidMount = async () => {
-    const storeDetail = await ProductAPI.GetStoreBasedonStoreId(2);
-    const productList = await ProductAPI.GetProductBasedonStoreId(2);
+    const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
+      this.props.route.params.storeId,
+    );
+    const productList = await ProductAPI.GetProductBasedonStoreId(
+      this.props.route.params.storeId,
+    );
     this.setState({storeDetail});
     this.setState({productList});
+  };
+
+  componentDidUpdate = async prevProps => {
+    if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
+      const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
+        this.props.route.params.storeId,
+      );
+      const productList = await ProductAPI.GetProductBasedonStoreId(
+        this.props.route.params.storeId,
+      );
+      this.setState({storeDetail});
+      this.setState({productList});
+    }
   };
 
   onAddHandler = item => {
@@ -176,7 +193,6 @@ class ProductsScreen extends Component {
         <ScrollView>
           <SafeAreaView>
             <StatusBarComponent styleType={0} />
-            <Header navigation={this.props.navigation} titleValue="Products" />
             {/* <Image
             source={{
               uri: this.state.storeDetail.banner,
@@ -231,6 +247,7 @@ class ProductsScreen extends Component {
                 <Product
                   {...this.state}
                   onAddHandler={product => this.onAddHandler(product)}
+                  storeId = {this.props.route.params.storeId}
                   handleQuantityChange={(item, type) => {
                     this.handleQuantityChange(item, type);
                   }}

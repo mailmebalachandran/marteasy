@@ -46,7 +46,6 @@ class HomeScreen extends Component {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor:'white'}}>
         <StatusBarComponent styleType={0} />
-        <Header navigation={this.props.navigation} titleValue="Home" />
         <ScrollView>
         <Slider dataValues={topPicks} />
         <Text style={{backgroundColor:'white', marginLeft:10, marginTop:20}}>Featured Stores</Text>
@@ -57,7 +56,6 @@ class HomeScreen extends Component {
         <Toast
           ref="toast"
           style={{backgroundColor: '#dfdfdf'}}
-          
           position="top"
           positionValue={100}
           fadeInDuration={750}

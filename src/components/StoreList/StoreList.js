@@ -20,7 +20,7 @@ class StoreList extends Component {
             <Card containerStyle={{ flex: 0.5 }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('Product', {
+                  this.props.navigation.navigate('Search', {
                     storeId: item.id,
                     storeName: item.store_name,
                     storeOpen: item.store_open_close
