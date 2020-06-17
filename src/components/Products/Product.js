@@ -34,32 +34,7 @@ class Product extends React.Component {
     );
   };
 
-  onAddHandler = item => {
-    let list = [];
-    this.state.productList.map((product) => {
-      if (product.id === item.id) {
-        product.isAdd = false;
-        product.count++;
-      }
-      list.push(product);
-    });
-    this.setState({productList: list});
-  };
-  handleQuantityChange = (item, type) => {
-    let list = [];
-    this.state.productList.map((product) => {
-      if (product.id === item.id) {
-        if(item.count > 0) {
-          type === "INC" ? product.count++ : product.count--;
-        } 
-        if(product.count === 0) {
-          product.isAdd = true;
-        }
-      }
-      list.push(product);
-    });
-    this.setState({productList: list});
-  }
+  
 
   render() {
     return (
@@ -102,7 +77,7 @@ class Product extends React.Component {
                         <View>
                           <TouchableOpacity
                             onPress={() => {
-                              this.onAddHandler(product)
+                              this.props.onAddHandler(product)
                             }}>
                             <Text
                               style={{
@@ -124,7 +99,7 @@ class Product extends React.Component {
                         <>
                           <View>
                             <TouchableOpacity
-                              onPress={() => this.handleQuantityChange(product, "DEC")}
+                              onPress={() => this.props.handleQuantityChange(product, "DEC")}
                             >
                               <View>
                                 <Icon
@@ -140,7 +115,7 @@ class Product extends React.Component {
                           </View>
                           <View>
                             <TouchableOpacity
-                              onPress={() => this.handleQuantityChange(product, "INC")}
+                              onPress={() => this.props.handleQuantityChange(product, "INC")}
                             >
                               <View>
                                 <Icon
