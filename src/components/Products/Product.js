@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getItemTransformedItemDesc} from './utils';
-import ButtonComponent from '../../components/Button/Button';
+import styles from "./styles"
 
 class Product extends React.Component {
   constructor(props) {
@@ -24,9 +24,9 @@ class Product extends React.Component {
   }
   renderProductImage = ({src}) => {
     return (
-      <View style={{height: 100}}>
+      <View style={styles.productImageContainer}>
         <Image
-          style={{height: 100, width: 100, borderRadius: 20}}
+          style={styles.productImage}
           resizeMode="cover"
           source={{uri: src}}
         />
@@ -37,38 +37,35 @@ class Product extends React.Component {
   onAddHandler = item => {
     let list = [];
     this.state.productList.map((product) => {
-      list = product;
       if (product.id === item.id) {
         product.isAdd = false;
+        product.count++;
       }
+      list.push(product);
     });
     this.setState({productList: list});
   };
+  handleQuantityChange = (item, type) => {
+    let list = [];
+    this.state.productList.map((product) => {
+      if (product.id === item.id) {
+        if(item.count > 0) {
+          type === "INC" ? product.count++ : product.count--;
+        } 
+        if(product.count === 0) {
+          product.isAdd = true;
+        }
+      }
+      list.push(product);
+    });
+    this.setState({productList: list});
+  }
 
   render() {
     return (
-      <View style={{height: '100%'}}>
+      <View style={styles.productScreenContainer}>
         {this.state.productList.map(product => (
-          <View
-            style={{
-              height: 125,
-              margin: 10,
-              padding: 10,
-              backgroundColor: 'white',
-              borderRadius: 1,
-              borderWidth: 1,
-              borderColor: 'white',
-              borderStyle: 'solid',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-
-              elevation: 5,
-            }}>
+          <View style={styles.productContainer}>
             <View
               style={{
                 flex: 1,
@@ -76,14 +73,8 @@ class Product extends React.Component {
               }}>
               {this.renderProductImage(product.images[0])}
               <View>
-                <Text style={{marginLeft: 10}}>{product.name}</Text>
-                <Text
-                  style={{
-                    marginLeft: 10,
-                    fontSize: 10,
-                    flexWrap: 'wrap',
-                    width: '100%',
-                  }}>
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.productDesc}>
                   {getItemTransformedItemDesc(product.short_description)}
                 </Text>
                 <View
@@ -91,18 +82,13 @@ class Product extends React.Component {
                     flex: 1,
                     flexDirection: 'row',
                   }}>
-                  <View style={{width: '50%'}}>
+                  <View style={styles.pricingContainer}>
                     <Text
-                      style={{
-                        marginLeft: 10,
-                        textDecorationLine: 'line-through',
-                        fontSize: 12,
-                        color: 'red',
-                      }}>
+                      style={styles.regularPrice}>
                       Rs.{product.regular_price}
                     </Text>
                     <Text
-                      style={{marginLeft: 10, color: 'green', fontSize: 15}}>
+                      style={styles.salePrice}>
                       Rs.{product.sale_price}
                     </Text>
                   </View>
@@ -137,7 +123,9 @@ class Product extends React.Component {
                       {!product.isAdd && (
                         <>
                           <View>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => this.handleQuantityChange(product, "DEC")}
+                            >
                               <View>
                                 <Icon
                                   name="minus"
@@ -151,7 +139,9 @@ class Product extends React.Component {
                             <Text style={{margin: 5}}>{product.count}</Text>
                           </View>
                           <View>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => this.handleQuantityChange(product, "INC")}
+                            >
                               <View>
                                 <Icon
                                   name="plus"
