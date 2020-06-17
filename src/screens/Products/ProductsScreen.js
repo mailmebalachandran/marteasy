@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {Text, Image, Avatar, Rating} from 'react-native-elements';
 import {SafeAreaView, View, ScrollView} from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
-import Header from '../../components/Header/Header';
-import ActivityIndicator from '../../components/ActivityIndicator/ActivityContainer';
 import Line from '../../components/Line/Line';
 import ProductAPI from '../../api/Products/ProductAPI';
 import OpeningHour from '../../components/OpeningHour/OpeningHour';
 import Product from '../../components/Products/Product';
 import * as ThemeColor from '../../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MenuLoader from "../../components/Loader/MenuLoader";
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -27,10 +26,16 @@ class ProductsScreen extends Component {
   }
 
   componentDidMount = async () => {
-    const storeDetail = await ProductAPI.GetStoreBasedonStoreId(2);
-    const productList = await ProductAPI.GetProductBasedonStoreId(2);
-    this.setState({storeDetail});
-    this.setState({productList});
+    this.setState({isLoading: true});
+    const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
+      this.props.route.params.storeId,
+    );
+    const productList = await ProductAPI.GetProductBasedonStoreId(
+      this.props.route.params.storeId,
+    );
+    this.setState({productList: productList, storeDetail: storeDetail}, () => {
+      this.setState({ isLoading: false });
+    });
   };
 
   onAddHandler = item => {
@@ -172,11 +177,12 @@ class ProductsScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <>
+      {this.state.isLoading ? <MenuLoader /> :
+      (<View style={{flex: 1}}>
         <ScrollView>
           <SafeAreaView>
             <StatusBarComponent styleType={0} />
-            <Header navigation={this.props.navigation} titleValue="Products" />
             {/* <Image
             source={{
               uri: this.state.storeDetail.banner,
@@ -231,6 +237,7 @@ class ProductsScreen extends Component {
                 <Product
                   {...this.state}
                   onAddHandler={product => this.onAddHandler(product)}
+                  storeId = {this.props.route.params.storeId}
                   handleQuantityChange={(item, type) => {
                     this.handleQuantityChange(item, type);
                   }}
@@ -273,7 +280,8 @@ class ProductsScreen extends Component {
             </View>
           </View>
         )}
-      </View>
+      </View>)}
+      </>
     );
   }
 }
