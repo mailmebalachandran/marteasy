@@ -18,8 +18,8 @@ export default class MenuLoader extends Component {
               this.animation = animation;
             }}
             style={{
-              width: screenWidth-60,
-              height: screenHeight-100,
+              width: 300,
+              height: 300,
             }}
             loop={true}
             source={menuLoader}
