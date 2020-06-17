@@ -38,20 +38,6 @@ class ProductsScreen extends Component {
     });
   };
 
-  componentDidUpdate = async prevProps => {
-    if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
-      const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
-        this.props.route.params.storeId,
-      );
-      const productList = await ProductAPI.GetProductBasedonStoreId(
-        this.props.route.params.storeId,
-      );
-      this.setState({productList: productList, storeDetail: storeDetail}, () => {
-        this.setState({ isLoading: false });
-      });
-    }
-  };
-
   onAddHandler = item => {
     let list = [];
     this.state.productList.map(product => {

@@ -6,6 +6,7 @@ import HomeScreen from './src/screens/Home/HomeScreen';
 import  { getTabIcons } from "./src/navigations/utils";
 import * as ThemeColor from './src/themes/colors';
 import ProductsScreen from './src/screens/Products/ProductsScreen';
+import CartScreen from './src/screens/Cart/CartScreen';
 
 class App extends Component {
   render() {
@@ -24,7 +25,7 @@ class App extends Component {
           >
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Search" component={ProductsScreen} />
-          <Tab.Screen name="Cart" component={HomeScreen} />
+          <Tab.Screen name="Cart" component={CartScreen} />
           <Tab.Screen name="Account" component={LoginScreen} />
         </Tab.Navigator>
       </NavigationContainer>
