@@ -16,7 +16,7 @@ class ProductsScreen extends Component {
       isLoading: false,
       productList: [],
       infoMessage: '',
-      storeDetail: {},
+      storeDetail: {}
     };
   }
 
@@ -46,7 +46,7 @@ class ProductsScreen extends Component {
               flexDirection: 'column',
               justifyContent: 'space-between',
             }}>
-            <View style={{ height: 85 }}>
+            <View style={{ height: 70 }}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
                 <View style={{ flex: 0.2 }}>
                   <Avatar
