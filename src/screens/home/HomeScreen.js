@@ -8,23 +8,28 @@ import StoreList from '../../components/StoreList/StoreList';
 import HomeAPI from '../../api/Home/HomeAPI';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import * as Images from '../../assets/index';
+import MenuLoader from "../../components/Loader/MenuLoader";
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ShopList: [],
+      isLoading: true,
     };
   }
 
   componentDidMount = () => {
+    this.setState({ isLoading: true });
     this.getStoresOnLoad();
   };
 
   getStoresOnLoad = async () => {
     let result = await HomeAPI.GetStores();
     if (result !== undefined) {
-      this.setState({ShopList: result});
+      this.setState({ShopList: result}, () => {
+        this.setState({ isLoading: false });
+      });
     }
   };
 
@@ -45,6 +50,8 @@ class HomeScreen extends Component {
     ];
     return (
       <SafeAreaView style={{flex: 1, backgroundColor:'white'}}>
+        {this.state.isLoading ? <MenuLoader /> : (
+        <>
         <StatusBarComponent styleType={0} />
         <Header navigation={this.props.navigation} titleValue="Home" />
         <ScrollView>
@@ -66,6 +73,9 @@ class HomeScreen extends Component {
           textStyle={{color: 'black'}}
         />
         </ScrollView>
+        </>
+        )
+        }
       </SafeAreaView>
     );
   }
