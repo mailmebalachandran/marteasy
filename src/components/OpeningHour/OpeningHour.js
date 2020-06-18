@@ -18,7 +18,6 @@ class OpeningHour extends Component {
 
   render() {
     const { storeDetail } = this.props;
-    console.log("store-->", storeDetail.id);
     return (
       <View style={styles.containerStyle}>
         {

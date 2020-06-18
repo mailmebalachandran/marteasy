@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, Image, Avatar, Rating} from 'react-native-elements';
-import {SafeAreaView, View, ScrollView} from 'react-native';
+import {SafeAreaView, View, ScrollView, AsyncStorage} from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Line from '../../components/Line/Line';
 import ProductAPI from '../../api/Products/ProductAPI';
@@ -8,7 +8,8 @@ import OpeningHour from '../../components/OpeningHour/OpeningHour';
 import Product from '../../components/Products/Product';
 import * as ThemeColor from '../../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MenuLoader from "../../components/Loader/MenuLoader";
+import MenuLoader from '../../components/Loader/MenuLoader';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -34,8 +35,36 @@ class ProductsScreen extends Component {
       this.props.route.params.storeId,
     );
     this.setState({productList: productList, storeDetail: storeDetail}, () => {
-      this.setState({ isLoading: false });
+      this.setState({isLoading: false});
     });
+  };
+
+  componentDidUpdate = async prevProps => {
+    if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
+      this.state = {
+        isLoading: false,
+        productList: [],
+        infoMessage: '',
+        storeDetail: {},
+        countDetail: [],
+        isViewCart: false,
+        productCount: 0,
+        productAmount: 0,
+      };
+      this.setState({isLoading: true, productCount: 0, productAmount: 0});
+      const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
+        this.props.route.params.storeId,
+      );
+      const productList = await ProductAPI.GetProductBasedonStoreId(
+        this.props.route.params.storeId,
+      );
+      this.setState(
+        {productList: productList, storeDetail: storeDetail},
+        () => {
+          this.setState({isLoading: false});
+        },
+      );
+    }
   };
 
   onAddHandler = item => {
@@ -77,7 +106,7 @@ class ProductsScreen extends Component {
     );
   };
 
-  checkCountDetails = (storeId, productId, count, amount) => {
+  checkCountDetails = async (storeId, productId, count, amount) => {
     let countDetail = [];
     if (this.state.countDetail.length > 0) {
       let storeCount = this.state.countDetail;
@@ -99,6 +128,9 @@ class ProductsScreen extends Component {
           }
           if (!isProductAvailable) {
             let obj = {productId: productId, count: count, amount: amount};
+            console.log(storeCount[item].products[0]);
+            if (storeCount[item].products[product] === null)
+              storeCount[item].products = [];
             storeCount[item].products.push(obj);
             isStoreAvailable = true;
             countDetail.push(storeCount[item]);
@@ -107,11 +139,12 @@ class ProductsScreen extends Component {
         if (!isStoreAvailable) {
           let storeObj = {};
           let productObj = {};
+          storeObj.products = [];
           productObj.productId = productId;
           productObj.count = count;
           productObj.amount = amount;
           storeObj.storeId = storeId;
-          storeObj.products = productObj;
+          storeObj.products.push(productObj);
           countDetail.push(storeObj);
         }
       }
@@ -126,16 +159,19 @@ class ProductsScreen extends Component {
                 parseInt(countDetail[item].products[product].amount) *
                 countDetail[item].products[product].count;
               count += countDetail[item].products[product].count;
+            } else {
+              delete countDetail[item].products[product];
             }
           }
         }
-        console.log(count);
         if (count !== 0) {
           this.setState({isViewCart: true});
         } else {
           this.setState({isViewCart: false});
         }
-        this.setState({productCount: count, productAmount: amount});
+        this.setState({productCount: count, productAmount: amount}, () => {
+          this.storeDataToStorage();
+        });
       }
     } else {
       //StoreObject
@@ -161,126 +197,182 @@ class ProductsScreen extends Component {
                 parseInt(countDetail[item].products[product].amount) *
                 countDetail[item].products[product].count;
               count += countDetail[item].products[product].count;
+            } else {
+              delete countDetail[item].products[product];
             }
           }
         }
-        console.log(count);
         if (count !== 0) {
           this.setState({isViewCart: true});
         } else {
           this.setState({isViewCart: false});
         }
-        this.setState({productCount: count, productAmount: amount});
+        this.setState({productCount: count, productAmount: amount}, () => {
+          this.storeDataToStorage();
+        });
       }
+    }
+  };
+
+  storeDataToStorage = async () => {
+    try {
+      let isValueDeleted = await this.removeDataToStorage('Cart');
+      if (isValueDeleted) {
+        await AsyncStorage.setItem(
+          'Cart',
+          JSON.stringify(this.state.countDetail),
+        );
+        this.getDataToStorage();
+      }
+    } catch (err) {
+      console.log('Error Details ' + err);
+    }
+  };
+
+  getDataToStorage = async () => {
+    try {
+      let value = await AsyncStorage.getItem('Cart');
+      console.log(JSON.stringify(value));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  removeDataToStorage = async key => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
     }
   };
 
   render() {
     return (
       <>
-      {this.state.isLoading ? <MenuLoader /> :
-      (<View style={{flex: 1}}>
-        <ScrollView>
-          <SafeAreaView>
-            <StatusBarComponent styleType={0} />
-            {/* <Image
+        {this.state.isLoading ? (
+          <MenuLoader />
+        ) : (
+          <View style={{flex: 1}}>
+            <ScrollView>
+              <SafeAreaView>
+                <StatusBarComponent styleType={0} />
+                {/* <Image
             source={{
               uri: this.state.storeDetail.banner,
             }}
             style={{ width: '100%', height: 100 }}
             PlaceholderContent={<ActivityIndicator isLoading={true} />}
           /> */}
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}>
-              <View style={{height: 70}}>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View style={{flex: 0.2}}>
-                    <Avatar
-                      rounded
-                      size="large"
-                      containerStyle={{margin: 5}}
-                      source={{
-                        uri: this.state.storeDetail.gravatar,
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}>
+                  <View style={{height: 70}}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View style={{flex: 0.2}}>
+                        <Avatar
+                          rounded
+                          size="large"
+                          containerStyle={{margin: 5}}
+                          source={{
+                            uri: this.state.storeDetail.gravatar,
+                          }}
+                        />
+                      </View>
+                      <View style={{flex: 0.6, marginLeft: 20}}>
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            marginTop: 10,
+                          }}>
+                          {this.state.storeDetail.store_name}
+                        </Text>
+                        <Text style={{fontSize: 10}}>Description</Text>
+                      </View>
+                      <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
+                        <Rating
+                          style={{width: 20, backgroundColor: 'transparent'}}
+                          imageSize={20}
+                        />
+                        <Text style={{fontSize: 10, marginTop: 10}}>
+                          0 reviews
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={{height: 20}}>
+                    <Line />
+                  </View>
+                  <View style={{height: 50}}>
+                    {this.state.storeDetail.id && (
+                      <OpeningHour {...this.state} />
+                    )}
+                  </View>
+                  <View style={{height: 20}}>
+                    <Line />
+                  </View>
+                  {this.state.productList.length > 0 && (
+                    <Product
+                      {...this.state}
+                      onAddHandler={product => this.onAddHandler(product)}
+                      storeId={this.props.route.params.storeId}
+                      handleQuantityChange={(item, type) => {
+                        this.handleQuantityChange(item, type);
                       }}
                     />
-                  </View>
-                  <View style={{flex: 0.6, marginLeft: 20}}>
-                    <Text
-                      style={{fontSize: 20, fontWeight: 'bold', marginTop: 10}}>
-                      {this.state.storeDetail.store_name}
+                  )}
+                </View>
+              </SafeAreaView>
+            </ScrollView>
+            {this.state.isViewCart && (
+              <View
+                style={{
+                  backgroundColor: ThemeColor.PrimaryColor,
+                  height: 50,
+                  justifyContent: 'center',
+                }}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                  }}>
+                  <View style={{marginRight: 20, justifyContent: 'center'}}>
+                    <Text style={{color: ThemeColor.DarkTextColor}}>
+                      {this.state.productCount} item
+                      {this.state.productCount > 1 ? 's ' : ' '} |{'  '}
+                      <Icon name="rupee" size={10} /> {this.state.productAmount}
                     </Text>
-                    <Text style={{fontSize: 10}}>Description</Text>
                   </View>
-                  <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
-                    <Rating
-                      style={{width: 20, backgroundColor: 'transparent'}}
-                      imageSize={20}
+                  <View style={{width: '30%'}} />
+                  <View style={{marginRight: 10, justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate('Cart', {
+                          countDetail: this.state.countDetail,
+                        });
+                      }}>
+                      <Text style={{color: ThemeColor.DarkTextColor}}>
+                        View Cart
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{marginRight: 30, justifyContent: 'center'}}>
+                    <Icon
+                      name="shopping-cart"
+                      size={20}
+                      color={ThemeColor.DarkTextColor}
                     />
-                    <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
                   </View>
                 </View>
               </View>
-              <View style={{height: 20}}>
-                <Line />
-              </View>
-              <View style={{height: 50}}>
-                {this.state.storeDetail.id && <OpeningHour {...this.state} />}
-              </View>
-              <View style={{height: 20}}>
-                <Line />
-              </View>
-              {this.state.productList.length > 0 && (
-                <Product
-                  {...this.state}
-                  onAddHandler={product => this.onAddHandler(product)}
-                  storeId = {this.props.route.params.storeId}
-                  handleQuantityChange={(item, type) => {
-                    this.handleQuantityChange(item, type);
-                  }}
-                />
-              )}
-            </View>
-          </SafeAreaView>
-        </ScrollView>
-        {this.state.isViewCart && (
-          <View
-            style={{
-              backgroundColor: ThemeColor.PrimaryColor,
-              height: 50,
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-              }}>
-              <View style={{marginRight: 20, justifyContent: 'center'}}>
-                <Text style={{color: ThemeColor.DarkTextColor}}>
-                  {this.state.productCount} item
-                  {this.state.productCount > 1 ? 's ' : ' '} |{'  '}
-                  <Icon name="rupee" size={10} /> {this.state.productAmount}
-                </Text>
-              </View>
-              <View style={{width: '30%'}} />
-              <View style={{marginRight: 10, justifyContent: 'center'}}>
-                <Text style={{color: ThemeColor.DarkTextColor}}>View Cart</Text>
-              </View>
-              <View style={{marginRight: 30, justifyContent: 'center'}}>
-                <Icon
-                  name="shopping-cart"
-                  size={20}
-                  color={ThemeColor.DarkTextColor}
-                />
-              </View>
-            </View>
+            )}
           </View>
         )}
-      </View>)}
       </>
     );
   }
