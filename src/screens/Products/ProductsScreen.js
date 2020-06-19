@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import {Text, Image, Avatar, Rating} from 'react-native-elements';
-import {SafeAreaView, View, ScrollView, AsyncStorage} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  ScrollView,
+  AsyncStorage,
+  TouchableOpacity,
+} from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Line from '../../components/Line/Line';
 import ProductAPI from '../../api/Products/ProductAPI';
@@ -9,7 +15,7 @@ import Product from '../../components/Products/Product';
 import * as ThemeColor from '../../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MenuLoader from '../../components/Loader/MenuLoader';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import Header from '../../components/Header/Header';
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -254,80 +260,77 @@ class ProductsScreen extends Component {
           <MenuLoader />
         ) : (
           <View style={{flex: 1}}>
-            <ScrollView>
-              <SafeAreaView>
-                <StatusBarComponent styleType={0} />
-                {/* <Image
+            <StatusBarComponent styleType={0} />
+            <Header
+              navigationScreenValue="HomeScreen"
+              navigation={this.props.navigation}
+            />
+            {/* <Image
             source={{
               uri: this.state.storeDetail.banner,
             }}
             style={{ width: '100%', height: 100 }}
             PlaceholderContent={<ActivityIndicator isLoading={true} />}
           /> */}
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View style={{height: 70}}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View style={{flex: 0.2}}>
-                        <Avatar
-                          rounded
-                          size="large"
-                          containerStyle={{margin: 5}}
-                          source={{
-                            uri: this.state.storeDetail.gravatar,
-                          }}
-                        />
-                      </View>
-                      <View style={{flex: 0.6, marginLeft: 20}}>
-                        <Text
-                          style={{
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            marginTop: 10,
-                          }}>
-                          {this.state.storeDetail.store_name}
-                        </Text>
-                        <Text style={{fontSize: 10}}>Description</Text>
-                      </View>
-                      <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
-                        <Rating
-                          style={{width: 20, backgroundColor: 'transparent'}}
-                          imageSize={20}
-                        />
-                        <Text style={{fontSize: 10, marginTop: 10}}>
-                          0 reviews
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={{height: 20}}>
-                    <Line />
-                  </View>
-                  <View style={{height: 50}}>
-                    {this.state.storeDetail.id && (
-                      <OpeningHour {...this.state} />
-                    )}
-                  </View>
-                  <View style={{height: 20}}>
-                    <Line />
-                  </View>
-                  {this.state.productList.length > 0 && (
-                    <Product
-                      {...this.state}
-                      onAddHandler={product => this.onAddHandler(product)}
-                      storeId={this.props.route.params.storeId}
-                      handleQuantityChange={(item, type) => {
-                        this.handleQuantityChange(item, type);
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{height: 70}}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View style={{flex: 0.2}}>
+                    <Avatar
+                      rounded
+                      size="large"
+                      containerStyle={{margin: 5}}
+                      source={{
+                        uri: this.state.storeDetail.gravatar,
                       }}
                     />
-                  )}
+                  </View>
+                  <View style={{flex: 0.6, marginLeft: 20}}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        marginTop: 10,
+                      }}>
+                      {this.state.storeDetail.store_name}
+                    </Text>
+                    <Text style={{fontSize: 10}}>Description</Text>
+                    <Text style={{fontSize: 10, marginTop:5}}><Icon name="star" size={10} color='grey'></Icon> 0 reviews</Text>
+                  </View>
+                  {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
+                    <Rating
+                      style={{width: 20, backgroundColor: 'transparent'}}
+                      imageSize={20}
+                    />
+                    <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
+                  </View> */}
                 </View>
-              </SafeAreaView>
-            </ScrollView>
+              </View>
+              <View style={{height: 20}}>
+                <Line />
+              </View>
+              <View style={{height: 50}}>
+                {this.state.storeDetail.id && <OpeningHour {...this.state} />}
+              </View>
+              <View style={{height: 20}}>
+                <Line />
+              </View>
+              {this.state.productList.length > 0 && (
+                <Product
+                  {...this.state}
+                  onAddHandler={product => this.onAddHandler(product)}
+                  storeId={this.props.route.params.storeId}
+                  handleQuantityChange={(item, type) => {
+                    this.handleQuantityChange(item, type);
+                  }}
+                />
+              )}
+            </View>
             {this.state.isViewCart && (
               <View
                 style={{

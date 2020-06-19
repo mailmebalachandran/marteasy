@@ -8,15 +8,15 @@ import {getTabIcons} from './src/navigations/utils';
 import * as ThemeColor from './src/themes/colors';
 import ProductsScreen from './src/screens/Products/ProductsScreen';
 import CartScreen from './src/screens/Cart/CartScreen';
+import SearchScreen from './src/screens/Search/SearchScreen';
 
 class App extends Component {
-  
-  
-  
   loginScreenNavigator = () => {
     let Stack = createStackNavigator();
     return (
-      <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown:false}}>
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     );
@@ -26,7 +26,8 @@ class App extends Component {
     const Tab = createBottomTabNavigator();
     return (
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Search"
+        header={{visible:true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>
             getTabIcons(route, focused, color, size),
@@ -36,7 +37,7 @@ class App extends Component {
           inactiveTintColor: 'gray',
         }}>
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Search" component={ProductsScreen} />
+        <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
         <Tab.Screen name="Account" component={HomeScreen} />
       </Tab.Navigator>
@@ -45,12 +46,24 @@ class App extends Component {
 
   render() {
     const RootStack = createStackNavigator();
-   
+
     return (
       <NavigationContainer>
-        <RootStack.Navigator screenOptions={{headerShown:false}} initialRouteName="HomeScreen">
-          <RootStack.Screen name="LoginScreen" component={this.loginScreenNavigator} />
-          <RootStack.Screen name="HomeScreen" component={this.homeScreenNavigator} />
+        <RootStack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName="HomeScreen">
+          <RootStack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+          />
+          <RootStack.Screen
+            name="HomeScreen"
+            component={this.homeScreenNavigator}
+          />
+          <RootStack.Screen
+            name="ProductScreen"
+            component={ProductsScreen}
+          />
         </RootStack.Navigator>
       </NavigationContainer>
     );

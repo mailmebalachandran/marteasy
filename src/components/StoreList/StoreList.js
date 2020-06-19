@@ -20,7 +20,7 @@ class StoreList extends Component {
             <Card containerStyle={{ flex: 0.5 }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('Search', {
+                  this.props.navigation.navigate('ProductScreen', {
                     storeId: item.id,
                     storeName: item.store_name,
                     storeOpen: item.store_open_close
@@ -50,6 +50,7 @@ class StoreList extends Component {
               </TouchableOpacity>
             </Card>
           )}
+          keyExtractor={(item) => {item.id}}
           numColumns={2}
         />
       </View>

@@ -1,30 +1,26 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
 import {Text, View, FlatList, Image, Dimensions} from 'react-native';
-import {Card} from 'react-native-elements';
+import {Card, Divider} from 'react-native-elements';
 import styles from './styles';
 import * as ThemeColor from '../../themes/colors';
 
 import Carousel from 'react-native-snap-carousel';
 
 export default class Slider extends Component {
-  
   render() {
-
     return (
       <View style={styles.containerStyle}>
-         <Carousel
-              ref={(c) => { this._carousel = c; }}
-              data={this.props.dataValues}
-              renderItem={({item}) => (
-                <Card containerStyle={{padding:0, marginLeft: "-43%", marginRight: "43%"}}>
-                    <Image
-                      source={item.name} style={{height:200,width:'100%'}}
-                    />
-                </Card>
-              )}
-              sliderWidth={400}
-              itemWidth={200}
-            />
+        <FlatList
+          data={this.props.dataValues}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item}) => (
+            <View style={styles.flatListViewStyle}>
+              <Image source={item.name} style={styles.flatListImageStyle} />
+            </View>
+          )}
+          keyExtractor={item => {item.id}}
+        />
       </View>
     );
   }
