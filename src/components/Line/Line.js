@@ -4,7 +4,7 @@ import styles from './styles';
 
 class Line extends Component{
     render(){
-        return(<Text style={styles.textStyle} numberOfLines={1}>............................................................................................</Text>);
+        return(<Text style={styles.textStyle} numberOfLines={1}>............................................................................................................</Text>);
     }
 }
 
