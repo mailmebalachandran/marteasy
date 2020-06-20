@@ -29,17 +29,79 @@ class ProductsScreen extends Component {
       isViewCart: false,
       productCount: 0,
       productAmount: 0,
+      storeId:0
     };
   }
 
   componentDidMount = async () => {
-    this.setState({isLoading: true});
+    this.setState({isLoading: true, storeId:this.props.route.params.storeId});
+
     const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
       this.props.route.params.storeId,
     );
     const productList = await ProductAPI.GetProductBasedonStoreId(
       this.props.route.params.storeId,
     );
+
+    let list = [];
+
+    let asyncDetails = await AsyncStorage.getItem('Cart');
+    if(asyncDetails != null){
+      let asyncDetailsTemp = JSON.parse(asyncDetails);
+      let result = Object.keys(asyncDetailsTemp).map(function(k) {
+        return asyncDetailsTemp[k];
+      })
+    // this.state.countDetail = result.slice();
+    console.log('result : ' + JSON.stringify(result))
+    let currentStoreProduct =result.filter(function(item){
+      return item.storeId == 19;
+    })
+
+    console.log('currentStoreProduct :' + JSON.stringify(currentStoreProduct))
+    if(currentStoreProduct != null)
+    {
+      console.log(' true');
+      console.log('currentStoreProduct : ' + JSON.stringify(currentStoreProduct))
+      console.log('currentStoreProduct.storeId : ' + currentStoreProduct[0].storeId)
+      console.log('currentStoreProduct.products : ' + currentStoreProduct[0].products)
+      for (var item in currentStoreProduct[0].products) {
+        productList.map(product => {
+          console.log('currentStoreProduct.products[item].productId : ' + currentStoreProduct[0].products[item].productId)
+          console.log('product.id : ' + product.id)
+          if(currentStoreProduct[0].products[item].productId == product.id)
+          {
+            product.isAdd = false;
+            product.count = currentStoreProduct[0].products[item].count;
+            console.log('currentProduct.count :' + currentStoreProduct[0].products[item].count)
+          }
+          // console.log('product : ' + JSON.stringify(product))
+          list.push(product);
+          // console.log('list : ' + JSON.stringify(list))
+        })
+        
+      }
+    // productList.map(product => {
+
+    //   let currentProduct = currentStoreProduct.filter(function(item){
+    //     return item.products.productId == product.id;
+    //   })
+    //   console.log('currentProduct :' + currentProduct)
+    //   if(currentProduct != null)
+    //   {
+    //     product.isAdd = false;
+    //     product.count = currentProduct.products.count;
+    //     console.log('currentProduct.count :' + currentProduct.count)
+    //   }
+
+    //   // // if (product.id === item.id) {
+    //   // //   product.isAdd = false;
+    //   // //   product.count++;
+    //   // }
+    //   list.push(product);
+    // });
+    this.setState({productList: list});
+    }
+  }
     this.setState({productList: productList, storeDetail: storeDetail}, () => {
       this.setState({isLoading: false});
     });
@@ -114,10 +176,37 @@ class ProductsScreen extends Component {
 
   checkCountDetails = async (storeId, productId, count, amount) => {
     let countDetail = [];
+
+        this.state.countDetail = [];
+    
+    let asyncDetails = await AsyncStorage.getItem('Cart');
+    if(asyncDetails != null){
+      let asyncDetailsTemp = JSON.parse(asyncDetails);
+      let result = Object.keys(asyncDetailsTemp).map(function(k) {
+        return asyncDetailsTemp[k];
+      })
+    // console.log('Storage :' + result);
+    // console.log('Before Count :' +this.state.countDetail.length);
+    // console.log('Before store Count :' +result.length);
+    this.state.countDetail = result.slice();
+    // console.log('After Count :' +this.state.countDetail.length);
+    }
+    else
+    {
+      console.log('Else Storage : null');
+    }
+
     if (this.state.countDetail.length > 0) {
       let storeCount = this.state.countDetail;
       for (var item in storeCount) {
         let isStoreAvailable = false;
+
+        console.log('Loop store' + storeCount[item])
+        console.log('Loop storeId ' + storeCount[item].storeId)
+        console.log('Loop products len ' + storeCount[item].products.length)
+
+        console.log('param storeId ' + storeId)
+
         if (
           storeCount[item].storeId === storeId &&
           storeCount[item].products.length > 0
