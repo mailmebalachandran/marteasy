@@ -30,6 +30,7 @@ class TextBox extends Component {
           secureTextEntry={this.props.secureText}
           placeholderTextColor={ThemeColor.PlaceHolderColor}
           inputStyle={{fontSize:14}}
+          autoCapitalize={this.props.autoCapitalize}
         />
       );
     } else {
@@ -42,6 +43,7 @@ class TextBox extends Component {
           secureTextEntry={this.props.secureText}
           placeholderTextColor={ThemeColor.PlaceHolderColor}
           inputStyle={{fontSize:14}}
+          autoCapitalize={this.props.autoCapitalize}
         />
       );
     }

@@ -10,6 +10,7 @@ import Validation from '../../validation/Login/LoginValidation';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import { LOGO } from '../../assets/index';
 import * as ThemeColor from '../../themes/colors';
+import * as Constants from './constants';
 
 class LoginScreen extends Component {
   state = {
@@ -30,7 +31,7 @@ class LoginScreen extends Component {
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
       }else{
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('HomeScreen');
       }
       this.setState({IsLoaded: false});
     }
@@ -45,38 +46,40 @@ class LoginScreen extends Component {
       <View style={styles.containerStyle}>
         {this.state.IsLoaded && <ActivityIndicator size='large' color={ThemeColor.DarkColor} />}
         <StatusBarComponent styleType={0} />
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.logoStyle}>
           <Image source={LOGO} />
         </View>
-        <Label labelValue="Username" />
+        <Label labelValue={Constants.LABEL_USERNAME} />
         <TextBox
-          placeHolderValue="Username"
+          placeHolderValue={Constants.PLACEHOLDER_USERNAME}
           textValue={this.state.UserName}
           IsHavingIcon={true}
           iconName="user"
           iconSize={25}
-          iconColor="#087f23"
+          iconColor={ThemeColor.DarkColor}
           secureText={false}
           textStyle={{fontSize: 10}}
+          autoCapitalize='none'
           onChangedTextHandler={text => {
             this.setState({UserName: text});
           }}
         />
-        <Label labelValue="Password" />
+        <Label labelValue={Constants.LABEL_PASSWORD} />
         <TextBox
-          placeHolderValue="Password"
+          placeHolderValue={Constants.PLACEHOLDER_PASSWORD}
           textValue={this.state.Password}
           IsHavingIcon={true}
           iconName="lock"
           iconSize={25}
-          iconColor="#087f23"
+          iconColor={ThemeColor.DarkColor}
           secureText={true}
+          autoCapitalize='none'
           onChangedTextHandler={text => {
             this.setState({Password: text});
           }}
         />
         <ButtonComponent
-          titleValue="Login"
+          titleValue={Constants.BUTTON_LOGIN}
           onPressHandler={this.onSubmitHandler}
         />
         <Toast

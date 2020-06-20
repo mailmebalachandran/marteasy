@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text, Image} from 'react-native';
-import {Avatar, Badge} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Avatar, Badge, SearchBar} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as ThemeColor from '../../themes/colors';
 
 class Header extends Component {
@@ -15,23 +15,10 @@ class Header extends Component {
         <View style={styles.drawerStyle}>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.openDrawer();
+              this.props.navigation.navigate(this.props.navigationScreenValue);
             }}>
-            <Icon name="bars" size={32} color={ThemeColor.PrimaryTextColor} />
+            <Icon name="arrow-left" size={32} color='black' />
           </TouchableOpacity>
-        </View>
-        <View style={{flex: 0.5, justifyContent:'center'}}>
-          <Text>{this.props.titleValue}</Text>
-        </View>
-        <View style={styles.addToCartContainerStyle}>
-          <View>
-          <Avatar rounded icon={{ name: 'shopping-cart', size:35 }} />
-            <Badge
-              containerStyle={{position: 'absolute', top: -5, right: 25}}
-              value="5"
-              badgeStyle={{backgroundColor:'red'}}
-            />
-          </View>
         </View>
       </View>
     );

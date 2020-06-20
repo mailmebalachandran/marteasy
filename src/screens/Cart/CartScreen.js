@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image, ActivityIndicator, Text} from 'react-native';
+import {View, Image, ActivityIndicator, Text, AsyncStorage} from 'react-native';
 import TextBox from '../../components/TextBox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
@@ -7,10 +7,29 @@ import ButtonComponent from '../../components/Button/Button';
 import Toast, {DURATION} from 'react-native-easy-toast';
 
 
-class CartScreen extends Component {
-  state = {
-    IsLoaded: false
+class CartScreen extends Component {  
+  constructor(props){
+    super(props);
+    this.state = {
+      IsLoaded: false
+    };
+    
+  }
+
+  getDataToStorage = async () => {
+    try {
+      let value = await AsyncStorage.getItem('Cart');
+      return JSON.stringify(value);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  componentDidMount = async () =>{
+    let value = await AsyncStorage.getItem('Cart');
+    console.log( JSON.stringify(value));
+    console.log(JSON.parse(JSON.stringify(value)));
+  }
 
   onSubmitHandler = async () => {
     
