@@ -3,6 +3,7 @@ import {View, Image, ActivityIndicator, Text, FlatList} from 'react-native';
 import {SearchBar, Avatar, Divider} from 'react-native-elements';
 import * as Images from '../../assets/index';
 import styles from './styles';
+import Axios from 'axios';
 
 class SearchScreen extends Component {
   constructor(props) {
@@ -12,6 +13,25 @@ class SearchScreen extends Component {
       search: '',
     };
   }
+
+  componentDidMount = () => {
+    Axios.get(
+      'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products/categories/49',
+      {
+        params: {
+          consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+          consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+        },
+      },
+    )
+
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   onSubmitHandler = async () => {};
 
@@ -47,14 +67,16 @@ class SearchScreen extends Component {
 
                 <View
                   style={{marginLeft: 10, flex: 1, flexDirection: 'column'}}>
-                  <Text style={{fontSize:15, fontWeight:'bold'}}>Jeera rice</Text>
-                  <Text style={{color:'grey', fontSize:12}}>SingHotel</Text>
-                  <Text></Text>
-                  <Text style={{fontSize:12}}>$25</Text>
+                  <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                    Jeera rice
+                  </Text>
+                  <Text style={{color: 'grey', fontSize: 12}}>SingHotel</Text>
+                  <Text />
+                  <Text style={{fontSize: 12}}>$25</Text>
                 </View>
-                <View style={{justifyContent:'center'}}>
+                <View style={{justifyContent: 'center'}}>
                   <Text>Balchandran</Text>
-                  </View>
+                </View>
               </View>
             )}
             keyExtractor={item => {

@@ -46,7 +46,6 @@ class App extends Component {
 
   render() {
     const RootStack = createStackNavigator();
-
     return (
       <NavigationContainer>
         <RootStack.Navigator

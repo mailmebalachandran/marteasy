@@ -6,12 +6,7 @@ const styles = StyleSheet.create({
         flexDirection:"column",
         justifyContent:'center',
         backgroundColor:'#fff',
-        padding:10
-    },
-    containers:{
-        margin:5,
-        padding:10
-
+        padding:10,
     },
     row: {
         flex: 1,
