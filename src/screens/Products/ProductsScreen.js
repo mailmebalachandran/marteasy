@@ -54,9 +54,11 @@ class ProductsScreen extends Component {
       let currentStoreProduct = result.filter(function(item) {
         return item.storeId == storedId;
       });
+      let countForPageLoad = [];
       if (currentStoreProduct != null && currentStoreProduct.length > 0) {
         productList.map(product => {
           for (var item in currentStoreProduct[0].products) {
+            let obj = {};
             if (currentStoreProduct[0].products[item] !== null) {
               if (
                 currentStoreProduct[0].products[item].productId == product.id
@@ -64,6 +66,10 @@ class ProductsScreen extends Component {
                 product.isAdd = false;
                 product.count = currentStoreProduct[0].products[item].count;
                 product.amount = currentStoreProduct[0].products[item].amount;
+                obj.isAdd = false;
+                obj.count = currentStoreProduct[0].products[item].count;
+                obj.amount = currentStoreProduct[0].products[item].amount;
+                countForPageLoad.push(obj);
               }
             }
           }
@@ -75,7 +81,7 @@ class ProductsScreen extends Component {
         //   let currentProduct = currentStoreProduct.filter(function(item){
         //     return item.products.productId == product.id;
         //   })
-       //   if(currentProduct != null)
+        //   if(currentProduct != null)
         //   {
         //     product.isAdd = false;
         //     product.count = currentProduct.products.count;
@@ -87,15 +93,35 @@ class ProductsScreen extends Component {
         //   // }
         //   list.push(product);
         // });
+        let otherStoreProduct = result.filter(function(item) {
+          return item.storeId !== storedId;
+        });
+
+        for (var item in otherStoreProduct) {
+          for (var product in otherStoreProduct[item].products) {
+            console.log(otherStoreProduct[item].products[product]);
+            let obj = {};
+            obj.isAdd = false;
+            obj.count = otherStoreProduct[item].products[product].count;
+            obj.amount = otherStoreProduct[item].products[product].amount;
+            countForPageLoad.push(obj);
+          }
+        }
+        console.log(countForPageLoad);
         this.setState({productList: productList});
-        if (list.length > 0) {
+        if (countForPageLoad.length > 0) {
           let amount = 0;
           let count = 0;
           let i = 0;
-          for (var item in list) {
-            if (list[item].count !== undefined && list[item].count !== 0) {
-              amount += parseInt(list[item].amount) * list[item].count;
-              count += list[item].count;
+          for (var item in countForPageLoad) {
+            if (
+              countForPageLoad[item].count !== undefined &&
+              countForPageLoad[item].count !== 0
+            ) {
+              amount +=
+                parseInt(countForPageLoad[item].amount) *
+                countForPageLoad[item].count;
+              count += countForPageLoad[item].count;
             }
           }
           this.setState({productCount: count, productAmount: amount});
@@ -143,8 +169,9 @@ class ProductsScreen extends Component {
         let currentStoreProduct = result.filter(function(item) {
           return item.storeId == storedId;
         });
-
+        let countForPageLoad = [];
         if (currentStoreProduct != null && currentStoreProduct.length > 0) {
+          let obj = {};
           productList.map(product => {
             for (var item in currentStoreProduct[0].products) {
               if (currentStoreProduct[0].products[item] !== null) {
@@ -154,11 +181,27 @@ class ProductsScreen extends Component {
                   product.isAdd = false;
                   product.count = currentStoreProduct[0].products[item].count;
                   product.amount = currentStoreProduct[0].products[item].amount;
+                  obj.isAdd = false;
+                  obj.count = currentStoreProduct[0].products[item].count;
+                  obj.amount = currentStoreProduct[0].products[item].amount;
+                  countForPageLoad.push(obj);
                 }
               }
             }
             list.push(product);
           });
+
+          let otherStoreProduct = result.filter(function(item) {
+            return item.storeId !== storedId;
+          });
+
+          for (var item in otherStoreProduct) {
+            let obj = {};
+            obj.isAdd = false;
+            obj.count = otherStoreProduct[item].count;
+            obj.amount = otherStoreProduct[item].amount;
+            countForPageLoad.push(obj);
+          }
 
           // productList.map(product => {
 
@@ -177,15 +220,21 @@ class ProductsScreen extends Component {
           //   // }
           //   list.push(product);
           // });
+
           this.setState({productList: productList});
-          if (list.length > 0) {
+          if (countForPageLoad.length > 0) {
             let amount = 0;
             let count = 0;
-            let i = 0;
-            for (var item in list) {
-              if (list[item].count !== undefined && list[item].count !== 0) {
-                amount += parseInt(list[item].amount) * list[item].count;
-                count += list[item].count;
+
+            for (var item in countForPageLoad) {
+              if (
+                countForPageLoad[item].count !== undefined &&
+                countForPageLoad[item].count !== 0
+              ) {
+                amount +=
+                  parseInt(countForPageLoad[item].amount) *
+                  countForPageLoad[item].count;
+                count += countForPageLoad[item].count;
               }
             }
             this.setState({productCount: count, productAmount: amount});
@@ -260,138 +309,140 @@ class ProductsScreen extends Component {
       console.log('Else Storage : null');
     }
 
-      if (this.state.countDetail.length > 0) {
-        console.log("Step 1");
-        let storeCount = this.state.countDetail;
-        for (var item in storeCount) {
-          console.log("Step 2");
-          let isStoreAvailable = false;
-
-          if (
-            storeCount[item].storeId === storeId &&
-            storeCount[item].products.length > 0
-          ) {
-            console.log("Step 3");
-            let isProductAvailable = false;
-            for (var product in storeCount[item].products) {
-              console.log("Step 4");
-              if (
-                storeCount[item].products[product].productId === productId
-              ) {
-                console.log("Step 5");
-                storeCount[item].products[product].count = count;
-                storeCount[item].products[product].amount = amount;
-                isProductAvailable = true;
-                isStoreAvailable = true;
-                //countDetail.push(storeCount[item]);
-              }
-            }
-            console.log("Step 6");
-            if (!isProductAvailable) {
-              console.log("Step 7");
-              let obj = {productId: productId, count: count, amount: amount};
-              if (storeCount[item].products[product] === null)
-              {
-                console.log("Step 8");
-                storeCount[item].products = [];
-              }
-              storeCount[item].products.push(obj);
+    if (this.state.countDetail.length > 0) {
+      console.log('Step 1');
+      let storeCount = this.state.countDetail;
+      let isStoreAvailable = false;
+      for (var item in storeCount) {
+        console.log('Step 2');
+        console.log('StoreId : ' + storeCount[item].storeId);
+        if (
+          storeCount[item].storeId === storeId &&
+          storeCount[item].products.length > 0
+        ) {
+          console.log('Step 3');
+          let isProductAvailable = false;
+          for (var product in storeCount[item].products) {
+            console.log('Step 4');
+            if (
+              storeCount[item].products[product] !== null &&
+              storeCount[item].products[product].productId === productId
+            ) {
+              console.log('Step 5');
+              storeCount[item].products[product].count = count;
+              storeCount[item].products[product].amount = amount;
+              isProductAvailable = true;
               isStoreAvailable = true;
               //countDetail.push(storeCount[item]);
             }
           }
-          console.log("Step 9");
-          console.log("Count Details : " +JSON.stringify(countDetail));
-          if (!isStoreAvailable) {
-            console.log("Step 10");
-            let storeObj = {};
-            let productObj = {};
-            storeObj.products = [];
-            productObj.productId = productId;
-            productObj.count = count;
-            productObj.amount = amount;
-            storeObj.storeId = storeId;
-            storeObj.products.push(productObj);
-            //countDetail.push(storeObj);
-            storeCount.push(storeObj);
-          }
-        }
-        this.setState({countDetail: storeCount});
-        if (storeCount.length > 0) {
-          let amount = 0;
-          let count = 0;
-          for (var item in storeCount) {
-            for (var product in storeCount[item].products) {
-              if (storeCount[item].products[product].count !== 0) {
-                amount +=
-                  parseInt(storeCount[item].products[product].amount) *
-                  storeCount[item].products[product].count;
-                count += storeCount[item].products[product].count;
-              } else {
-                delete storeCount[item].products[product];
-              }
+          console.log('Step 6');
+          if (!isProductAvailable) {
+            console.log('Step 7');
+            let obj = {}; //{productId: productId, count: count, amount: amount};
+            obj.productId = productId;
+            obj.count = count;
+            obj.amount = amount;
+            if (storeCount[item].products[product] === null) {
+              console.log('Step 8');
+              storeCount[item].products = [];
             }
+            storeCount[item].products.push(obj);
+            isStoreAvailable = true;
+            //countDetail.push(storeCount[item]);
           }
-          if (count !== 0) {
-            this.setState({isViewCart: true});
-          } else {
-            this.setState({isViewCart: false});
-          }
-          this.setState({productCount: count, productAmount: amount}, () => {
-            this.storeDataToStorage();
-          });
-        }
-      } else {
-        console.log("ELse");
-        //StoreObject
-        var storeObj = {};
-        storeObj.storeId = storeId;
-        storeObj.products = [];
-
-        //Product object
-        var productDetail = {};
-        productDetail.productId = productId;
-        productDetail.count = count;
-        productDetail.amount = amount;
-        storeObj.products.push(productDetail);
-        countDetail.push(storeObj);
-        this.setState({countDetail: countDetail});
-        if (countDetail.length > 0) {
-          let amount = 0;
-          let count = 0;
-          for (var item in countDetail) {
-            for (var product in countDetail[item].products) {
-              if (countDetail[item].products[product].count !== 0) {
-                amount +=
-                  parseInt(countDetail[item].products[product].amount) *
-                  countDetail[item].products[product].count;
-                count += countDetail[item].products[product].count;
-              } else {
-                delete countDetail[item].products[product];
-              }
-            }
-          }
-          if (count !== 0) {
-            this.setState({isViewCart: true});
-          } else {
-            this.setState({isViewCart: false});
-          }
-          this.setState({productCount: count, productAmount: amount}, () => {
-            this.storeDataToStorage();
-          });
         }
       }
-    
+      console.log('Step 9');
+      if (!isStoreAvailable) {
+        console.log('Step 10');
+        let storeObj = {};
+        let productObj = {};
+        storeObj.products = [];
+        productObj.productId = productId;
+        productObj.count = count;
+        productObj.amount = amount;
+        storeObj.storeId = storeId;
+        storeObj.products.push(productObj);
+        //countDetail.push(storeObj);
+        storeCount.push(storeObj);
+      }
+      this.setState({countDetail: storeCount});
+      if (storeCount.length > 0) {
+        let amount = 0;
+        let count = 0;
+        for (var item in storeCount) {
+          for (var product in storeCount[item].products) {
+            if (
+              storeCount[item].products[product] !== null &&
+              storeCount[item].products[product].count !== 0
+            ) {
+              amount +=
+                parseInt(storeCount[item].products[product].amount) *
+                storeCount[item].products[product].count;
+              count += storeCount[item].products[product].count;
+            } else {
+              delete storeCount[item].products[product];
+            }
+          }
+        }
+        if (count !== 0) {
+          this.setState({isViewCart: true});
+        } else {
+          this.setState({isViewCart: false});
+        }
+        this.setState({productCount: count, productAmount: amount}, () => {
+          this.storeDataToStorage(storeCount);
+        });
+      }
+    } else {
+      console.log('ELse');
+      //StoreObject
+      var storeObj = {};
+      storeObj.storeId = storeId;
+      storeObj.products = [];
+
+      //Product object
+      var productDetail = {};
+      productDetail.productId = productId;
+      productDetail.count = count;
+      productDetail.amount = amount;
+      storeObj.products.push(productDetail);
+      countDetail.push(storeObj);
+      this.setState({countDetail: countDetail});
+      if (countDetail.length > 0) {
+        let amount = 0;
+        let count = 0;
+        for (var item in countDetail) {
+          for (var product in countDetail[item].products) {
+            if (countDetail[item].products[product].count !== 0) {
+              amount +=
+                parseInt(countDetail[item].products[product].amount) *
+                countDetail[item].products[product].count;
+              count += countDetail[item].products[product].count;
+            } else {
+              delete countDetail[item].products[product];
+            }
+          }
+        }
+        if (count !== 0) {
+          this.setState({isViewCart: true});
+        } else {
+          this.setState({isViewCart: false});
+        }
+        this.setState({productCount: count, productAmount: amount}, () => {
+          this.storeDataToStorage(countDetail);
+        });
+      }
+    }
   };
 
-  storeDataToStorage = async () => {
+  storeDataToStorage = async storeCount => {
     try {
+      console.log(JSON.stringify(storeCount));
       let isValueDeleted = await this.removeDataToStorage('Cart');
       if (isValueDeleted) {
-        await AsyncStorage.setItem(
-          'Cart',
-          JSON.stringify(this.state.countDetail),
-        );
+        await AsyncStorage.setItem('Cart', JSON.stringify(storeCount));
         this.getDataToStorage();
       }
     } catch (err) {
