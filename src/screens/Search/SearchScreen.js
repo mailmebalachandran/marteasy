@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image, ActivityIndicator, Text, FlatList} from 'react-native';
+import {View, Image, ActivityIndicator, Text, FlatList, AsyncStorage} from 'react-native';
 import {SearchBar, Avatar, Divider} from 'react-native-elements';
 import * as Images from '../../assets/index';
 import styles from './styles';
@@ -14,7 +14,9 @@ class SearchScreen extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async() => {
+   // await AsyncStorage.removeItem('Cart');
+    let value = await AsyncStorage.getItem('Cart');
     Axios.get(
       'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products/categories/49',
       {
