@@ -98,13 +98,17 @@ class ProductsScreen extends Component {
         });
 
         for (var item in otherStoreProduct) {
-          for (var product in otherStoreProduct[item].products) {
-            console.log(otherStoreProduct[item].products[product]);
-            let obj = {};
-            obj.isAdd = false;
-            obj.count = otherStoreProduct[item].products[product].count;
-            obj.amount = otherStoreProduct[item].products[product].amount;
-            countForPageLoad.push(obj);
+          if (otherStoreProduct[item] !== null) { 
+            for (var product in otherStoreProduct[item].products) {
+              if(otherStoreProduct[item].products[product] !== null)
+              {
+              let obj = {};
+              obj.isAdd = false;
+              obj.count = otherStoreProduct[item].products[product].count;
+              obj.amount = otherStoreProduct[item].products[product].amount;
+              countForPageLoad.push(obj);
+              }
+            }
           }
         }
         console.log(countForPageLoad);
@@ -196,11 +200,18 @@ class ProductsScreen extends Component {
           });
 
           for (var item in otherStoreProduct) {
-            let obj = {};
-            obj.isAdd = false;
-            obj.count = otherStoreProduct[item].count;
-            obj.amount = otherStoreProduct[item].amount;
-            countForPageLoad.push(obj);
+            if (otherStoreProduct[item] !== null) { 
+              for (var product in otherStoreProduct[item].products) {
+                if(otherStoreProduct[item].products[product] !== null)
+                {
+                let obj = {};
+                obj.isAdd = false;
+                obj.count = otherStoreProduct[item].products[product].count;
+                obj.amount = otherStoreProduct[item].products[product].amount;
+                countForPageLoad.push(obj);
+                }
+              }
+            }
           }
 
           // productList.map(product => {
