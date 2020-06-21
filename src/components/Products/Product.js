@@ -9,11 +9,16 @@ class Product extends React.Component {
     super(props);
     let productList = props.productList;
     let productListWithAdd = [];
+
     productList.map(item => {
       let element = [];
       element = item;
-      element.count = 0;
-      element.isAdd = true;
+      console.log(item.count);
+      console.log(item.isAdd);
+      if (item.count === undefined || item.count === 0) {
+        element.count = 0;
+        element.isAdd = true;
+      }
       productListWithAdd.push(element);
     });
     this.state = {
