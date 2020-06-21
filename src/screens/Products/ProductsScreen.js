@@ -98,20 +98,18 @@ class ProductsScreen extends Component {
         });
 
         for (var item in otherStoreProduct) {
-          if (otherStoreProduct[item] !== null) { 
+          if (otherStoreProduct[item] !== null) {
             for (var product in otherStoreProduct[item].products) {
-              if(otherStoreProduct[item].products[product] !== null)
-              {
-              let obj = {};
-              obj.isAdd = false;
-              obj.count = otherStoreProduct[item].products[product].count;
-              obj.amount = otherStoreProduct[item].products[product].amount;
-              countForPageLoad.push(obj);
+              if (otherStoreProduct[item].products[product] !== null) {
+                let obj = {};
+                obj.isAdd = false;
+                obj.count = otherStoreProduct[item].products[product].count;
+                obj.amount = otherStoreProduct[item].products[product].amount;
+                countForPageLoad.push(obj);
               }
             }
           }
         }
-        console.log(countForPageLoad);
         this.setState({productList: productList});
         if (countForPageLoad.length > 0) {
           let amount = 0;
@@ -200,38 +198,18 @@ class ProductsScreen extends Component {
           });
 
           for (var item in otherStoreProduct) {
-            if (otherStoreProduct[item] !== null) { 
+            if (otherStoreProduct[item] !== null) {
               for (var product in otherStoreProduct[item].products) {
-                if(otherStoreProduct[item].products[product] !== null)
-                {
-                let obj = {};
-                obj.isAdd = false;
-                obj.count = otherStoreProduct[item].products[product].count;
-                obj.amount = otherStoreProduct[item].products[product].amount;
-                countForPageLoad.push(obj);
+                if (otherStoreProduct[item].products[product] !== null) {
+                  let obj = {};
+                  obj.isAdd = false;
+                  obj.count = otherStoreProduct[item].products[product].count;
+                  obj.amount = otherStoreProduct[item].products[product].amount;
+                  countForPageLoad.push(obj);
                 }
               }
             }
           }
-
-          // productList.map(product => {
-
-          //   let currentProduct = currentStoreProduct.filter(function(item){
-          //     return item.products.productId == product.id;
-          //   })
-          //   if(currentProduct != null)
-          //   {
-          //     product.isAdd = false;
-          //     product.count = currentProduct.products.count;
-          //   }
-
-          //   // // if (product.id === item.id) {
-          //   // //   product.isAdd = false;
-          //   // //   product.count++;
-          //   // }
-          //   list.push(product);
-          // });
-
           this.setState({productList: productList});
           if (countForPageLoad.length > 0) {
             let amount = 0;
@@ -316,57 +294,42 @@ class ProductsScreen extends Component {
         return asyncDetailsTemp[k];
       });
       this.state.countDetail = result.slice();
-    } else {
-      console.log('Else Storage : null');
     }
 
     if (this.state.countDetail.length > 0) {
-      console.log('Step 1');
       let storeCount = this.state.countDetail;
       let isStoreAvailable = false;
       for (var item in storeCount) {
-        console.log('Step 2');
-        console.log('StoreId : ' + storeCount[item].storeId);
         if (
           storeCount[item].storeId === storeId &&
           storeCount[item].products.length > 0
         ) {
-          console.log('Step 3');
           let isProductAvailable = false;
           for (var product in storeCount[item].products) {
-            console.log('Step 4');
             if (
               storeCount[item].products[product] !== null &&
               storeCount[item].products[product].productId === productId
             ) {
-              console.log('Step 5');
               storeCount[item].products[product].count = count;
               storeCount[item].products[product].amount = amount;
               isProductAvailable = true;
               isStoreAvailable = true;
-              //countDetail.push(storeCount[item]);
             }
           }
-          console.log('Step 6');
           if (!isProductAvailable) {
-            console.log('Step 7');
-            let obj = {}; //{productId: productId, count: count, amount: amount};
+            let obj = {};
             obj.productId = productId;
             obj.count = count;
             obj.amount = amount;
             if (storeCount[item].products[product] === null) {
-              console.log('Step 8');
               storeCount[item].products = [];
             }
             storeCount[item].products.push(obj);
             isStoreAvailable = true;
-            //countDetail.push(storeCount[item]);
           }
         }
       }
-      console.log('Step 9');
       if (!isStoreAvailable) {
-        console.log('Step 10');
         let storeObj = {};
         let productObj = {};
         storeObj.products = [];
@@ -375,7 +338,6 @@ class ProductsScreen extends Component {
         productObj.amount = amount;
         storeObj.storeId = storeId;
         storeObj.products.push(productObj);
-        //countDetail.push(storeObj);
         storeCount.push(storeObj);
       }
       this.setState({countDetail: storeCount});
@@ -407,13 +369,9 @@ class ProductsScreen extends Component {
         });
       }
     } else {
-      console.log('ELse');
-      //StoreObject
       var storeObj = {};
       storeObj.storeId = storeId;
       storeObj.products = [];
-
-      //Product object
       var productDetail = {};
       productDetail.productId = productId;
       productDetail.count = count;
@@ -450,23 +408,12 @@ class ProductsScreen extends Component {
 
   storeDataToStorage = async storeCount => {
     try {
-      console.log(JSON.stringify(storeCount));
       let isValueDeleted = await this.removeDataToStorage('Cart');
       if (isValueDeleted) {
         await AsyncStorage.setItem('Cart', JSON.stringify(storeCount));
-        this.getDataToStorage();
       }
     } catch (err) {
       console.log('Error Details ' + err);
-    }
-  };
-
-  getDataToStorage = async () => {
-    try {
-      let value = await AsyncStorage.getItem('Cart');
-      console.log(JSON.stringify(value));
-    } catch (err) {
-      console.log(err);
     }
   };
 

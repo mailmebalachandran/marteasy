@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getItemTransformedItemDesc} from './utils';
 import styles from './styles';
+import AddCart from '../AddCart/AddCart';
 
 class Product extends React.Component {
   constructor(props) {
@@ -13,8 +14,6 @@ class Product extends React.Component {
     productList.map(item => {
       let element = [];
       element = item;
-      console.log(item.count);
-      console.log(item.isAdd);
       if (item.count === undefined || item.count === 0) {
         element.count = 0;
         element.isAdd = true;
@@ -75,69 +74,15 @@ class Product extends React.Component {
                           flex: 1,
                           flexDirection: 'row',
                         }}>
-                        {product.isAdd && (
-                          <View>
-                            <TouchableOpacity
-                              onPress={() => {
-                                this.props.onAddHandler(product);
-                              }}>
-                              <Text
-                                style={{
-                                  paddingLeft: 20,
-                                  paddingRight: 20,
-                                  paddingBottom: 5,
-                                  paddingTop: 5,
-                                  borderBottomWidth: 1,
-                                  borderColor: 'green',
-                                  borderRadius: 1,
-                                  borderWidth: 1,
-                                }}>
-                                Add
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        )}
-                        {!product.isAdd && (
-                          <>
-                            <View>
-                              <TouchableOpacity
-                                onPress={() =>
-                                  this.props.handleQuantityChange(
-                                    product,
-                                    'DEC',
-                                  )
-                                }>
-                                <View>
-                                  <Icon
-                                    name="minus"
-                                    size={25}
-                                    style={{marginTop: 5}}
-                                  />
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-                            <View>
-                              <Text style={{margin: 5}}>{product.count}</Text>
-                            </View>
-                            <View>
-                              <TouchableOpacity
-                                onPress={() =>
-                                  this.props.handleQuantityChange(
-                                    product,
-                                    'INC',
-                                  )
-                                }>
-                                <View>
-                                  <Icon
-                                    name="plus"
-                                    size={25}
-                                    style={{marginTop: 5}}
-                                  />
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-                          </>
-                        )}
+                        <AddCart
+                          productValue={product}
+                          onAddHandler={product => {
+                            this.props.onAddHandler(product);
+                          }}
+                          handleQuantityChange={(product, type) => {
+                            this.props.handleQuantityChange(product, type);
+                          }}
+                        />
                       </View>
                     </View>
                   </View>
