@@ -78,7 +78,7 @@ class HomeScreen extends Component {
                   style={{
                     marginLeft: 10,
                     marginTop: 20,
-                    fontFamily: 'notoserif',
+                    fontFamily: Platform.OS === 'ios' ? 'Verdana' : 'notoserif',
                     fontWeight: 'bold',
                     fontSize: 20,
                   }}>
