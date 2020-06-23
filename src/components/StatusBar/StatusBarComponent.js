@@ -15,7 +15,7 @@ class StatusBarComponent extends Component {
     return (
       <View>
         <StatusBar
-          backgroundColor={Color}
+          backgroundColor={ThemeColor.PrimaryColor}
           barStyle={styleTypes[this.props.styleType]}
         />
       </View>

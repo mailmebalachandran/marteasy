@@ -1,0 +1,1 @@
+export const OPENING_HOUR_TITLES = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
