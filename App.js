@@ -9,6 +9,7 @@ import * as ThemeColor from './src/themes/colors';
 import ProductsScreen from './src/screens/Products/ProductsScreen';
 import CartScreen from './src/screens/Cart/CartScreen';
 import SearchScreen from './src/screens/Search/SearchScreen';
+import ProfileScreen from './src/screens/Profile/ProfileScreen';
 
 class App extends Component {
   loginScreenNavigator = () => {
@@ -26,7 +27,7 @@ class App extends Component {
     const Tab = createBottomTabNavigator();
     return (
       <Tab.Navigator
-        initialRouteName="Search"
+        initialRouteName="Account"
         header={{visible:true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>
@@ -39,7 +40,7 @@ class App extends Component {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
-        <Tab.Screen name="Account" component={HomeScreen} />
+        <Tab.Screen name="Account" component={ProfileScreen} />
       </Tab.Navigator>
     );
   };
