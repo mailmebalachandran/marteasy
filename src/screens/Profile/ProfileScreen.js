@@ -23,13 +23,14 @@ class ProfileScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            IsLoaded: false,
+            isLoading: false,
             userDetails: {},
             orders: [],
         };
     }
 
     componentDidMount = async () => {
+        this.setState({ isLoading: true })
         Axios.get(
             'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
             {
@@ -55,7 +56,10 @@ class ProfileScreen extends Component {
                     this.setState({
                         orders: res.data
                     })
-                })
+                    this.setState({ isLoading: false })
+                }).catch(err => {
+                    console.log(err);
+                });
                 this.setState({
                     userDetails: res.data[0]
                 })
@@ -72,6 +76,9 @@ class ProfileScreen extends Component {
         } else {
             return "No Phone";
         }
+    }
+    navigateToManageAddr = () => {
+        this.props.navigation.navigate('Account', { screen: 'ManageAddr' });
     }
 
     render() {
@@ -99,7 +106,9 @@ class ProfileScreen extends Component {
                                             </Text>
                                         </View>
                                         <Divider style={styles.divideStyles} />
-                                        <TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={this.navigateToManageAddr}
+                                        >
                                             <View style={styles.flexRow}>
                                                 <View>
                                                     <Text
