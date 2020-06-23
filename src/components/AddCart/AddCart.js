@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ThemeColor from '../../themes/colors';
 
 class AddCart extends Component {
   constructor(props) {
@@ -12,40 +13,70 @@ class AddCart extends Component {
     let bindingValues;
     if (this.props.productValue.isAdd) {
       bindingValues = (
-        <View>
+        <View style={{width:80}}>
           <TouchableOpacity
             onPress={() => {
               this.props.onAddHandler(this.props.productValue);
             }}>
-            <Text
-              style={styles.addTextStyle}>
-              Add
-            </Text>
+            <Text style={styles.addTextStyle}>Add</Text>
           </TouchableOpacity>
         </View>
       );
     } else {
-        bindingValues = (<>
-        <View>
-          <TouchableOpacity
-            onPress={() => this.props.handleQuantityChange(this.props.productValue, 'DEC')}>
-            <View>
-              <Icon name="minus" size={25} style={{marginTop: 5}} />
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={{margin: 5}}>{this.props.productValue.count}</Text>
-        </View>
-        <View>
-          <TouchableOpacity
-            onPress={() => this.props.handleQuantityChange(this.props.productValue, 'INC')}>
-            <View>
-              <Icon name="plus" size={25} style={{marginTop: 5}} />
-            </View>
-          </TouchableOpacity>
-        </View>
-      </>);
+      bindingValues = (
+        <>
+          <View
+            style={{
+              borderColor: ThemeColor.DarkColor,
+              borderStyle: 'solid',
+              borderWidth: 1,
+              padding: 5,
+              height: 35,
+              borderRightColor: ThemeColor.DarkTextColor,
+              borderRightWidth: 0,
+            }}>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.handleQuantityChange(this.props.productValue, 'DEC')
+              }>
+              <View>
+                <Icon name="minus" size={15} style={{marginTop: 5}} />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              borderColor: ThemeColor.DarkColor,
+              borderStyle: 'solid',
+              borderWidth: 1,
+              padding: 5,
+              height: 35,
+              borderRightColor: ThemeColor.DarkTextColor,
+              borderRightWidth: 0,
+            }}>
+            <Text style={{margin: 5, marginTop: 0}}>
+              {this.props.productValue.count}
+            </Text>
+          </View>
+          <View
+            style={{
+              borderColor: ThemeColor.DarkColor,
+              borderStyle: 'solid',
+              borderWidth: 1,
+              padding: 5,
+              height: 35,
+            }}>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.handleQuantityChange(this.props.productValue, 'INC')
+              }>
+              <View>
+                <Icon name="plus" size={15} style={{marginTop: 5}} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </>
+      );
     }
     return <>{bindingValues}</>;
   }

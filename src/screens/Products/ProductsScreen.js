@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Text, Image, Avatar, Rating } from 'react-native-elements';
+import React, {Component} from 'react';
+import {Text, Image, Avatar, Rating} from 'react-native-elements';
 import {
   SafeAreaView,
   View,
@@ -16,6 +16,7 @@ import * as ThemeColor from '../../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Header from '../../components/Header/Header';
+import ViewCart from '../../components/ViewCart/ViewCart';
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class ProductsScreen extends Component {
       productCount: 0,
       productAmount: 0,
       storeId: 0,
-      isRunning: false
+      isRunning: false,
     };
   }
 
@@ -39,7 +40,7 @@ class ProductsScreen extends Component {
   };
 
   onPageLoad = async () => {
-    this.setState({ isLoading: true, storeId: this.props.route.params.storeId });
+    this.setState({isLoading: true, storeId: this.props.route.params.storeId});
     const storedId = this.props.route.params.storeId;
     const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
       this.props.route.params.storeId,
@@ -53,10 +54,10 @@ class ProductsScreen extends Component {
     let asyncDetails = await AsyncStorage.getItem('Cart');
     if (asyncDetails != null) {
       let asyncDetailsTemp = JSON.parse(asyncDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function (k) {
+      let result = Object.keys(asyncDetailsTemp).map(function(k) {
         return asyncDetailsTemp[k];
       });
-      let currentStoreProduct = result.filter(function (item) {
+      let currentStoreProduct = result.filter(function(item) {
         return item.storeId == storedId;
       });
 
@@ -82,10 +83,9 @@ class ProductsScreen extends Component {
           list.push(product);
         });
       }
-      let otherStoreProduct = result.filter(function (item) {
+      let otherStoreProduct = result.filter(function(item) {
         return item.storeId !== storedId;
       });
-
 
       for (var item in otherStoreProduct) {
         if (otherStoreProduct[item] !== null) {
@@ -100,7 +100,7 @@ class ProductsScreen extends Component {
           }
         }
       }
-      this.setState({ productList: productList });
+      this.setState({productList: productList});
       if (countForPageLoad.length > 0) {
         let amount = 0;
         let count = 0;
@@ -116,22 +116,20 @@ class ProductsScreen extends Component {
             count += countForPageLoad[item].count;
           }
         }
-        this.setState({ productCount: count, productAmount: amount });
+        this.setState({productCount: count, productAmount: amount});
         if (count !== 0) {
-          this.setState({ isViewCart: true });
+          this.setState({isViewCart: true});
         } else {
-          this.setState({ isViewCart: false });
+          this.setState({isViewCart: false});
         }
       }
-
     }
-    this.setState({ productList: productList, storeDetail: storeDetail }, () => {
-      this.setState({ isLoading: false });
+    this.setState({productList: productList, storeDetail: storeDetail}, () => {
+      this.setState({isLoading: false});
     });
   };
 
   componentDidUpdate = async prevProps => {
-
     if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
       this.state = {
         isLoading: false,
@@ -143,14 +141,13 @@ class ProductsScreen extends Component {
         productCount: 0,
         productAmount: 0,
       };
-      this.setState({ isLoading: true, productCount: 0, productAmount: 0 });
+      this.setState({isLoading: true, productCount: 0, productAmount: 0});
       const storedId = this.props.route.params.storeId;
       this.onPageLoad();
     }
   };
 
   onAddHandler = item => {
-
     let list = [];
     this.state.productList.map(product => {
       if (product.id === item.id) {
@@ -159,7 +156,7 @@ class ProductsScreen extends Component {
       }
       list.push(product);
     });
-    this.setState({ productList: list });
+    this.setState({productList: list});
     this.checkCountDetails(
       this.state.storeDetail.id,
       item.id,
@@ -168,11 +165,9 @@ class ProductsScreen extends Component {
     );
   };
   handleQuantityChange = (item, type) => {
-    if (this.state.isRunning)
-      return;
+    if (this.state.isRunning) return;
     // this.state.isRunning = true;
-    this.setState({ isRunning: true }, () => {
-    });
+    this.setState({isRunning: true}, () => {});
 
     let list = [];
     this.state.productList.map(product => {
@@ -186,14 +181,14 @@ class ProductsScreen extends Component {
       }
       list.push(product);
     });
-    this.setState({ productList: list });
+    this.setState({productList: list});
     this.checkCountDetails(
       this.state.storeDetail.id,
       item.id,
       item.count,
       item.sale_price,
     );
-    this.setState({ isRunning: false });
+    this.setState({isRunning: false});
     this.state.isRunning = false;
   };
 
@@ -204,7 +199,7 @@ class ProductsScreen extends Component {
     let asyncDetails = await AsyncStorage.getItem('Cart');
     if (asyncDetails != null) {
       let asyncDetailsTemp = JSON.parse(asyncDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function (k) {
+      let result = Object.keys(asyncDetailsTemp).map(function(k) {
         return asyncDetailsTemp[k];
       });
       this.state.countDetail = result.slice();
@@ -254,7 +249,7 @@ class ProductsScreen extends Component {
         storeObj.products.push(productObj);
         storeCount.push(storeObj);
       }
-      this.setState({ countDetail: storeCount });
+      this.setState({countDetail: storeCount});
       if (storeCount.length > 0) {
         let amount = 0;
         let count = 0;
@@ -274,11 +269,11 @@ class ProductsScreen extends Component {
           }
         }
         if (count !== 0) {
-          this.setState({ isViewCart: true });
+          this.setState({isViewCart: true});
         } else {
-          this.setState({ isViewCart: false });
+          this.setState({isViewCart: false});
         }
-        this.setState({ productCount: count, productAmount: amount }, () => {
+        this.setState({productCount: count, productAmount: amount}, () => {
           this.storeDataToStorage(storeCount);
         });
       }
@@ -292,7 +287,7 @@ class ProductsScreen extends Component {
       productDetail.amount = amount;
       storeObj.products.push(productDetail);
       countDetail.push(storeObj);
-      this.setState({ countDetail: countDetail });
+      this.setState({countDetail: countDetail});
       if (countDetail.length > 0) {
         let amount = 0;
         let count = 0;
@@ -309,11 +304,11 @@ class ProductsScreen extends Component {
           }
         }
         if (count !== 0) {
-          this.setState({ isViewCart: true });
+          this.setState({isViewCart: true});
         } else {
-          this.setState({ isViewCart: false });
+          this.setState({isViewCart: false});
         }
-        this.setState({ productCount: count, productAmount: amount }, () => {
+        this.setState({productCount: count, productAmount: amount}, () => {
           this.storeDataToStorage(countDetail);
         });
       }
@@ -346,125 +341,88 @@ class ProductsScreen extends Component {
         {this.state.isLoading ? (
           <MenuLoader />
         ) : (
-            <View style={{ flex: 1 }}>
-              <StatusBarComponent styleType={0} />
-              <Header
-                navigationScreenValue="HomeScreen"
-                navigation={this.props.navigation}
-              />
-              {/* <Image
+          <View style={{flex: 1}}>
+            <StatusBarComponent styleType={0} />
+            <Header
+              navigationScreenValue="HomeScreen"
+              navigation={this.props.navigation}
+            />
+            {/* <Image
             source={{
               uri: this.state.storeDetail.banner,
             }}
             style={{ width: '100%', height: 100 }}
             PlaceholderContent={<ActivityIndicator isLoading={true} />}
           /> */}
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                }}>
-                <View style={{ height: 70 }}>
-                  <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <View style={{ flex: 0.2 }}>
-                      <Avatar
-                        rounded
-                        size="large"
-                        containerStyle={{ margin: 5 }}
-                        source={{
-                          uri: this.state.storeDetail.gravatar,
-                        }}
-                      />
-                    </View>
-                    <View style={{ flex: 0.6, marginLeft: 20 }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          marginTop: 10,
-                        }}>
-                        {this.state.storeDetail.store_name}
-                      </Text>
-                      <Text style={{ fontSize: 10 }}>Description</Text>
-                      <Text style={{ fontSize: 10, marginTop: 5 }}>
-                        <Icon name="star" size={10} color="grey" /> 0 reviews
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{height: 70}}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View style={{flex: 0.2}}>
+                    <Avatar
+                      rounded
+                      size="large"
+                      containerStyle={{margin: 5}}
+                      source={{
+                        uri: this.state.storeDetail.gravatar,
+                      }}
+                    />
+                  </View>
+                  <View style={{flex: 0.6, marginLeft: 20}}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        marginTop: 10,
+                      }}>
+                      {this.state.storeDetail.store_name}
                     </Text>
-                    </View>
-                    {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
+                    <Text style={{fontSize: 10}}>Description</Text>
+                    <Text style={{fontSize: 10, marginTop: 5}}>
+                      <Icon name="star" size={10} color="grey" /> 0 reviews
+                    </Text>
+                  </View>
+                  {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
                     <Rating
                       style={{width: 20, backgroundColor: 'transparent'}}
                       imageSize={20}
                     />
                     <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
                   </View> */}
-                  </View>
                 </View>
-                <View style={{ height: 20 }}>
-                  <Line />
-                </View>
-                {/* <View style={{height: 50}}>
+              </View>
+              <View style={{height: 20}}>
+                <Line />
+              </View>
+              {/* <View style={{height: 50}}>
                 {this.state.storeDetail.store_open_close && <OpeningHour {...this.state} />}
               </View> */}
-                <View style={{ height: 20 }}>
-                  <Line />
-                </View>
-                {this.state.productList.length > 0 && (
-                  <Product
-                    {...this.state}
-                    onAddHandler={product => this.onAddHandler(product)}
-                    storeId={this.props.route.params.storeId}
-                    handleQuantityChange={(item, type) => {
-                      this.handleQuantityChange(item, type);
-                    }}
-                  />
-                )}
+              <View style={{height: 20}}>
+                <Line />
               </View>
-              {this.state.isViewCart && (
-                <View
-                  style={{
-                    backgroundColor: ThemeColor.PrimaryColor,
-                    height: 50,
-                    justifyContent: 'center',
-                  }}>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}>
-                    <View style={{ marginRight: 20, justifyContent: 'center' }}>
-                      <Text style={{ color: ThemeColor.DarkTextColor }}>
-                        {this.state.productCount} item
-                      {this.state.productCount > 1 ? 's ' : ' '} |{'  '}
-                        <Icon name="rupee" size={10} /> {this.state.productAmount}
-                      </Text>
-                    </View>
-                    <View style={{ width: '30%' }} />
-                    <View style={{ marginRight: 10, justifyContent: 'center' }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.props.navigation.navigate('Cart', {
-                            countDetail: this.state.countDetail,
-                          });
-                        }}>
-                        <Text style={{ color: ThemeColor.DarkTextColor }}>
-                          View Cart
-                      </Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={{ marginRight: 30, justifyContent: 'center' }}>
-                      <Icon
-                        name="shopping-cart"
-                        size={20}
-                        color={ThemeColor.DarkTextColor}
-                      />
-                    </View>
-                  </View>
-                </View>
+              {this.state.productList.length > 0 && (
+                <Product
+                  {...this.state}
+                  onAddHandler={product => this.onAddHandler(product)}
+                  storeId={this.props.route.params.storeId}
+                  handleQuantityChange={(item, type) => {
+                    this.handleQuantityChange(item, type);
+                  }}
+                />
               )}
             </View>
-          )}
+            {this.state.isViewCart && (
+              <ViewCart
+                productCount={this.state.productCount}
+                productAmount={this.state.productAmount}
+              />
+            )}
+          </View>
+        )}
       </>
     );
   }
