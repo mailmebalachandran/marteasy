@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1064399159614",
+    "firebase_url": "https://easymart-bd738.firebaseio.com",
+    "project_id": "easymart-bd738",
+    "storage_bucket": "easymart-bd738.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064399159614:android:777c6769a85491e317ac6f",
+        "android_client_info": {
+          "package_name": "com.marteasy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064399159614-nknhsjvcdc51fkledr3b8s6t680m9m08.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNgrNgmhD_8toYSnHwlHqE5W52DWYSlPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064399159614-nknhsjvcdc51fkledr3b8s6t680m9m08.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1064399159614-n7p2uusasnk3i22hidib3o1o44sjkftg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.MartEasy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
