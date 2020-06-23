@@ -10,6 +10,8 @@ import ProductsScreen from './src/screens/Products/ProductsScreen';
 import CartScreen from './src/screens/Cart/CartScreen';
 import SearchScreen from './src/screens/Search/SearchScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
+import ManageAddress from './src/screens/ManageAddress/ManageAddress';
+import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay"
 
 class App extends Component {
   loginScreenNavigator = () => {
@@ -19,6 +21,18 @@ class App extends Component {
         initialRouteName="Login"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    );
+  };
+  profileStack = () => {
+    let Stack = createStackNavigator();
+    return (
+      <Stack.Navigator
+        initialRouteName="Profile"
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="ManageAddr" component={ManageAddress} />
+        <Stack.Screen name="AddressEdit" component={AddressOverlay} />
       </Stack.Navigator>
     );
   };
@@ -40,7 +54,7 @@ class App extends Component {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
-        <Tab.Screen name="Account" component={ProfileScreen} />
+        <Tab.Screen name="Account" component={this.profileStack} />
       </Tab.Navigator>
     );
   };
