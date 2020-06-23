@@ -15,6 +15,7 @@ class AddressOverlay extends React.Component {
         this.state = {
             firstName: "",
             lastName: "",
+            company: "",
             address1: "",
             address2: "",
             city: "",
@@ -26,11 +27,48 @@ class AddressOverlay extends React.Component {
             isAddrUpdated: "",
         }
     }
+    setEditDetails = (data) => {
+        this.setState({
+            firstName: data.first_name,
+            lastName: data.last_name,
+            company: data.company,
+            address1: data.address_1,
+            address2: data.address_2,
+            city: data.city,
+            state: data.state,
+            country: "IN",
+            postalCode: data.postcode,
+            phone: data.phone,
+            email: data.email,
+            userId: "",
+        })
+    }
+
     componentDidMount = () => {
-        // const { isEdit } = this.props.route.params;
-        // if(isEdit) {
-        //     axios.get
-        // }
+        const { isEdit, isShipping } = this.props.route.params;
+        if (isEdit) {
+            this.setState({ isLoading: true })
+            axios.get(
+                'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                {
+                    params: {
+                        email: 'user_test2@gmail.com',
+                        consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                        consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                    },
+                },
+            )
+                .then(res => {
+                    const { data } = res;
+                    isShipping ?
+                        this.setEditDetails(data[0].shipping) : this.setEditDetails(data[0].billing)
+                    this.setState({userId: data[0].id})
+                    this.setState({ isLoading: false })
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
     hideOverlay = () => {
         this.setState({ isVisible: false })
@@ -40,15 +78,66 @@ class AddressOverlay extends React.Component {
         const { isEdit, isShipping } = this.props.route.params;
         heading += isEdit ? "Edit " : "Add ";
         heading += isShipping ? "Shipping" : "Billing";
-        heading += "Address"
+        heading += " Address"
         return heading;
     }
-    navigateToManageAddr = () =>  {
-        this.props.navigation.navigate("Account",{
+    navigateToManageAddr = () => {
+        this.props.navigation.navigate("Account", {
             screen: "ManageAddr",
             params: {
                 isAddrUpdate: this.state.isAddrUpdated,
             }
+        })
+    }
+    updateAddr = () => {
+        const { isShipping, userId } = this.props.route.params;
+        let payload = {}
+        if (isShipping) {
+            payload = {
+                shipping: {
+                    first_name: this.state.firstName,
+                    last_name: this.state.lastName,
+                    company: this.state.company,
+                    address_1: this.state.address1,
+                    address_2: this.state.address2,
+                    city: this.state.city,
+                    postcode: this.state.postalCode,
+                    country: this.state.country,
+                    state: this.state.state
+                }
+            }
+        } else {
+            payload = {
+                billing: {
+                    first_name: this.state.firstName,
+                    last_name: this.state.lastName,
+                    company: this.state.company,
+                    address_1: this.state.address1,
+                    address_2: this.state.address2,
+                    city: this.state.city,
+                    postcode: this.state.postalCode,
+                    country: this.state.country,
+                    state: this.state.state,
+                    email: this.state.email,
+                    phone: this.state.phone,
+                }
+            }
+        }
+        axios.put(
+            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers/'+userId,
+            payload,
+            {
+                params: {
+                    email: 'user_test2@gmail.com',
+                    consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                    consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                },
+            },
+        ).then((res) => {
+            console.log("from update",res.data)
+        })
+        .catch((err) => {
+            console.log(err);
         })
     }
     render() {
@@ -62,7 +151,7 @@ class AddressOverlay extends React.Component {
                             </View>
                             <TextBox
                                 placeHolderValue="FirstName"
-                                textValue={this.state.UserName}
+                                textValue={this.state.firstName}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -72,7 +161,7 @@ class AddressOverlay extends React.Component {
                             />
                             <TextBox
                                 placeHolderValue="LastName"
-                                textValue={this.state.UserName}
+                                textValue={this.state.lastName}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -81,8 +170,18 @@ class AddressOverlay extends React.Component {
                                 }}
                             />
                             <TextBox
+                                placeHolderValue="Company Name"
+                                textValue={this.state.company}
+                                secureText={false}
+                                textStyle={{ fontSize: 10 }}
+                                autoCapitalize='none'
+                                onChangedTextHandler={text => {
+                                    this.setState({ company: text });
+                                }}
+                            />
+                            <TextBox
                                 placeHolderValue="Address Line 1"
-                                textValue={this.state.UserName}
+                                textValue={this.state.address1}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -92,7 +191,7 @@ class AddressOverlay extends React.Component {
                             />
                             <TextBox
                                 placeHolderValue="Address Line 2"
-                                textValue={this.state.UserName}
+                                textValue={this.state.address2}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -102,7 +201,7 @@ class AddressOverlay extends React.Component {
                             />
                             <TextBox
                                 placeHolderValue="Town/City"
-                                textValue={this.state.UserName}
+                                textValue={this.state.city}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -112,7 +211,7 @@ class AddressOverlay extends React.Component {
                             />
                             <TextBox
                                 placeHolderValue="State/Country"
-                                textValue={this.state.UserName}
+                                textValue={this.state.state}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -122,7 +221,7 @@ class AddressOverlay extends React.Component {
                             />
                             <TextBox
                                 placeHolderValue="Postal Code"
-                                textValue={this.state.UserName}
+                                textValue={this.state.postalCode}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -132,7 +231,7 @@ class AddressOverlay extends React.Component {
                             />
                             <TextBox
                                 placeHolderValue="Email"
-                                textValue={this.state.UserName}
+                                textValue={this.state.email}
                                 secureText={false}
                                 textStyle={{ fontSize: 10 }}
                                 autoCapitalize='none'
@@ -150,6 +249,10 @@ class AddressOverlay extends React.Component {
                                         />
                                     }
                                     title="Save"
+                                    style={styles.savebtn}
+                                    onPress={
+                                        this.updateAddr
+                                    }
                                 />
                                 <Button
                                     icon={
@@ -160,6 +263,7 @@ class AddressOverlay extends React.Component {
                                         />
                                     }
                                     title="Cancel"
+                                    style={styles.cancelBtn}
                                     onPress={
                                         this.navigateToManageAddr
                                     }

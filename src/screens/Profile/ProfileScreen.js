@@ -52,7 +52,6 @@ class ProfileScreen extends Component {
                         },
                     },
                 ).then((res) => {
-                    console.log(res.data)
                     this.setState({
                         orders: res.data
                     })

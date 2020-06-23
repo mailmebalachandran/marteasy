@@ -35,7 +35,7 @@ class ManageAddress extends Component {
             'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
             {
                 params: {
-                    email: 'user_test1@gmail.com',
+                    email: 'user_test2@gmail.com',
                     consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
                     consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
                 },
@@ -46,7 +46,6 @@ class ManageAddress extends Component {
                     userDetails: res.data[0]
                 })
                 this.setState({ isLoading: false })
-                console.log("dets", this.state.userDetails)
             })
             .catch(err => {
                 console.log(err);
@@ -55,7 +54,7 @@ class ManageAddress extends Component {
 
     renderBillingAddress = (userDetails) => {
         if (userDetails !== undefined) {
-            if (userDetails.billing !== undefined) {
+            if (userDetails.billing !== undefined && userDetails.billing.city !== "") {
                 const { billing } = userDetails;
                 return (
                     <>
@@ -117,8 +116,8 @@ class ManageAddress extends Component {
 
     renderShippingAddress = (userDetails) => {
         if (userDetails !== undefined) {
-            if (userDetails.billing !== undefined) {
-                const { billing } = userDetails;
+            if (userDetails.shipping !== undefined && userDetails.shipping.city !== "") {
+                const { shipping } = userDetails;
                 return (
                     <>
                         <View style={styles.flexRow}>
@@ -129,13 +128,13 @@ class ManageAddress extends Component {
                                     {(`  Shipping Address`)}
                                 </Text>
                                 <Text style={styles.subHeading}>
-                                    {`${billing.first_name} ${billing.last_name}`}
+                                    {`${shipping.first_name} ${shipping.last_name}`}
                                 </Text>
                                 <Text style={styles.subHeading}>
                                     {
-                                        billing.address_1 + ', ' + billing.address_2 + ', ' +
-                                        billing.city + ', ' + billing.state + ', ' +
-                                        billing.country
+                                        shipping.address_1 + ', ' + shipping.address_2 + ', ' +
+                                        shipping.city + ', ' + shipping.state + ', ' +
+                                        shipping.country
                                     }
                                 </Text>
                             </View>
@@ -184,12 +183,13 @@ class ManageAddress extends Component {
                 params: {
                     isShowAddrOverlay: true,
                     isEdit: true,
-                    isShippingAddr
+                    isShippingAddr,
+                    userId: this.state.userDetails.id
                 }
             }
         );
     }
-    showAddAddrOverlay = (isShippingAddr) => {
+    showAddAddrOverlay = (isShipping) => {
         this.props.navigation.navigate(
             'Account',
             {
@@ -197,7 +197,8 @@ class ManageAddress extends Component {
                 params: {
                     isShowAddrOverlay: true,
                     isEdit: false,
-                    isShippingAddr
+                    isShipping,
+                    userId: this.state.userDetails.id
                 }
             }
         );
