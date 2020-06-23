@@ -4,6 +4,7 @@ import {Text} from 'react-native-elements';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Slider from '../../components/Slider/Slider';
 import StoreList from '../../components/StoreList/StoreList';
+import CategoryList from '../../components/CategoryList/CategoryList';
 import HomeAPI from '../../api/Home/HomeAPI';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import * as Images from '../../assets/index';
@@ -15,6 +16,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       ShopList: [],
+      CategoryList: [],
       isLoading: true,
     };
   }
@@ -22,6 +24,7 @@ class HomeScreen extends Component {
   componentDidMount = () => {
     this.setState({isLoading: true});
     this.getStoresOnLoad();
+    this.getCategoryOnLoad();
   };
 
   getStoresOnLoad = async () => {
@@ -29,6 +32,16 @@ class HomeScreen extends Component {
     if (result !== undefined) {
       this.setState({ShopList: result}, () => {
         this.setState({isLoading: false});
+      });
+    }
+  };
+
+  getCategoryOnLoad = async () => {
+    let result = await HomeAPI.GetCategories();
+    if (result !== undefined) {
+      this.setState({CategoryList: result}, () => {
+        this.setState({isLoading: false});
+        console.log('getCategoryOnLoad :' + JSON.stringify(result[0]))
       });
     }
   };
@@ -82,6 +95,23 @@ class HomeScreen extends Component {
                     fontWeight: 'bold',
                     fontSize: 20,
                   }}>
+                  <Icon name="glass-martini-alt" size={20} color="grey" />
+                  {'  '}Category
+                </Text>
+                <CategoryList
+                  dataValues={this.state.CategoryList}
+                  navigation={this.props.navigation}
+                />
+              </View>
+              <View style={{marginTop: 10, backgroundColor: 'white'}}>
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    marginTop: 20,
+                    fontFamily: 'notoserif',
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                  }}>
                   <Icon name="utensils" size={20} color="grey" />
                   {'  '}Featured Stores
                 </Text>
@@ -90,6 +120,7 @@ class HomeScreen extends Component {
                   navigation={this.props.navigation}
                 />
               </View>
+              
               <Toast
                 ref="toast"
                 style={{backgroundColor: '#dfdfdf'}}

@@ -21,4 +21,19 @@ const GetStoreBasedonStoreId = async storeId => {
   }
 };
 
-export default {GetProductBasedonStoreId, GetStoreBasedonStoreId};
+const GetProductBasedonCategoryId = async categoryId => {
+  try {
+    console.log('Step1')
+    const {data} = await Axios.get(
+      Constants.GetProductByCategoryAPI + categoryId, {
+        params: {consumer_key: Constants.CONSUMER_KEY,consumer_secret: Constants.CONSUMER_SECRET}});
+        console.log('Step2')
+    return data;
+  } catch (err) {
+    console.log('Step3')
+    return err;
+  }
+};
+
+
+export default {GetProductBasedonStoreId, GetStoreBasedonStoreId, GetProductBasedonCategoryId};

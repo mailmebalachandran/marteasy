@@ -2,6 +2,8 @@ export const LoginAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/jwt-
 export const GetProductsAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/dokan/v1/stores/";
 export const GetShopsAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/dokan/v1/stores/";
 export const SearchProductsAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products?search=";
+export const GetCategoriesAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products/categories?parent=0";
+export const GetProductByCategoryAPI = "https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products?category=";
 
 
 export const CONSUMER_KEY = "ck_6dcda63598acde7f3c8f52a07095629132ca84ed";

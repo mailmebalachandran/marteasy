@@ -4,7 +4,7 @@ import styles from './styles';
 import { Card } from 'react-native-elements';
 import * as ThemeColor from '../../themes/colors';
 
-class StoreList extends Component {
+class CategoryList extends Component {
   constructor(props) {
     super(props);
   }
@@ -21,18 +21,18 @@ class StoreList extends Component {
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('ProductScreen', {
-                    isStore:true,
+                    isStore:false,
                     storeId: item.id,
-                    storeName: item.store_name,
-                    storeOpen: item.store_open_close,
-                    image:item.gravatar
+                    storeName: item.name,
+                    storeOpen: '',
+                    image:item.image.src
                   })
                 }
                 }
               >
                 <View>
                   <Image
-                    source={{ uri: item.gravatar }}
+                    source={{ uri: item.image.src }}
                     style={{
                       resizeMode: 'contain',
                       height: 100,
@@ -47,7 +47,7 @@ class StoreList extends Component {
                     fontWeight: 'bold',
                   }}>
                   {' '}
-                  {item.store_name}{' '}
+                  {item.name}{' '}
                 </Text>
               </TouchableOpacity>
             </Card>
@@ -60,4 +60,4 @@ class StoreList extends Component {
   }
 }
 
-export default StoreList;
+export default CategoryList;

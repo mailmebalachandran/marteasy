@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {getItemTransformedItemDesc} from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
+import * as Images from '../../assets/index'
 
 class Product extends React.Component {
   constructor(props) {
@@ -26,13 +27,40 @@ class Product extends React.Component {
       countList: [],
     };
   }
+
+  onAvatarImage = item => {
+    if (item.images.length > 0) {
+      return (
+        <View style={styles.productImageContainer}>
+        <Image
+          style={styles.productImage}
+          resizeMode="cover"
+          source={{uri: item.images[0].src}}
+        />
+      </View>
+      );
+    } else {
+      return (
+        <View style={styles.productImageContainer}>
+        <Image
+          style={styles.productImage}
+          resizeMode="cover"
+          source={Images.NODISH}
+        />
+      </View>
+      );
+    }
+  };
+
   renderProductImage = ({src}) => {
+     console.log('src :' + src);
     return (
+      
       <View style={styles.productImageContainer}>
         <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{uri: src}}
+          // source={{uri: src.src}}
         />
       </View>
     );
@@ -49,7 +77,7 @@ class Product extends React.Component {
                   flex: 1,
                   flexDirection: 'row',
                 }}>
-                {this.renderProductImage(product.images[0])}
+                {this.onAvatarImage(product)}
                 <View>
                   <Text style={styles.productName}>{product.name}</Text>
                   <Text style={styles.productDesc}>

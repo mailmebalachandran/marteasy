@@ -11,4 +11,15 @@ const GetStores = async storeId => {
   }
 };
 
-export default {GetStores};
+const GetCategories = async storeId => {
+  let res;
+  try {
+    res = await Axios.get(Constants.GetCategoriesAPI, {
+      params: {consumer_key: Constants.CONSUMER_KEY,consumer_secret: Constants.CONSUMER_SECRET}});
+    return res.data;
+  } catch (err) {
+    return JSON.parse('{"message":"Something went wrong", "isValid":false}');
+  }
+};
+
+export default {GetStores, GetCategories};
