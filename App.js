@@ -41,7 +41,7 @@ class App extends Component {
     const Tab = createBottomTabNavigator();
     return (
       <Tab.Navigator
-        initialRouteName="Account"
+        initialRouteName="Cart"
         header={{visible:true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>

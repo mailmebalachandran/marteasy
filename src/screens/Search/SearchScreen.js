@@ -7,7 +7,7 @@ import {
   FlatList,
   AsyncStorage,
 } from 'react-native';
-import {SearchBar, Avatar, Divider} from 'react-native-elements';
+import {SearchBar, Avatar, Divider, Overlay} from 'react-native-elements';
 import * as Images from '../../assets/index';
 import styles from './styles';
 import Axios from 'axios';
@@ -31,12 +31,14 @@ class SearchScreen extends Component {
       productCount: 0,
       productAmount: 0,
       storeId: 0,
-      productInAsyncDetails: [],
+      productInAsyncDetails: []
     };
   }
 
   componentDidMount = async () => {
-    this.onPageLoad();
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.onPageLoad();
+    });
   };
 
   onPageLoad = async () => {
@@ -80,7 +82,7 @@ class SearchScreen extends Component {
             countForPageLoad[item].count !== 0
           ) {
             amount +=
-              parseInt(countForPageLoad[item].amount) *
+              parseFloat(countForPageLoad[item].amount) *
               countForPageLoad[item].count;
             count += countForPageLoad[item].count;
           }
