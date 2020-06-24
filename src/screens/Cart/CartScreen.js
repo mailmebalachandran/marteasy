@@ -7,8 +7,9 @@ import {
   AsyncStorage,
   Dimensions,
   TouchableOpacity,
+  Button,
 } from 'react-native';
-import {Avatar, Divider} from 'react-native-elements';
+import {Avatar, Divider, Overlay} from 'react-native-elements';
 import * as Images from '../../assets/index';
 import ButtonComponent from '../../components/Button/Button';
 import * as ThemeColor from '../../themes/colors';
@@ -17,6 +18,7 @@ import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CartAPI from '../../api/Cart/CartAPI';
 import AddCart from '../../components/AddCart/AddCart';
+import MenuLoader from '../../components/Loader/MenuLoader';
 
 class CartScreen extends Component {
   constructor(props) {
@@ -27,8 +29,11 @@ class CartScreen extends Component {
       productList: [],
       totalAmount: 0,
       deliveryAmount: 0,
-      totalCount: 0
+      totalCount: 0,
+      totalAllAmount: 0,
+      overlayVisible: false,
     };
+    this.getCartDetails();
   }
 
   getDataToStorage = async () => {
@@ -41,7 +46,10 @@ class CartScreen extends Component {
   };
 
   componentDidMount = async () => {
-    this.getCartDetails();
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.setState({isLoading: true});
+      this.getCartDetails();
+    });
   };
 
   getCartDetails = async () => {
@@ -66,46 +74,61 @@ class CartScreen extends Component {
           }
         }
       }
-      let productListData = await CartAPI.GetCartDetails(productsInCart);
-      console.log(productListData.length);
-      if (
-        productListData !== null &&
-        productListData !== undefined &&
-        productListData.length > 0
-      ) {
-        let productWithCount = [];
-        productListData.map(items => {
-          let obj = {};
-          obj = items;
-          for (var item in otherStoreProduct) {
-            if (otherStoreProduct[item] !== null) {
-              for (var product in otherStoreProduct[item].products) {
-                if (
-                  otherStoreProduct[item].products[product] !== null &&
-                  otherStoreProduct[item].products[product].productId ===
-                    items.id
-                ) {
-                  obj.count = otherStoreProduct[item].products[product].count;
-                  productWithCount.push(obj);
+      if (productsInCart !== '') {
+        let productListData = await CartAPI.GetCartDetails(productsInCart);
+        if (
+          productListData !== null &&
+          productListData !== undefined &&
+          productListData.length > 0
+        ) {
+          let productWithCount = [];
+          productListData.map(items => {
+            let obj = {};
+            obj = items;
+            for (var item in otherStoreProduct) {
+              if (otherStoreProduct[item] !== null) {
+                for (var product in otherStoreProduct[item].products) {
+                  if (
+                    otherStoreProduct[item].products[product] !== null &&
+                    otherStoreProduct[item].products[product].productId ===
+                      items.id
+                  ) {
+                    obj.count = otherStoreProduct[item].products[product].count;
+                    productWithCount.push(obj);
+                  }
                 }
               }
             }
-          }
-        });
-        console.log(productWithCount);
-        this.setState(
-          {productList: productWithCount, isCartEmpty: false},
-          () => {},
-        );
+          });
+          this.setState(
+            {productList: productWithCount, isCartEmpty: false},
+            () => {
+              this.totalAmountCountHandler();
+            },
+          );
+        } else {
+          this.setState({isCartEmpty: true, isLoading: false, productList: []});
+        }
       } else {
-        this.setState({isCartEmpty: true, productList: []});
+        this.setState({isCartEmpty: true, isLoading: false, productList: []});
       }
     } else {
-      this.setState({isCartEmpty: true, productList: []});
+      this.setState({isCartEmpty: true, isLoading: false, productList: []});
     }
   };
 
-  onSubmitHandler = async () => {};
+  onSubmitHandler = async () => {
+    let userDetails = await AsyncStorage.getItem('userAuth');
+    if (userDetails !== null) {
+      let userDetailsTemp = JSON.parse(userDetails);
+      let result = Object.keys(asyncDetailsTemp).map(function(k) {
+        return userDetailsTemp[k];
+      });
+      this.setState({overlayVisible: false});
+    } else {
+      this.setState({overlayVisible: true});
+    }
+  };
 
   onAvatarImage = item => {
     if (item.images.length > 0) {
@@ -132,7 +155,9 @@ class CartScreen extends Component {
       }
       list.push(product);
     });
-    this.setState({productList: list});
+    this.setState({productList: list}, () => {
+      this.totalAmountCountHandler();
+    });
     this.checkCountDetails(item.store.id, item.id, item.count, item.sale_price);
   };
 
@@ -149,7 +174,9 @@ class CartScreen extends Component {
       }
       list.push(product);
     });
-    this.setState({productList: list});
+    this.setState({productList: list}, () => {
+      this.totalAmountCountHandler();
+    });
     this.checkCountDetails(item.store.id, item.id, item.count, item.sale_price);
   };
 
@@ -293,9 +320,45 @@ class CartScreen extends Component {
     }
   };
 
-  getTotalCount = (item) =>{
-    this.setState({totalCount: item})
-  }
+  getTotalCount = item => {
+    this.setState({totalCount: item});
+  };
+
+  onRemoveHandler = async item => {
+    let asyncDetails = await AsyncStorage.getItem('Cart');
+    if (asyncDetails != null) {
+      let asyncDetailsTemp = JSON.parse(asyncDetails);
+      let result = Object.keys(asyncDetailsTemp).map(function(k) {
+        return asyncDetailsTemp[k];
+      });
+      for (var asyncItem in result) {
+        for (var asyncProduct in result[asyncItem].products)
+          if (
+            result[asyncItem].products[asyncProduct] !== null &&
+            result[asyncItem].products[asyncProduct].productId === item.id
+          ) {
+            delete result[asyncItem].products[asyncProduct];
+          }
+      }
+      this.storeDataToStorage(result);
+      this.getCartDetails();
+    }
+  };
+
+  totalAmountCountHandler = () => {
+    let totalCount = 0;
+    let totalAmount = 0;
+    this.state.productList.map(item => {
+      totalCount += item.count;
+      totalAmount += item.count * item.sale_price;
+    });
+    let totalAllAmount = totalAmount + this.state.deliveryAmount;
+    this.setState({
+      totalCount: totalCount,
+      totalAmount: totalAmount,
+      totalAllAmount: totalAllAmount,
+    });
+  };
 
   render() {
     const windowWidth = Dimensions.get('window').width;
@@ -365,7 +428,10 @@ class CartScreen extends Component {
                   </View>
                   <Divider />
                   <View
-                    style={{flexDirection: 'column', justifyContent: 'center'}}>
+                    style={{
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -392,7 +458,10 @@ class CartScreen extends Component {
                         </View>
                       </View>
 
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.onRemoveHandler(item);
+                        }}>
                         <View style={{height: 45, justifyContent: 'center'}}>
                           <Text>
                             Remove{'   '}
@@ -419,12 +488,17 @@ class CartScreen extends Component {
               <Divider />
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 1, flexDirection: 'column'}}>
-                  <Text style={{margin: 10}}>Price (12 Items)</Text>
+                  <Text style={{margin: 10}}>
+                    Price ( {this.state.totalCount} Item
+                    {this.state.totalCount > 1 ? 's' : ''} )
+                  </Text>
                   <Text style={{margin: 10}}>Delivery Fee</Text>
                 </View>
                 <View>
-                  <Text style={{margin: 10}}>Rs. 100000</Text>
-                  <Text style={{margin: 10}}>Rs. 100000</Text>
+                  <Text style={{margin: 10}}>Rs. {this.state.totalAmount}</Text>
+                  <Text style={{margin: 10}}>
+                    Rs. {this.state.deliveryAmount}
+                  </Text>
                 </View>
               </View>
               <Divider />
@@ -434,15 +508,41 @@ class CartScreen extends Component {
                 </View>
                 <View>
                   <Text style={{margin: 10, fontWeight: 'bold'}}>
-                    Rs. 100000
+                    Rs. {this.state.totalAllAmount}
                   </Text>
                 </View>
               </View>
               <Divider />
             </View>
             <View>
-              <ButtonComponent titleValue="Procced to Pay" />
+              <ButtonComponent
+                titleValue="Procced to Pay"
+                onPressHandler={() => this.onSubmitHandler()}
+              />
             </View>
+            <Overlay
+              isVisible={this.state.overlayVisible}
+              onBackdropPress={() => {
+                this.setState({overlayVisible: false});
+              }}>
+              <View
+                style={{
+                  height: 200,
+                  width: 200,
+                  justifyContent: 'center',
+                }}>
+                <Text style={{marginLeft: 40, color: 'grey'}}>
+                  User not logged in.
+                </Text>
+                <ButtonComponent
+                  titleValue="Login"
+                  onPressHandler={() => {
+                    this.setState({overlayVisible: false});
+                    this.props.navigation.navigate('LoginScreen');
+                  }}
+                />
+              </View>
+            </Overlay>
           </View>
         )}
       </>
