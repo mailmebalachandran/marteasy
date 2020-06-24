@@ -398,9 +398,9 @@ class ProductsScreen extends Component {
               <View style={{height: 20}}>
                 <Line />
               </View>
-              {/* <View style={{height: 50}}>
+              <View style={{height: 50}}>
                 {this.state.storeDetail.store_open_close && <OpeningHour {...this.state} />}
-              </View> */}
+              </View>
               <View style={{height: 20}}>
                 <Line />
               </View>
@@ -414,6 +414,13 @@ class ProductsScreen extends Component {
                   }}
                 />
               )}
+              {this.state.productList.length == 0 && (
+                <View style={{flex:1, margin:20}}>
+                  <Text>No Products in store</Text>
+                </View>
+              )
+
+              }
             </View>
             {this.state.isViewCart && (
               <ViewCart

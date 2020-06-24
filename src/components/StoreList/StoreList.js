@@ -3,11 +3,38 @@ import { View, Image, FlatList, SafeAreaView, Text, TouchableOpacity } from 'rea
 import styles from './styles';
 import { Card } from 'react-native-elements';
 import * as ThemeColor from '../../themes/colors';
+import * as Images from '../../assets/index';
 
 class StoreList extends Component {
   constructor(props) {
     super(props);
   }
+
+  onAvatarImage = item => {
+    if (item.gravatar !== undefined) {
+      return (
+        <Image
+        source={{ uri: item.gravatar }}
+        style={{
+          resizeMode: 'contain',
+          height: 100,
+          width: '100%',
+        }}
+      />
+      );
+    } else {
+      return (
+        <Image
+        source={Images.NOSTORE}
+        style={{
+          resizeMode: 'contain',
+          height: 100,
+          width: '100%',
+        }}
+      />
+      );
+    }
+  };
 
   render() {
     return (
@@ -29,14 +56,7 @@ class StoreList extends Component {
                 }
               >
                 <View>
-                  <Image
-                    source={{ uri: item.gravatar }}
-                    style={{
-                      resizeMode: 'contain',
-                      height: 100,
-                      width: '100%',
-                    }}
-                  />
+                  {this.onAvatarImage(item)}
                 </View>
                 <Text
                   style={{
