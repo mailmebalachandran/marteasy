@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {getItemTransformedItemDesc} from './utils';
+import { getItemTransformedItemDesc } from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
 
@@ -26,13 +26,38 @@ class Product extends React.Component {
       countList: [],
     };
   }
-  renderProductImage = ({src}) => {
+
+  onAvatarImage = item => {
+    if (item.images.length > 0) {
+      return (
+        <View style={styles.productImageContainer}>
+        <Image
+          style={styles.productImage}
+          resizeMode="cover"
+          source={{uri: item.images[0].src}}
+        />
+      </View>
+      );
+    } else {
+      return (
+        <View style={styles.productImageContainer}>
+        <Image
+          style={styles.productImage}
+          resizeMode="cover"
+          source={Images.NOSTORE}
+        />
+      </View>
+      );
+    }
+  };
+
+  renderProductImage = ({ src }) => {
     return (
       <View style={styles.productImageContainer}>
         <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{uri: src}}
+          source={{ uri: src }}
         />
       </View>
     );
@@ -49,7 +74,7 @@ class Product extends React.Component {
                   flex: 1,
                   flexDirection: 'row',
                 }}>
-                {this.renderProductImage(product.images[0])}
+                {this.onAvatarImage(product)}
                 <View>
                   <Text style={styles.productName}>{product.name}</Text>
                   <Text style={styles.productDesc}>
@@ -61,14 +86,16 @@ class Product extends React.Component {
                       flexDirection: 'row',
                     }}>
                     <View style={styles.pricingContainer}>
-                      <Text style={styles.regularPrice}>
-                        Rs.{product.regular_price}
-                      </Text>
+                      { product.regular_price !== '' && product.regular_price !== null && product.regular_price !== undefined && 
+                        <Text style={styles.regularPrice}>
+                          Rs.{product.regular_price}
+                        </Text>
+                      }
                       <Text style={styles.salePrice}>
                         Rs.{product.sale_price}
                       </Text>
                     </View>
-                    <View style={{marginTop: 10, width: '50%'}}>
+                    <View style={{ marginTop: 10, width: '50%' }}>
                       <View
                         style={{
                           flex: 1,

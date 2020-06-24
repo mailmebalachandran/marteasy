@@ -6,6 +6,12 @@ const GetProductBasedonStoreId = async storeId => {
     const {data} = await Axios.get(
       Constants.GetProductsAPI + storeId + '/products',
     );
+    for(var item in data){
+      if(data[item].sale_price === '' || data[item].sale_price === undefined || data[item].sale_price === null){
+        data[item].sale_price = data[item].regular_price;
+        data[item].regular_price = '';
+      } 
+    }
     return data;
   } catch (err) {
     return err;
