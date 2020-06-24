@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, Button } from "react-native";
 import styles from "./styles";
-import Label from '../../components/Label/Label';
-import TextBox from '../../components/TextBox/TextBox';
 import * as Theme from "../../themes/colors";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
+import { Input } from 'react-native-elements';
+import { addrValidation } from "./validation";
 
 class AddressOverlay extends React.Component {
     constructor(props) {
@@ -19,12 +19,24 @@ class AddressOverlay extends React.Component {
             address1: "",
             address2: "",
             city: "",
-            state: "",
+            stateName: "",
             country: "IN",
             postalCode: "",
             phone: "",
             email: "",
             isAddrUpdated: "",
+            //Validation
+            firstNameVal: "",
+            lastNameVal: "",
+            companyVal: "",
+            address1Val: "",
+            address2Val: "",
+            cityVal: "",
+            stateNameVal: "",
+            countryVal: "",
+            postalCodeVal: "",
+            phoneVal: "",
+            emailVal: "",
         }
     }
     setEditDetails = (data) => {
@@ -35,7 +47,7 @@ class AddressOverlay extends React.Component {
             address1: data.address_1,
             address2: data.address_2,
             city: data.city,
-            state: data.state,
+            stateName: data.state,
             country: "IN",
             postalCode: data.postcode,
             phone: data.phone,
@@ -62,7 +74,7 @@ class AddressOverlay extends React.Component {
                     const { data } = res;
                     isShipping ?
                         this.setEditDetails(data[0].shipping) : this.setEditDetails(data[0].billing)
-                    this.setState({userId: data[0].id})
+                    this.setState({ userId: data[0].id })
                     this.setState({ isLoading: false })
                 })
                 .catch(err => {
@@ -85,13 +97,19 @@ class AddressOverlay extends React.Component {
         this.props.navigation.navigate("Account", {
             screen: "ManageAddr",
             params: {
-                isAddrUpdate: this.state.isAddrUpdated,
+                isAddrUpdated: this.state.isAddrUpdated,
             }
         })
     }
     updateAddr = () => {
         const { isShipping, userId } = this.props.route.params;
         let payload = {}
+        const { isError } = addrValidation(this.state)
+        if (isError) {
+            console.log("inside vali")
+            this.setState({ state: addrValidation });
+            return false;
+        }
         if (isShipping) {
             payload = {
                 shipping: {
@@ -103,7 +121,7 @@ class AddressOverlay extends React.Component {
                     city: this.state.city,
                     postcode: this.state.postalCode,
                     country: this.state.country,
-                    state: this.state.state
+                    state: this.state.stateName
                 }
             }
         } else {
@@ -117,14 +135,14 @@ class AddressOverlay extends React.Component {
                     city: this.state.city,
                     postcode: this.state.postalCode,
                     country: this.state.country,
-                    state: this.state.state,
+                    state: this.state.stateName,
                     email: this.state.email,
                     phone: this.state.phone,
                 }
             }
         }
         axios.put(
-            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers/'+userId,
+            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers/' + userId,
             payload,
             {
                 params: {
@@ -134,13 +152,16 @@ class AddressOverlay extends React.Component {
                 },
             },
         ).then((res) => {
-            console.log("from update",res.data)
+            console.log("from update", res.data)
+            this.setState({ isAddrUpdated: true });
+            this.navigateToManageAddr();
         })
-        .catch((err) => {
-            console.log(err);
-        })
+            .catch((err) => {
+                console.log(err);
+            })
     }
     render() {
+        const { isShipping } = this.props.route.params;
         return (
             <SafeAreaView>
                 <ScrollView>
@@ -149,96 +170,131 @@ class AddressOverlay extends React.Component {
                             <View style={styles.orderSectionTitleContainer}>
                                 <Text styles={styles.orderSectionTitle}>{this.renderOverlayHeading()}</Text>
                             </View>
-                            <TextBox
-                                placeHolderValue="FirstName"
-                                textValue={this.state.firstName}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ firstName: text });
+                            <Input
+                                placeholder='FirstName'
+                                label="First Name"
+                                value={this.state.firstName}
+                                onChangeText={text => {
+                                    this.setState({
+                                        firstName: text,
+                                        firstNameVal: "",
+                                    })
                                 }}
+                                errorMessage={this.state.firstNameVal}
                             />
-                            <TextBox
-                                placeHolderValue="LastName"
-                                textValue={this.state.lastName}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ lastName: text });
+                            <Input
+                                placeholder="LastName"
+                                label="Last Name"
+                                value={this.state.lastName}
+                                onChangeText={text => {
+                                    this.setState({
+                                        lastName: text,
+                                        lastNameVal: "",
+                                    });
                                 }}
+                                errorMessage={this.state.lastNameVal}
                             />
-                            <TextBox
-                                placeHolderValue="Company Name"
-                                textValue={this.state.company}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ company: text });
+                            <Input
+                                placeholder="Company Name"
+                                label="Company Name"
+                                value={this.state.company}
+                                onChangeText={text => {
+                                    this.setState({
+                                        company: text,
+                                        companyVal: "",
+                                    });
                                 }}
+                                errorMessage={this.state.companyVal}
                             />
-                            <TextBox
-                                placeHolderValue="Address Line 1"
-                                textValue={this.state.address1}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ address1: text });
+                            <Input
+                                placeholder="Address Line 1"
+                                label="Address Line 1"
+                                value={this.state.address1}
+                                onChangeText={text => {
+                                    this.setState({
+                                        address1: text,
+                                        address1Val: "",
+                                    });
                                 }}
+                                errorMessage={this.state.address1Val}
                             />
-                            <TextBox
-                                placeHolderValue="Address Line 2"
-                                textValue={this.state.address2}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ address2: text });
+                            <Input
+                                placeholder="Address Line 2"
+                                label="Address Line 2"
+                                value={this.state.address2}
+                                onChangeText={text => {
+                                    this.setState({
+                                        address2: text,
+                                        address2Val: "",
+                                    });
                                 }}
+                                errorMessage={this.state.address2Val}
                             />
-                            <TextBox
-                                placeHolderValue="Town/City"
-                                textValue={this.state.city}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ city: text });
+                            <Input
+                                placeholder="Town/City"
+                                label="Town/City"
+                                value={this.state.city}
+                                onChangeText={text => {
+                                    this.setState({
+                                        city: text,
+                                        cityVal: "",
+                                    });
                                 }}
+                                errorMessage={this.state.cityVal}
                             />
-                            <TextBox
-                                placeHolderValue="State/Country"
-                                textValue={this.state.state}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ state: text });
+                            <Input
+                                placeholder="State"
+                                label="State"
+                                value={this.state.stateName}
+                                onChangeText={text => {
+                                    this.setState({
+                                        stateName: text,
+                                        stateNameVal: ""
+                                    });
                                 }}
+                                errorMessage={this.state.stateNameVal}
                             />
-                            <TextBox
-                                placeHolderValue="Postal Code"
-                                textValue={this.state.postalCode}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ postalCode: text });
+                            <Input
+                                placeholder="Postal Code"
+                                label="Post Code"
+                                value={this.state.postalCode}
+                                onChangeText={text => {
+                                    this.setState({
+                                        postalCode: text,
+                                        postalCodeVal: "",
+                                    });
                                 }}
+                                errorMessage={this.state.postalCodeVal}
                             />
-                            <TextBox
-                                placeHolderValue="Email"
-                                textValue={this.state.email}
-                                secureText={false}
-                                textStyle={{ fontSize: 10 }}
-                                autoCapitalize='none'
-                                onChangedTextHandler={text => {
-                                    this.setState({ email: text });
-                                }}
-                            />
+                            {!isShipping &&
+                                (<>
+                                    <Input
+                                        placeholder="PhoneNumber"
+                                        label="Phone Number"
+                                        value={this.state.phone}
+                                        onChangeText={text => {
+                                            this.setState({
+                                                phone: text,
+                                                phoneVal: "",
+                                            });
+                                        }}
+                                        errorMessage={this.state.phoneVal}
+                                    />
+                                    <Input
+                                        placeholder="Email"
+                                        label="Email"
+                                        value={this.state.email}
+                                        onChangeText={text => {
+                                            this.setState({
+                                                email: text,
+                                                emailVal: "",
+                                            });
+                                        }}
+                                        errorMessage={this.state.emailVal}
+                                    />
+                                </>
+                                )
+                            }
                             <View style={styles.btnContainer}>
                                 <Button
                                     icon={

@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
     orderSectionTitle: {
         color: Theme.DarkColor,
-        fontSize: 18,
+        fontSize: 20,
     },
     btnContainer: {
         flex: 1,

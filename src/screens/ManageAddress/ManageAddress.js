@@ -149,7 +149,8 @@ class ManageAddress extends Component {
                                 }
                                 type="clear"
                                 onPress={
-                                    () => this.showAddrOverlay(true)
+                                    //TRUE in below call is determine whether it is shipping or not
+                                    () => this.showEditAddrOverlay(true)
                                 }
                             />
                         </View>
@@ -166,6 +167,7 @@ class ManageAddress extends Component {
                                 styles.logoutBtn
                             }
                             onPress={
+                                //TRUE in below call is determine whether it is shipping or not
                                 () => this.showAddAddrOverlay(true)
                             }
                         />
@@ -175,7 +177,7 @@ class ManageAddress extends Component {
         }
     }
 
-    showEditAddrOverlay = (isShippingAddr) => {
+    showEditAddrOverlay = (isShipping) => {
         this.props.navigation.navigate(
             'Account',
             {
@@ -183,7 +185,7 @@ class ManageAddress extends Component {
                 params: {
                     isShowAddrOverlay: true,
                     isEdit: true,
-                    isShippingAddr,
+                    isShipping,
                     userId: this.state.userDetails.id
                 }
             }
