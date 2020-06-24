@@ -63,8 +63,15 @@ const styles = StyleSheet.create({
     btnContainer: {
         flex: 1,
         flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+    },
+    savebtn: {
+        backgroundColor: Theme.DarkColor,
+    },
+    cancelBtn: {
+        backgroundColor: Theme.DarkColor,
     }
-
 })
 
 export default styles;

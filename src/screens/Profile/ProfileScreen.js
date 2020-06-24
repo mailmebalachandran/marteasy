@@ -109,9 +109,8 @@ class ProfileScreen extends Component {
                                             onPress={this.navigateToManageAddr}
                                         >
                                             <View style={styles.flexRow}>
-                                                <View>
-                                                    <Text
-                                                        style={styles.heading}>
+                                                <View styles={styles.manageAddrLeftContainer}>
+                                                    <Text style={styles.heading}>
                                                         <Icon name="home" size={20} color="grey" />
                                                         {(`  Manage Address`)}
                                                     </Text>
@@ -119,15 +118,15 @@ class ProfileScreen extends Component {
                                                         {`Manage Your Billing Address, Shipping Address Here`}
                                                     </Text>
                                                 </View>
-                                                <View>
-                                                    {/* <Icon name="arrow-right" size={20} color="grey" /> */}
+                                                <View style={styles.manageAddrRightContainer}>
+                                                    <Icon name="angle-right" size={25} color="grey" />
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
                                         <Divider style={styles.dividerSmall} />
                                         <TouchableOpacity>
                                             <View style={styles.flexRow}>
-                                                <View>
+                                                <View styles={styles.manageAddrLeftContainer}>
                                                     <Text
                                                         style={styles.heading}>
                                                         <Icon name="link" size={20} color="grey" />
@@ -136,9 +135,6 @@ class ProfileScreen extends Component {
                                                     <Text style={styles.subHeading}>
                                                         {`Faq & Links `}
                                                     </Text>
-                                                </View>
-                                                <View>
-                                                    {/* <Icon name="arrow-right" size={20} color="grey" /> */}
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
@@ -150,7 +146,10 @@ class ProfileScreen extends Component {
                                                 let total = 0;
                                                 return (
                                                     <>
-                                                        <View style={styles.orderDetailsContainer}>
+                                                        <View 
+                                                            key={order.store.id} 
+                                                            style={styles.orderDetailsContainer}
+                                                        >
                                                             <Text style={styles.storeName}>
                                                                 {order.store.name}
                                                             </Text>

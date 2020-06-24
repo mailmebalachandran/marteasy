@@ -8,6 +8,8 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 import { Input } from 'react-native-elements';
 import { addrValidation } from "./validation";
+import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
+import ProfileHeader from "../../components/ProfileHeader/ProfileHeader"
 
 class AddressOverlay extends React.Component {
     constructor(props) {
@@ -37,6 +39,7 @@ class AddressOverlay extends React.Component {
             postalCodeVal: "",
             phoneVal: "",
             emailVal: "",
+            isLoading: false,
         }
     }
     setEditDetails = (data) => {
@@ -56,31 +59,38 @@ class AddressOverlay extends React.Component {
         })
     }
 
+    componentWillUnmount() {
+        this._unsubscribe();
+      }
+
     componentDidMount = () => {
-        const { isEdit, isShipping } = this.props.route.params;
-        if (isEdit) {
-            this.setState({ isLoading: true })
-            axios.get(
-                'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-                {
-                    params: {
-                        email: 'user_test2@gmail.com',
-                        consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                        consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+        this._unsubscribe = this.props.navigation.addListener('focus', () => {
+            this.setState({ isLoading: true });
+            const { isEdit, isShipping } = this.props.route.params;
+            if (isEdit) {
+                this.setState({ isLoading: true })
+                axios.get(
+                    'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                    {
+                        params: {
+                            email: 'user_test2@gmail.com',
+                            consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                            consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                        },
                     },
-                },
-            )
-                .then(res => {
-                    const { data } = res;
-                    isShipping ?
-                        this.setEditDetails(data[0].shipping) : this.setEditDetails(data[0].billing)
-                    this.setState({ userId: data[0].id })
-                    this.setState({ isLoading: false })
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
+                )
+                    .then(res => {
+                        const { data } = res;
+                        isShipping ?
+                            this.setEditDetails(data[0].shipping) : this.setEditDetails(data[0].billing)
+                        this.setState({ userId: data[0].id })
+                        this.setState({ isLoading: false })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+        });
     }
     hideOverlay = () => {
         this.setState({ isVisible: false })
@@ -165,6 +175,10 @@ class AddressOverlay extends React.Component {
         return (
             <SafeAreaView>
                 <ScrollView>
+                <ProfileHeader />
+                    {this.state.isLoading &&
+                        <ActivityContainer isLoading={this.state.isLoading} />
+                    }
                     <View style={styles.continerStyles}>
                         <View style={styles.innerContainer}>
                             <View style={styles.orderSectionTitleContainer}>
@@ -304,11 +318,13 @@ class AddressOverlay extends React.Component {
                                             color="white"
                                         />
                                     }
+                                    type="solid"
                                     title="Save"
-                                    style={styles.savebtn}
+                                    buttonStyle={styles.savebtn}
                                     onPress={
                                         this.updateAddr
                                     }
+                                    raised={false}
                                 />
                                 <Button
                                     icon={
@@ -319,10 +335,11 @@ class AddressOverlay extends React.Component {
                                         />
                                     }
                                     title="Cancel"
-                                    style={styles.cancelBtn}
+                                    buttonStyle={styles.cancelBtn}
                                     onPress={
                                         this.navigateToManageAddr
                                     }
+                                    raised={false}
                                 />
                             </View>
                         </View>

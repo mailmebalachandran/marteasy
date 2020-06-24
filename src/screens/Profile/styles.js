@@ -11,6 +11,15 @@ const styles = StyleSheet.create({
         marginLeft: "5%",
         marginRight: "5%",
     },
+    manageAddrLeftContainer: {
+        width: "90%",
+    },
+    manageAddrRightContainer: {
+        justifyContent: "center",
+        alignItems: "flex-end",
+        width: "10%",
+        marginTop: "5%",
+    },
     //Common
     divideStyles: {
         marginTop: "5%",
@@ -41,6 +50,8 @@ const styles = StyleSheet.create({
     },
     flexRow: {
         flexDirection: 'row',
+        flex: 1,
+        width: "100%",
     },
     flex9: {
         flex: 0.7,
