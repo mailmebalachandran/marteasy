@@ -58,13 +58,20 @@ const styles = StyleSheet.create({
     },
     orderSectionTitle: {
         color: Theme.DarkColor,
-        fontSize: 18,
+        fontSize: 20,
     },
     btnContainer: {
         flex: 1,
         flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+    },
+    savebtn: {
+        backgroundColor: Theme.DarkColor,
+    },
+    cancelBtn: {
+        backgroundColor: Theme.DarkColor,
     }
-
 })
 
 export default styles;
