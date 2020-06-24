@@ -51,6 +51,7 @@ class AddCart extends Component {
               borderWidth: 1,
               padding: 5,
               height: 35,
+              borderLeftColor:ThemeColor.DarkTextColor,
               borderRightColor: ThemeColor.DarkTextColor,
               borderRightWidth: 0,
             }}>
@@ -61,6 +62,7 @@ class AddCart extends Component {
           <View
             style={{
               borderColor: ThemeColor.DarkColor,
+              borderLeftColor:ThemeColor.DarkTextColor,
               borderStyle: 'solid',
               borderWidth: 1,
               padding: 5,
