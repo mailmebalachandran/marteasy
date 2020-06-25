@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, ScrollView} from 'react-native';
+import {View, SafeAreaView, ScrollView, RefreshControl} from 'react-native';
 import {Text} from 'react-native-elements';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Slider from '../../components/Slider/Slider';
@@ -16,6 +16,7 @@ class HomeScreen extends Component {
     this.state = {
       ShopList: [],
       isLoading: true,
+      refreshing: false
     };
   }
 
@@ -32,6 +33,10 @@ class HomeScreen extends Component {
       });
     }
   };
+
+  _onRefresh = () => {
+    this.getStoresOnLoad();
+  }
 
   render() {
     const topPicks = [
@@ -58,7 +63,10 @@ class HomeScreen extends Component {
           <MenuLoader />
         ) : (
           <>
-            <ScrollView>
+            <ScrollView refreshControl={<RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />}>   
               <StatusBarComponent styleType={0} />
               <View style={{backgroundColor: 'white'}}>
                 <Text
