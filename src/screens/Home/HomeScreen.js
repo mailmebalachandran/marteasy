@@ -9,6 +9,7 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import * as Images from '../../assets/index';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import ErrorOverlay from '../../components/Errors/ErrorOverlay'
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -16,20 +17,27 @@ class HomeScreen extends Component {
     this.state = {
       ShopList: [],
       isLoading: true,
-      refreshing: false
+      refreshing: false,
+      isShowError:false,
     };
   }
 
   componentDidMount = () => {
+    console.log("componentDidMount")
     this.setState({isLoading: true});
     this.getStoresOnLoad();
   };
 
   getStoresOnLoad = async () => {
     let result = await HomeAPI.GetStores();
-    if (result !== undefined) {
+    console.log('result :' + result.isError)
+    if(result !== undefined && result.isError !== undefined && result.isError === true){
+
+this.setState({isShowError:true, isLoading: false});
+    }
+    else if (result !== undefined) {
       this.setState({ShopList: result}, () => {
-        this.setState({isLoading: false});
+        this.setState({isLoading: false, isShowError:false});
       });
     }
   };
@@ -61,7 +69,7 @@ class HomeScreen extends Component {
       <SafeAreaView style={{flex: 1}}>
         {this.state.isLoading ? (
           <MenuLoader />
-        ) : (
+        ) : this.state.isShowError ? <ErrorOverlay reload={this.componentDidMount} /> : (
           <>
             <ScrollView refreshControl={<RefreshControl
             refreshing={this.state.refreshing}
