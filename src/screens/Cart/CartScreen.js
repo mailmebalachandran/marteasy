@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CartAPI from '../../api/Cart/CartAPI';
 import AddCart from '../../components/AddCart/AddCart';
 import MenuLoader from '../../components/Loader/MenuLoader';
+import * as CommonConstants from '../../constants';
 
 class CartScreen extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class CartScreen extends Component {
       isCartEmpty: false,
       productList: [],
       totalAmount: 0,
-      deliveryAmount: 0,
+      deliveryAmount: CommonConstants.DELIVERY_FEE,
       totalCount: 0,
       totalAllAmount: 0,
       overlayVisible: false,
@@ -46,6 +47,8 @@ class CartScreen extends Component {
   };
 
   componentDidMount = async () => {
+    this.setState({isLoading: true});
+    this.getCartDetails();
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState({isLoading: true});
       this.getCartDetails();
@@ -104,6 +107,7 @@ class CartScreen extends Component {
             {productList: productWithCount, isCartEmpty: false},
             () => {
               this.totalAmountCountHandler();
+              this.setState({isLoading: false});
             },
           );
         } else {
@@ -161,7 +165,7 @@ class CartScreen extends Component {
     this.checkCountDetails(item.store.id, item.id, item.count, item.sale_price);
   };
 
-  handleQuantityChange = (item, type) => {
+  handleQuantityChange = async (item, type) => {
     let list = [];
     this.state.productList.map(product => {
       if (product.id === item.id) {
@@ -178,6 +182,26 @@ class CartScreen extends Component {
       this.totalAmountCountHandler();
     });
     this.checkCountDetails(item.store.id, item.id, item.count, item.sale_price);
+    if (type !== 'INC' && item.count === 0) {
+      let asyncDetails = await AsyncStorage.getItem('Cart');
+      if (asyncDetails != null) {
+        let asyncDetailsTemp = JSON.parse(asyncDetails);
+        let result = Object.keys(asyncDetailsTemp).map(function(k) {
+          return asyncDetailsTemp[k];
+        });
+        for (var asyncItem in result) {
+          for (var asyncProduct in result[asyncItem].products)
+            if (
+              result[asyncItem].products[asyncProduct] !== null &&
+              result[asyncItem].products[asyncProduct].productId === item.id
+            ) {
+              delete result[asyncItem].products[asyncProduct];
+            }
+        }
+        this.storeDataToStorage(result);
+        this.getCartDetails();
+      }
+    }
   };
 
   checkCountDetails = async (storeId, productId, count, amount) => {
@@ -366,186 +390,208 @@ class CartScreen extends Component {
     return (
       <>
         {this.state.isCartEmpty && (
-          <View
-            style={{
-              backgroundColor: ThemeColor.DarkTextColor,
-              flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-            <StatusBarComponent />
-            <Image
-              source={Images.EMPTYCART}
-              style={{
-                resizeMode: 'contain',
-                height: 200,
-                width: 200,
-                backgroundColor: 'transparent',
-                marginLeft: windowWidth / 4,
-              }}
-            />
-            <Text style={{marginLeft: windowWidth / 3, color: 'grey'}}>
-              Your cart is empty
-            </Text>
-            <ButtonComponent titleValue="Browse Stores" />
-          </View>
-        )}
-        {!this.state.isCartEmpty && (
-          <View style={{paddingTop: 15, paddingBottom: 15, flex: 1}}>
-            <StatusBarComponent />
-            <ScrollView>
-            <View>
-              {this.state.productList.map(item => (
-                <View
-                  style={{
-                    height: 150,
-                    padding: 10,
-                    marginBottom: 20,
-                    backgroundColor: ThemeColor.DarkTextColor,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}>
-                  <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{flex: 1, flexDirection: 'column'}}>
-                      <Text style={{fontSize: 16}}>{item.name}</Text>
-                      <Text style={{fontSize: 12, color: 'grey'}}>
-                        {item.store.shop_name}
-                      </Text>
-                      <Text style={{fontSize: 20}}>
-                        <Text style={{fontSize: 12}}>
-                          {' '}
-                          {item.count} * {item.sale_price} {'      '}
-                        </Text>
-                        Rs. {item.count * item.sale_price}
-                      </Text>
-                    </View>
-                    <View>{this.onAvatarImage(item)}</View>
-                  </View>
-                  <Divider />
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <View>
-                        <View
-                          style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            height: 45,
-                            marginTop: 10,
-                          }}>
-                          <AddCart
-                            productValue={item}
-                            onAddHandler={item => {
-                              this.onAddHandler(item);
-                            }}
-                            handleQuantityChange={(item, type) => {
-                              this.handleQuantityChange(item, type);
-                            }}
-                          />
-                        </View>
-                      </View>
-
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.onRemoveHandler(item);
-                        }}>
-                        <View style={{height: 45, justifyContent: 'center'}}>
-                          <Text>
-                            Remove{'   '}
-                            <Icon name="trash" size={20} />
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              ))}
-            </View>
-            <View
-              style={{
-                backgroundColor: ThemeColor.DarkTextColor,
-                paddingTop: 15,
-                paddingLeft: 10,
-                paddingRight: 10,
-                flex: 1,
-              }}>
-              <View style={{height: 40}}>
-                <Text>PRICE DETAILS</Text>
-              </View>
-              <Divider />
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 1, flexDirection: 'column'}}>
-                  <Text style={{margin: 10}}>
-                    Price ( {this.state.totalCount} Item
-                    {this.state.totalCount > 1 ? 's' : ''} )
-                  </Text>
-                  <Text style={{margin: 10}}>Delivery Fee</Text>
-                </View>
-                <View>
-                  <Text style={{margin: 10}}>Rs. {this.state.totalAmount}</Text>
-                  <Text style={{margin: 10}}>
-                    Rs. {this.state.deliveryAmount}
-                  </Text>
-                </View>
-              </View>
-              <Divider />
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 1, flexDirection: 'column'}}>
-                  <Text style={{margin: 10, fontWeight: 'bold'}}>Total</Text>
-                </View>
-                <View>
-                  <Text style={{margin: 10, fontWeight: 'bold'}}>
-                    Rs. {this.state.totalAllAmount}
-                  </Text>
-                </View>
-              </View>
-              <Divider />
-            </View>
-            </ScrollView>
-            <View>
-              <ButtonComponent
-                titleValue="Procced to Pay"
-                onPressHandler={() => this.onSubmitHandler()}
-              />
-            </View>
-            <Overlay
-              isVisible={this.state.overlayVisible}
-              onBackdropPress={() => {
-                this.setState({overlayVisible: false});
-              }}>
+          <>
+            {this.state.isLoading ? (
+              <MenuLoader />
+            ) : (
               <View
                 style={{
-                  height: 200,
-                  width: 200,
+                  backgroundColor: ThemeColor.DarkTextColor,
+                  flex: 1,
+                  flexDirection: 'column',
                   justifyContent: 'center',
                 }}>
-                <Text style={{marginLeft: 40, color: 'grey'}}>
-                  User not logged in.
+                <StatusBarComponent />
+                <Image
+                  source={Images.EMPTYCART}
+                  style={{
+                    resizeMode: 'contain',
+                    height: 200,
+                    width: 200,
+                    backgroundColor: 'transparent',
+                    marginLeft: windowWidth / 4,
+                  }}
+                />
+                <Text style={{marginLeft: windowWidth / 3, color: 'grey'}}>
+                  Your cart is empty
                 </Text>
                 <ButtonComponent
-                  titleValue="Login"
+                  titleValue="Browse Stores"
                   onPressHandler={() => {
-                    this.setState({overlayVisible: false});
-                    this.props.navigation.navigate('LoginScreen');
+                    this.props.navigation.navigate('Home');
                   }}
                 />
               </View>
-            </Overlay>
-          </View>
+            )}
+          </>
+        )}
+        {!this.state.isCartEmpty && (
+          <>
+            {this.state.isLoading ? (
+              <MenuLoader />
+            ) : (
+              <View style={{paddingTop: 15, paddingBottom: 15, flex: 1}}>
+                <StatusBarComponent />
+                <ScrollView>
+                  <View>
+                    {this.state.productList.map(item => (
+                      <View
+                        style={{
+                          height: 150,
+                          padding: 10,
+                          marginBottom: 20,
+                          backgroundColor: ThemeColor.DarkTextColor,
+                          shadowColor: '#000',
+                          shadowOffset: {
+                            width: 0,
+                            height: 2,
+                          },
+                          shadowOpacity: 0.25,
+                          shadowRadius: 3.84,
+                          elevation: 5,
+                        }}>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                          <View style={{flex: 1, flexDirection: 'column'}}>
+                            <Text style={{fontSize: 16}}>{item.name}</Text>
+                            <Text style={{fontSize: 12, color: 'grey'}}>
+                              {item.store.shop_name}
+                            </Text>
+                            <Text style={{fontSize: 20}}>
+                              <Text style={{fontSize: 12}}>
+                                {' '}
+                                {item.count} * {item.sale_price} {'      '}
+                              </Text>
+                              Rs. {item.count * item.sale_price}
+                            </Text>
+                          </View>
+                          <View>{this.onAvatarImage(item)}</View>
+                        </View>
+                        <Divider />
+                        <View
+                          style={{
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                          }}>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                            }}>
+                            <View>
+                              <View
+                                style={{
+                                  flex: 1,
+                                  flexDirection: 'row',
+                                  justifyContent: 'center',
+                                  height: 45,
+                                  marginTop: 10,
+                                }}>
+                                <AddCart
+                                  productValue={item}
+                                  onAddHandler={item => {
+                                    this.onAddHandler(item);
+                                  }}
+                                  handleQuantityChange={(item, type) => {
+                                    this.handleQuantityChange(item, type);
+                                  }}
+                                />
+                              </View>
+                            </View>
+
+                            <TouchableOpacity
+                              onPress={() => {
+                                this.onRemoveHandler(item);
+                              }}>
+                              <View
+                                style={{height: 45, justifyContent: 'center'}}>
+                                <Text>
+                                  Remove{'   '}
+                                  <Icon name="trash" size={20} />
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: ThemeColor.DarkTextColor,
+                      paddingTop: 15,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      flex: 1,
+                    }}>
+                    <View style={{height: 40}}>
+                      <Text>PRICE DETAILS</Text>
+                    </View>
+                    <Divider />
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{flex: 1, flexDirection: 'column'}}>
+                        <Text style={{margin: 10}}>
+                          Price ( {this.state.totalCount} Item
+                          {this.state.totalCount > 1 ? 's' : ''} )
+                        </Text>
+                        <Text style={{margin: 10}}>Delivery Fee</Text>
+                      </View>
+                      <View>
+                        <Text style={{margin: 10}}>
+                          Rs. {this.state.totalAmount}
+                        </Text>
+                        <Text style={{margin: 10}}>
+                          Rs. {this.state.deliveryAmount}
+                        </Text>
+                      </View>
+                    </View>
+                    <Divider />
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{flex: 1, flexDirection: 'column'}}>
+                        <Text style={{margin: 10, fontWeight: 'bold'}}>
+                          Total
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={{margin: 10, fontWeight: 'bold'}}>
+                          Rs. {this.state.totalAllAmount}
+                        </Text>
+                      </View>
+                    </View>
+                    <Divider style={{marginBottom: 15}} />
+                  </View>
+                </ScrollView>
+                <View>
+                  <ButtonComponent
+                    titleValue="Proceed to Pay"
+                    onPressHandler={() => this.onSubmitHandler()}
+                  />
+                </View>
+                <Overlay
+                  isVisible={this.state.overlayVisible}
+                  onBackdropPress={() => {
+                    this.setState({overlayVisible: false});
+                  }}>
+                  <View
+                    style={{
+                      height: 400,
+                      width: 250,
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={{marginLeft: 40, color: 'grey'}}>
+                      User not logged in.
+                    </Text>
+                    <ButtonComponent
+                      titleValue="Login"
+                      onPressHandler={() => {
+                        this.setState({overlayVisible: false});
+                        this.props.navigation.navigate('LoginScreen');
+                      }}
+                    />
+                  </View>
+                </Overlay>
+              </View>
+            )}
+          </>
         )}
       </>
     );

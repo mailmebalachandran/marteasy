@@ -26,6 +26,11 @@ class HomeScreen extends Component {
     console.log("componentDidMount")
     this.setState({isLoading: true});
     this.getStoresOnLoad();
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.setState({isLoading: true});
+      this.getStoresOnLoad();
+    });
+
   };
 
   getStoresOnLoad = async () => {

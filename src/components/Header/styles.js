@@ -7,12 +7,13 @@ const styles = StyleSheet.create({
     backgroundColor: ThemeColor.BackgroundColorLight,
     shadowColor: '#000',
     shadowOffset: {
-        width: 0,
-        height: 2,
+      width: 0,
+      height: 1,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+
+    elevation: 1,
   },
   drawerStyle: {
     flex: 0.3,

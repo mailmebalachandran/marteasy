@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getItemTransformedItemDesc } from './utils';
+import {getItemTransformedItemDesc} from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
+import * as Images from '../../assets/index';
+import * as CommonConstants from '../../constants';
 
 class Product extends React.Component {
   constructor(props) {
@@ -29,35 +31,51 @@ class Product extends React.Component {
 
   onAvatarImage = item => {
     if (item.images.length > 0) {
-      return (
-        <View style={styles.productImageContainer}>
-        <Image
-          style={styles.productImage}
-          resizeMode="cover"
-          source={{uri: item.images[0].src}}
-        />
-      </View>
-      );
+      if (
+        item.images[0].src.includes(
+          CommonConstants.NODISHDEFAULT_TEXT_TO_SEARCH,
+        )
+      ) {
+        return (
+          <View style={styles.productImageContainer}>
+            <Image
+              style={styles.productImage}
+              resizeMode="cover"
+              source={Images.NODISH}
+            />
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.productImageContainer}>
+            <Image
+              style={styles.productImage}
+              resizeMode="cover"
+              source={{uri: item.images[0].src}}
+            />
+          </View>
+        );
+      }
     } else {
       return (
         <View style={styles.productImageContainer}>
-        <Image
-          style={styles.productImage}
-          resizeMode="cover"
-          source={Images.NOSTORE}
-        />
-      </View>
+          <Image
+            style={styles.productImage}
+            resizeMode="cover"
+            source={Images.NODISH}
+          />
+        </View>
       );
     }
   };
 
-  renderProductImage = ({ src }) => {
+  renderProductImage = ({src}) => {
     return (
       <View style={styles.productImageContainer}>
         <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{ uri: src }}
+          source={{uri: src}}
         />
       </View>
     );
@@ -86,16 +104,18 @@ class Product extends React.Component {
                       flexDirection: 'row',
                     }}>
                     <View style={styles.pricingContainer}>
-                      { product.regular_price !== '' && product.regular_price !== null && product.regular_price !== undefined && 
-                        <Text style={styles.regularPrice}>
-                          Rs.{product.regular_price}
-                        </Text>
-                      }
+                      {product.regular_price !== '' &&
+                        product.regular_price !== null &&
+                        product.regular_price !== undefined && (
+                          <Text style={styles.regularPrice}>
+                            Rs.{product.regular_price}
+                          </Text>
+                        )}
                       <Text style={styles.salePrice}>
                         Rs.{product.sale_price}
                       </Text>
                     </View>
-                    <View style={{ marginTop: 10, width: '35%' }}>
+                    <View style={{marginTop: 10, width: '35%'}}>
                       <View
                         style={{
                           flex: 1,
