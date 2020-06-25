@@ -32,16 +32,18 @@ export const addrValidation = (state) => {
         state.isError = true;
         state.postalCodeVal = "PostalCode Can't Be Empty"
     }
-    if (state.email === "" || state.email === undefined) {
-        state.isError = true;
-        state.emailVal = "Email Can't Be Empty";
-    } else if(validateEmail(state.email)) {
-        state.isError = true;
-        state.emailVal = "Please Enter Valid Email";
-    }
-    if (state.phone === "" || state.phone === undefined) {
-        state.isError = true;
-        state.phoneVal = "PhoneNum Can't Be Empty"
+    if (!state.isShipping) {
+        if (state.email === "" || state.email === undefined) {
+            state.isError = true;
+            state.emailVal = "Email Can't Be Empty";
+        } else if (validateEmail(state.email)) {
+            state.isError = true;
+            state.emailVal = "Please Enter Valid Email";
+        }
+        if (state.phone === "" || state.phone === undefined) {
+            state.isError = true;
+            state.phoneVal = "PhoneNum Can't Be Empty"
+        }
     }
     return state;
 }

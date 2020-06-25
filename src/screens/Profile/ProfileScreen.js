@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import {
     View,
-    Image,
-    ActivityIndicator,
     Text,
-    FlatList,
-    AsyncStorage,
+    AsyncStorage
 } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import Axios from "axios";
 import { Button, Divider } from 'react-native-elements';
-import * as Images from '../../assets/index';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
-import * as Theme from "../../themes/colors"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import MenuLoader from '../../components/Loader/MenuLoader';
+import LoginErrorOverlay from "../../components/Errors/LoginErrorOverlay";
+import ConnectionError from "../../components/Errors/ConnectionError";
 
 
 class ProfileScreen extends Component {
@@ -26,11 +24,21 @@ class ProfileScreen extends Component {
             isLoading: false,
             userDetails: {},
             orders: [],
+            overlayVisible: false,
+            isConnected: true,
         };
     }
-
+    componentWillUnmount() {
+        // this.unsubscribe();
+    }
+    handleConnectivityChange = isConnected => {
+        this.setState({ isConnected });
+    }
     componentDidMount = async () => {
         this.setState({ isLoading: true })
+        // const unsubscribe = NetInfo.addEventListener(state => {
+        //     this.setState({isConnected : state.isConnected});
+        // });
         Axios.get(
             'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
             {
@@ -79,15 +87,24 @@ class ProfileScreen extends Component {
     navigateToManageAddr = () => {
         this.props.navigation.navigate('Account', { screen: 'ManageAddr' });
     }
+    isUserLoggedIn = () => {
+        let userDetails = AsyncStorage.getItem('userAuth');
+        if (userDetails !== null) {
+            this.setState({ overlayVisible: false });
+        } else {
+            this.setState({ overlayVisible: true });
+        }
+    }
 
     render() {
         const { first_name, last_name, email } = this.state.userDetails;
+        console.log("con", this.state.isConnected)
         return (
             <SafeAreaView>
-                {this.state.isLoading ?
-                    <MenuLoader />
-                    : (
-                        <>
+                <ConnectionError isConnected={this.state.isConnected} />
+                {false ?
+                    <LoginErrorOverlay /> : (<>
+                        {this.state.isLoading ? <MenuLoader /> : (<>
                             <ScrollView>
                                 <StatusBarComponent styleType={0} />
                                 <View style={styles.continerStyles}>
@@ -146,8 +163,8 @@ class ProfileScreen extends Component {
                                                 let total = 0;
                                                 return (
                                                     <>
-                                                        <View 
-                                                            key={order.store.id} 
+                                                        <View
+                                                            key={order.store.id}
                                                             style={styles.orderDetailsContainer}
                                                         >
                                                             <Text style={styles.storeName}>
@@ -198,6 +215,7 @@ class ProfileScreen extends Component {
                                 </View>
                             </ScrollView>
                         </>)}
+                    </>)}
             </SafeAreaView>
         );
     }

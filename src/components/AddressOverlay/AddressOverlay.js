@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text, Button } from "react-native";
+import { View, Text } from "react-native";
 import styles from "./styles";
-import * as Theme from "../../themes/colors";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Feather';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import axios from "axios";
-import { Input } from 'react-native-elements';
+import { Input, Button } from 'react-native-elements';
 import { addrValidation } from "./validation";
 import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
-import ProfileHeader from "../../components/ProfileHeader/ProfileHeader"
+import MenuLoader from "../../components/Loader/MenuLoader"
 
 class AddressOverlay extends React.Component {
     constructor(props) {
@@ -40,6 +40,7 @@ class AddressOverlay extends React.Component {
             phoneVal: "",
             emailVal: "",
             isLoading: false,
+            commonErr: "Please Enter All Required Fields",
         }
     }
     setEditDetails = (data) => {
@@ -64,8 +65,8 @@ class AddressOverlay extends React.Component {
       }
 
     componentDidMount = () => {
+        this.setState({ isLoading: true });
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
-            this.setState({ isLoading: true });
             const { isEdit, isShipping } = this.props.route.params;
             if (isEdit) {
                 this.setState({ isLoading: true })
@@ -88,6 +89,7 @@ class AddressOverlay extends React.Component {
                     })
                     .catch(err => {
                         console.log(err);
+                        console.log("err",err.data.message)
                     });
             }
         });
@@ -112,10 +114,12 @@ class AddressOverlay extends React.Component {
         })
     }
     updateAddr = () => {
+        this.setState({isLoading: true});
         const { isShipping, userId } = this.props.route.params;
         let payload = {}
-        const { isError } = addrValidation(this.state)
+        const { isError } = addrValidation(this.state, isShipping)
         if (isError) {
+            this.setState({isLoading: false});
             console.log("inside vali")
             this.setState({ state: addrValidation });
             return false;
@@ -162,28 +166,40 @@ class AddressOverlay extends React.Component {
                 },
             },
         ).then((res) => {
-            console.log("from update", res.data)
-            this.setState({ isAddrUpdated: true });
+            this.setState({isLoading: false});
             this.navigateToManageAddr();
         })
             .catch((err) => {
-                console.log(err);
+                this.setState({isLoading: false});
+                console.log(err.response.data.data.params.billing);
+                if(err.response.data.data.params.billing) {
+                    this.setState({commonErr: err.response.data.data.params.billing})
+                    console.log("err",this.state.commonErr);
+                } else {
+                    this.setState({commonErr: "Oops Something went wrong!!!"})
+                }
             })
     }
     render() {
         const { isShipping } = this.props.route.params;
         return (
             <SafeAreaView>
+                {this.state.isLoading ?
+                <MenuLoader />
+                :
+                (
+                <>
+                <View style={styles.orderSectionTitleContainer}>
+                    <TouchableOpacity
+                        onPress={this.navigateToManageAddr}
+                    >
+                        <Icon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
+                    </TouchableOpacity>
+                    <Text style={styles.orderSectionTitle}>{this.renderOverlayHeading()}</Text>
+                </View>
                 <ScrollView>
-                <ProfileHeader />
-                    {this.state.isLoading &&
-                        <ActivityContainer isLoading={this.state.isLoading} />
-                    }
                     <View style={styles.continerStyles}>
                         <View style={styles.innerContainer}>
-                            <View style={styles.orderSectionTitleContainer}>
-                                <Text styles={styles.orderSectionTitle}>{this.renderOverlayHeading()}</Text>
-                            </View>
                             <Input
                                 placeholder='FirstName'
                                 label="First Name"
@@ -309,6 +325,11 @@ class AddressOverlay extends React.Component {
                                 </>
                                 )
                             }
+                            {this.state.isError &&
+                                <Text style={styles.errorMsg}>
+                                    {this.state.commonErr}
+                                </Text>
+                            }
                             <View style={styles.btnContainer}>
                                 <Button
                                     icon={
@@ -320,6 +341,7 @@ class AddressOverlay extends React.Component {
                                     }
                                     type="solid"
                                     title="Save"
+                                    
                                     buttonStyle={styles.savebtn}
                                     onPress={
                                         this.updateAddr
@@ -328,7 +350,7 @@ class AddressOverlay extends React.Component {
                                 />
                                 <Button
                                     icon={
-                                        <Icon
+                                        <MaterialIcon
                                             name="clear"
                                             size={15}
                                             color="white"
@@ -345,6 +367,8 @@ class AddressOverlay extends React.Component {
                         </View>
                     </View>
                 </ScrollView>
+                </>
+                )}
             </SafeAreaView>
         );
     }
