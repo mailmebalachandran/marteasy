@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     productImage: {
         height: 100,
         width: 100,
-        borderRadius: 20,
+        // borderRadius: 20,
     },
     //Products Details
     productName: {
