@@ -15,8 +15,14 @@ class OpeningHour extends Component {
         ? styles.avatarContainerGreenStyle
         : styles.avatarContainerRedStyle;
       return color;
-    }
-    else{
+    } else if (time.length === 0) {
+      return styles.avatarContainerRedStyle;
+    } else if (time !== undefined && time.sunday.status !== '') {
+      let color = getIsOpen(day, time)
+        ? styles.avatarContainerGreenStyle
+        : styles.avatarContainerRedStyle;
+      return color;
+    } else {
       return styles.avatarContainerRedStyle;
     }
   };
