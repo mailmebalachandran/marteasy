@@ -95,7 +95,7 @@ class Product extends React.Component {
                         Rs.{product.sale_price}
                       </Text>
                     </View>
-                    <View style={{ marginTop: 10, width: '50%' }}>
+                    <View style={{ marginTop: 10, width: '35%' }}>
                       <View
                         style={{
                           flex: 1,

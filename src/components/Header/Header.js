@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text, Image} from 'react-native';
 import {Avatar, Badge, SearchBar} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconFeather from 'react-native-vector-icons/Feather';
 import * as ThemeColor from '../../themes/colors';
 
 class Header extends Component {
@@ -17,7 +17,7 @@ class Header extends Component {
             onPress={() => {
               this.props.navigation.navigate(this.props.navigationScreenValue);
             }}>
-            <Icon name="arrow-left" size={32} color='black' />
+            <IconFeather name="arrow-left" size={32} color='black' ic />
           </TouchableOpacity>
         </View>
       </View>
