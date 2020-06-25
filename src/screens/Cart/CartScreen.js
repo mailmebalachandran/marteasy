@@ -7,7 +7,7 @@ import {
   AsyncStorage,
   Dimensions,
   TouchableOpacity,
-  Button,
+  ScrollView,
 } from 'react-native';
 import {Avatar, Divider, Overlay} from 'react-native-elements';
 import * as Images from '../../assets/index';
@@ -393,6 +393,7 @@ class CartScreen extends Component {
         {!this.state.isCartEmpty && (
           <View style={{paddingTop: 15, paddingBottom: 15, flex: 1}}>
             <StatusBarComponent />
+            <ScrollView>
             <View>
               {this.state.productList.map(item => (
                 <View
@@ -514,6 +515,7 @@ class CartScreen extends Component {
               </View>
               <Divider />
             </View>
+            </ScrollView>
             <View>
               <ButtonComponent
                 titleValue="Procced to Pay"
