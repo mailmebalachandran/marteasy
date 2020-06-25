@@ -7,7 +7,8 @@ const GetStores = async storeId => {
     res = await Axios.get(Constants.GetShopsAPI);
     return res.data;
   } catch (err) {
-    return JSON.parse('{"message":"Something went wrong", "isValid":false}');
+    console.log(JSON.stringify(err))
+    return JSON.parse('{"isError" : true}');
   }
 };
 
