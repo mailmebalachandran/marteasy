@@ -68,17 +68,18 @@ const styles = StyleSheet.create({
     },
     //Order Listing
     orderSectionTitleContainer: {
-        paddingTop: "5%",
-        paddingBottom: "5%",
+        flexDirection: 'row',
+        paddingTop: "4%",
+        paddingBottom: "4%",
         paddingLeft: "5%",
         backgroundColor: '#efefef',
-        marginLeft: "-5%",
-        marginRight: "-5%",
-        marginTop: "7%",
+        justifyContent: "flex-start",
+        alignItems: "center",
     },
     orderSectionTitle: {
-        color: Theme.DarkColor,
-        fontSize: 13,
+        color: '#4f4f4f',
+        fontSize: 18,
+        marginLeft: "15%",
     },
     orderDetailsContainer: {
         marginTop: "5%",

@@ -11,12 +11,14 @@ import Axios from "axios";
 import { Button, Divider } from 'react-native-elements';
 import * as Images from '../../assets/index';
 import Icon from 'react-native-vector-icons/Entypo';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 import styles from './styles';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import * as Theme from "../../themes/colors"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import MenuLoader from '../../components/Loader/MenuLoader';
+import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
 
 
 
@@ -28,28 +30,33 @@ class ManageAddress extends Component {
             userDetails: [],
         };
     }
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
 
     componentDidMount = async () => {
-        this.setState({ isLoading: true })
-        Axios.get(
-            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-            {
-                params: {
-                    email: 'user_test2@gmail.com',
-                    consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                    consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+        this.setState({ isLoading: true });
+        this._unsubscribe = this.props.navigation.addListener('focus', () => {
+            Axios.get(
+                'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                {
+                    params: {
+                        email: 'user_test2@gmail.com',
+                        consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                        consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                    },
                 },
-            },
-        )
-            .then(res => {
-                this.setState({
-                    userDetails: res.data[0]
+            )
+                .then(res => {
+                    this.setState({
+                        userDetails: res.data[0]
+                    })
+                    this.setState({ isLoading: false })
                 })
-                this.setState({ isLoading: false })
-            })
-            .catch(err => {
-                console.log(err);
-            });
+                .catch(err => {
+                    console.log(err);
+                });
+        })
     };
 
     renderBillingAddress = (userDetails) => {
@@ -205,18 +212,28 @@ class ManageAddress extends Component {
             }
         );
     }
+    navigateToProfile = () => {
+        this.props.navigation.navigate("Account", { screen: "Profile" })
+    }
 
     render() {
         return (
             <SafeAreaView>
                 {this.state.isLoading ? <MenuLoader /> : (<>
+                    <View style={styles.orderSectionTitleContainer}>
+                        <TouchableOpacity
+                            onPress={
+                                this.navigateToProfile
+                            }
+                        >
+                            <FeatherIcon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
+                        </TouchableOpacity>
+                        <Text style={styles.orderSectionTitle}>Manage Address</Text>
+                    </View>
                     <ScrollView>
                         <StatusBarComponent styleType={0} />
                         <View style={styles.continerStyles}>
                             <View style={styles.innerContainer}>
-                                <View style={styles.orderSectionTitleContainer}>
-                                    <Text styles={styles.orderSectionTitle}>Manage Address</Text>
-                                </View>
                                 {this.renderBillingAddress(this.state.userDetails)}
                                 {this.renderShippingAddress(this.state.userDetails)}
                             </View>{/* End InnerContainer */}
