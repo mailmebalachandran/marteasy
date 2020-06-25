@@ -15,10 +15,15 @@ const styles = StyleSheet.create({
     elevation: 2,
     height: "4%",
     alignItems: "center",
-    paddingLeft: ""
+    paddingLeft: "2%",
+    paddingTop: "7%",
+    paddingBottom: "7%",
   },
   titleStyle: {
+      color: ThemeColor.DarkColor,
       alignSelf: "center",
+      backgroundColor: ThemeColor.DarkColor,
+      height: 100
   },
   navIcon: {
       fontWeight: '100',

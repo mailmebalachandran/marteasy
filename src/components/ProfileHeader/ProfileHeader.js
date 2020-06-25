@@ -8,15 +8,18 @@ class ProfileHeader extends Component {
     super(props);
   }
   render() {
+      const { mainRoute, subRoute, headerTitle } = this.props;
+      console.log("tt",headerTitle)
     return (
       <View style={styles.containerStyle}>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate(this.props.navigation);
+                console.log("called");
+              this.props.navigation.navigate(mainRoute,{screen: subRoute});
             }}>
             <Icon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
           </TouchableOpacity>
-          <Text style={styles.titleStyle}>{this.props.title}</Text>
+          <Text style={styles.titleStyle}>{headerTitle}</Text>
       </View>
     );
   }

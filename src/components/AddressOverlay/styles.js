@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     innerContainer: {
         marginLeft: "5%",
         marginRight: "5%",
+        marginTop: "5%"
     },
     //Common
     divideStyles: {
@@ -46,31 +47,40 @@ const styles = StyleSheet.create({
         flex:1,
     },
     orderSectionTitleContainer: {
-        paddingTop: "5%",
-        paddingBottom: "5%",
+        flexDirection: 'row',
+        paddingTop: "4%",
+        paddingBottom: "4%",
         paddingLeft: "5%",
         backgroundColor: '#efefef',
-        marginLeft: "-5%",
-        marginRight: "-5%",
-        marginTop: "7%",
-        // justifyContent: "center",
-        // alignItems: "center",
+        justifyContent: "flex-start",
+        alignItems: "center",
     },
     orderSectionTitle: {
-        color: Theme.DarkColor,
-        fontSize: 20,
+        color: '#4f4f4f',
+        fontSize: 18,
+        marginLeft: "15%",
     },
     btnContainer: {
         flex: 1,
         flexDirection: "row",
-        justifyContent: "space-around",
+        justifyContent: "space-between",
         alignItems: "center",
+        marginBottom: "10%",
     },
     savebtn: {
         backgroundColor: Theme.DarkColor,
+        width: "75%"
     },
     cancelBtn: {
         backgroundColor: Theme.DarkColor,
+        width: "75%",
+        alignSelf: 'flex-end',
+    },
+    errorMsg: {
+        color: "red",
+        fontWeight: "100",
+        fontSize: 15,
+        marginBottom: "5%",
     }
 })
 
