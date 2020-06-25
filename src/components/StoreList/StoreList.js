@@ -24,7 +24,7 @@ class StoreList extends Component {
           source={{uri: item.gravatar}}
           style={{
             resizeMode: 'contain',
-            height: 140,
+            height: 100,
             width: '100%',
           }}
         />
@@ -35,7 +35,7 @@ class StoreList extends Component {
           source={Images.NOSTORE}
           style={{
             resizeMode: 'contain',
-            height: 140,
+            height: 100,
             width: '80%',
             shadowColor: "black",
     shadowOffset: { height: 2},
@@ -55,7 +55,7 @@ class StoreList extends Component {
           data={this.props.dataValues}
           renderItem={({item}) => (
             <Card
-              containerStyle={{flex: 0.5, backgroundColor: '#e4ffde', margin: 0,}}>
+              containerStyle={{flex: 0.5, backgroundColor: '#fff'}}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('ProductScreen', {
@@ -66,7 +66,7 @@ class StoreList extends Component {
                 }}>
                 <View
                   style={{
-                    backgroundColor:'#d8facd',
+                    backgroundColor:'transparent',
                     width:'100%',
                     shadowColor: '#000',
                     shadowOffset: { width: 0, height: 3 },

@@ -426,6 +426,7 @@ class ProductsScreen extends Component {
               <ViewCart
                 productCount={this.state.productCount}
                 productAmount={this.state.productAmount}
+                navigation={this.props.navigation}
               />
             )}
           </View>
