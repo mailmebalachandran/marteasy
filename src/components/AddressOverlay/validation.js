@@ -33,6 +33,7 @@ export const addrValidation = (state) => {
         state.postalCodeVal = "PostalCode Can't Be Empty"
     }
     if (!state.isShipping) {
+        console.log("in ship")
         if (state.email === "" || state.email === undefined) {
             state.isError = true;
             state.emailVal = "Email Can't Be Empty";

@@ -6,10 +6,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         paddingBottom: 50,
+        flex: 1,
+        height: "100%",
     },
     innerContainer: {
         marginLeft: "5%",
         marginRight: "5%",
+        flex: 1,
+        height: "100%",
     },
     manageAddrLeftContainer: {
         width: "90%",
@@ -124,6 +128,34 @@ const styles = StyleSheet.create({
         backgroundColor: Theme.DarkColor,
         borderRadius: 0,
     },
+    //Login Error Styles
+    loginErrorConatiner: {
+        backgroundColor: '#fafafa',
+        height: "100%",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    errorHeader: {
+        fontSize: 24,
+        fontWeight: "bold"
+    },
+    errorSubText: {
+        fontSize: 18,
+        marginTop: "5%",
+        marginBottom: "5%",
+    },
+    //No Orders
+    noOrdersErrContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "10%",
+        marginBottom: "10%",
+    },
+    noOrdersErrText: {
+        fontSize: 18,
+        marginTop: "0.5%",
+    }
 
 })
 
