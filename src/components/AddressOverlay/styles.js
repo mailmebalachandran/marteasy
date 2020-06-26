@@ -67,9 +67,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom: "10%",
     },
+    btnTitle: {
+        marginLeft: 5,
+    },
     savebtn: {
         backgroundColor: Theme.DarkColor,
-        width: "75%"
+        width: "75%",
     },
     cancelBtn: {
         backgroundColor: Theme.DarkColor,
