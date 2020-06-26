@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    AsyncStorage
+    Image,
 } from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
 import Axios from "axios";
@@ -13,9 +13,10 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import MenuLoader from '../../components/Loader/MenuLoader';
-import LoginErrorOverlay from "../../components/Errors/LoginErrorOverlay";
 import ConnectionError from "../../components/Errors/ConnectionError";
-
+import { USER_LOGIN_ERROR } from "../../assets/index";
+import ButtonComponent from "../../components/Button/Button";
+import { isUserLoggedIn, logout } from "../../utils";
 
 class ProfileScreen extends Component {
     constructor(props) {
@@ -24,57 +25,68 @@ class ProfileScreen extends Component {
             isLoading: false,
             userDetails: {},
             orders: [],
-            overlayVisible: false,
+            isLoginOverlay: false,
             isConnected: true,
         };
     }
     componentWillUnmount() {
-        // this.unsubscribe();
+        this._unsubscribe();
     }
     handleConnectivityChange = isConnected => {
         this.setState({ isConnected });
     }
-    componentDidMount = async () => {
-        this.setState({ isLoading: true })
-        // const unsubscribe = NetInfo.addEventListener(state => {
-        //     this.setState({isConnected : state.isConnected});
-        // });
-        Axios.get(
-            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-            {
-                params: {
-                    email: 'user_test1@gmail.com',
-                    consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                    consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
-                },
-            },
-        )
-            .then(res => {
-                Axios.get(
-                    'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v2/orders',
-                    {
-                        params: {
-                            customer: res.data[0].id.toString(),
-                            consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                            consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+    componentDidMount() {
+        this._unsubscribe = this.props.navigation.addListener('focus', () => {
+            this.setState({ isLoading: true });
+            isUserLoggedIn().then((loginDetails) => {
+                const user = JSON.parse(loginDetails);
+                this.setState({ isLoginOverlay: false });
+                if (user) {
+                    Axios.get(
+                        'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                        {
+                            params: {
+                                email: user.user_email,
+                                consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                                consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                            },
                         },
-                    },
-                ).then((res) => {
-                    this.setState({
-                        orders: res.data
-                    })
-                    this.setState({ isLoading: false })
-                }).catch(err => {
-                    console.log(err);
-                });
-                this.setState({
-                    userDetails: res.data[0]
-                })
+                    )
+                        .then(res => {
+                            Axios.get(
+                                'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v2/orders',
+                                {
+                                    params: {
+                                        customer: res.data[0].id.toString(),
+                                        consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                                        consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                                    },
+                                },
+                            ).then((res) => {
+                                this.setState({
+                                    orders: res.data
+                                })
+                                this.setState({ isLoading: false })
+                            }).catch(err => {
+                                console.log(err);
+                            });
+                            this.setState({
+                                userDetails: res.data[0]
+                            })
 
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                } else {
+                    this.setState({ isLoading: false });
+                    this.setState({ isLoginOverlay: true });
+                }
             })
-            .catch(err => {
-                console.log(err);
-            });
+            // const unsubscribe = NetInfo.addEventListener(state => {
+            //     this.setState({isConnected : state.isConnected});
+            // });
+        })
     };
 
     renderPhoneNum = (billingAddr) => {
@@ -85,25 +97,49 @@ class ProfileScreen extends Component {
         }
     }
     navigateToManageAddr = () => {
-        this.props.navigation.navigate('Account', { screen: 'ManageAddr' });
+        this.props.navigation.navigate('Account', 
+        { screen: 'ManageAddr' });
     }
-    isUserLoggedIn = () => {
-        let userDetails = AsyncStorage.getItem('userAuth');
-        if (userDetails !== null) {
-            this.setState({ overlayVisible: false });
-        } else {
-            this.setState({ overlayVisible: true });
-        }
+    renderLoginError = () => {
+        return (
+            <View style={styles.loginErrorConatiner}>
+                <View style={styles.imgViewStyle}>
+                    <Image source={USER_LOGIN_ERROR} />
+                </View>
+                <Text style={styles.errorHeader}>You need to login {'\n'} to access this</Text>
+                <Text style={styles.errorSubText}>
+                    Still you can browse products {'\n'}
+                    from our awesome collection
+                </Text>
+                <ButtonComponent
+                    titleValue={"Login Now"}
+                    onPressHandler={() => this.props.navigation.navigate('LoginScreen')}
+                />
+            </View>
+        )
     }
-
+    renderNoOrdersErr = () => {
+        return (
+            <View style={styles.noOrdersErrContainer}>
+                <Text>
+                    No Orders Yet
+                </Text>
+                <Text>
+                    Search your favourite below
+                </Text>
+                <ButtonComponent
+                    titleValue={"Search Products"}
+                    onPressHandler={() => this.props.navigation.navigate("Search")}
+                />
+            </View>
+        )
+    }
     render() {
         const { first_name, last_name, email } = this.state.userDetails;
-        console.log("con", this.state.isConnected)
         return (
             <SafeAreaView>
-                <ConnectionError isConnected={this.state.isConnected} />
-                {false ?
-                    <LoginErrorOverlay /> : (<>
+                {this.state.isLoginOverlay ?
+                    this.renderLoginError() : (<>
                         {this.state.isLoading ? <MenuLoader /> : (<>
                             <ScrollView>
                                 <StatusBarComponent styleType={0} />
@@ -158,8 +194,8 @@ class ProfileScreen extends Component {
                                         <View style={styles.orderSectionTitleContainer}>
                                             <Text styles={styles.orderSectionTitle}>Recent Orders</Text>
                                         </View>
-                                        {
-                                            this.state.orders.map((order) => {
+                                        {this.state.orders.length > 0 ?
+                                            (this.state.orders.map((order) => {
                                                 let total = 0;
                                                 return (
                                                     <>
@@ -192,7 +228,10 @@ class ProfileScreen extends Component {
                                                         <Divider style={styles.dividerVerymall} />
                                                     </>
                                                 )
-                                            })
+                                            })) :
+                                            (<>
+                                                {this.renderNoOrdersErr()}
+                                            </>)
                                         }
                                         <View style={styles.logoutContainer}>
                                             <Button
@@ -209,6 +248,7 @@ class ProfileScreen extends Component {
                                                 buttonStyle={
                                                     styles.logoutBtn
                                                 }
+                                                onPress={() => logout(this.props.navigation)}
                                             />
                                         </View>
                                     </View>{/* End InnerContainer */}

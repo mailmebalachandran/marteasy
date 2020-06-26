@@ -1,16 +1,15 @@
-import React, {Component} from 'react';
-import {View, SafeAreaView, ScrollView, RefreshControl} from 'react-native';
-import {Text} from 'react-native-elements';
+import React, { Component } from 'react';
+import { View, SafeAreaView, ScrollView, RefreshControl } from 'react-native';
+import { Text } from 'react-native-elements';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Slider from '../../components/Slider/Slider';
 import StoreList from '../../components/StoreList/StoreList';
 import HomeAPI from '../../api/Home/HomeAPI';
-import Toast, {DURATION} from 'react-native-easy-toast';
+import Toast, { DURATION } from 'react-native-easy-toast';
 import * as Images from '../../assets/index';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Icon, { FA5Style } from 'react-native-vector-icons/FontAwesome5';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay'
-// import NetInfo from '@react-native-community/netinfo'
 import NetInfo from '@react-native-community/netinfo'
 
 class HomeScreen extends Component {
@@ -20,15 +19,15 @@ class HomeScreen extends Component {
       ShopList: [],
       isLoading: true,
       refreshing: false,
-      isShowError:false,
-      IsInternetConnected:true,
+      isShowError: false,
+      IsInternetConnected: true,
     };
   }
 
   componentDidMount = () => {
     console.log("componentDidMount")
-    this.setState({isLoading: true});
-    
+    this.setState({ isLoading: true });
+
 
     NetInfo.addEventListener(this.handleConnectivityChange);
 
@@ -42,21 +41,14 @@ class HomeScreen extends Component {
       }
     });
 
-    
+
     this.getStoresOnLoad();
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.setState({ isLoading: true });
+      this.getStoresOnLoad();
+    });
 
   };
-
-  // handleConnectivityChange = state => {
-  //   console.log('handleConnectivityChange isConnected.fetch : ' + JSON.stringify(state.isConnected))
-  //   if (state.isConnected) {
-  //     this.setState({ IsInternetConnected: true })
-  //   } else {
-  //     this.setState({ IsInternetConnected: false })
-  //   }
-  // };
-
-
   handleConnectivityChange = (isConnected) => {
     console.log('handleConnectivityChange isConnected : ' + isConnected.isConnected)
     if (isConnected.isConnected == true) {
@@ -65,18 +57,18 @@ class HomeScreen extends Component {
     else {
       this.setState({ IsInternetConnected: false })
     }
-  };
+  }
 
   getStoresOnLoad = async () => {
     let result = await HomeAPI.GetStores();
     console.log('result :' + result.isError)
-    if(result !== undefined && result.isError !== undefined && result.isError === true){
+    if (result !== undefined && result.isError !== undefined && result.isError === true) {
 
-this.setState({isShowError:true, isLoading: false});
+      this.setState({ isShowError: true, isLoading: false });
     }
     else if (result !== undefined) {
-      this.setState({ShopList: result}, () => {
-        this.setState({isLoading: false, isShowError:false});
+      this.setState({ ShopList: result }, () => {
+        this.setState({ isLoading: false, isShowError: false });
       });
     }
   };
@@ -105,17 +97,17 @@ this.setState({isShowError:true, isLoading: false});
       },
     ];
     return (
-      <SafeAreaView style={{flex: 1}}>
-        { !this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
+      <SafeAreaView style={{ flex: 1 }}>
+        {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
           <MenuLoader />
         ) : this.state.isShowError ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
           <>
             <ScrollView refreshControl={<RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
-          />}>   
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />}>
               <StatusBarComponent styleType={0} />
-              <View style={{backgroundColor: 'white'}}>
+              <View style={{ backgroundColor: 'white' }}>
                 <Text
                   style={{
                     marginLeft: 10,
@@ -128,7 +120,7 @@ this.setState({isShowError:true, isLoading: false});
                 </Text>
                 <Slider dataValues={topPicks} />
               </View>
-              <View style={{marginTop: 10, backgroundColor: 'white'}}>
+              <View style={{ marginTop: 10, backgroundColor: 'white' }}>
                 <Text
                   style={{
                     marginLeft: 10,
@@ -147,13 +139,13 @@ this.setState({isShowError:true, isLoading: false});
               </View>
               <Toast
                 ref="toast"
-                style={{backgroundColor: '#dfdfdf'}}
+                style={{ backgroundColor: '#dfdfdf' }}
                 position="top"
                 positionValue={100}
                 fadeInDuration={750}
                 fadeOutDuration={1000}
                 opacity={0.8}
-                textStyle={{color: 'black'}}
+                textStyle={{ color: 'black' }}
               />
             </ScrollView>
           </>

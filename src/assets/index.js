@@ -8,4 +8,5 @@ export const IMAGE2 = require('./images/image2.jpg');
 export const IMAGE3 = require('./images/image3.jpg');
 export const IMAGE4 = require('./images/image4.jpg');
 export const NO_INTERNET = require('./images/wentWrong.jpg');
+export const USER_LOGIN_ERROR = require('./images/userlogin.jpg');
 export const INTERNALERROR = require('./images/InternalServerError.jpg');

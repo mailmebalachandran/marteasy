@@ -25,7 +25,11 @@ class LoginErrorOverlay extends React.Component {
                                     <Image source={INTERNALERROR} />
                                 }
                             </View>
-                            { this.props.errorType === 'NetWork' ? <Text style={styles.errorHeader}>No Internet please check your internet connection</Text>: 
+                            { this.props.errorType === 'NetWork' ? (
+                            <View>
+                            <Text style={styles.errorHeader}>No Internet</Text>
+                            <Text style={styles.errorSubText}>please check your internet connection</Text>
+                            </View>): 
                             <View>
                             <Text style={styles.errorHeader}>We have an internal {'\n'} server error</Text>
                             <Text style={styles.errorSubText}>Please try again later</Text>

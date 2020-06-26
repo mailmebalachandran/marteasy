@@ -18,7 +18,7 @@ import * as Theme from "../../themes/colors"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import MenuLoader from '../../components/Loader/MenuLoader';
-import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
+import { isUserLoggedIn } from "../../utils";
 
 
 
@@ -37,25 +37,32 @@ class ManageAddress extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true });
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
-            Axios.get(
-                'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-                {
-                    params: {
-                        email: 'user_test2@gmail.com',
-                        consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                        consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
-                    },
-                },
-            )
-                .then(res => {
-                    this.setState({
-                        userDetails: res.data[0]
-                    })
-                    this.setState({ isLoading: false })
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+            isUserLoggedIn().then((loginDetails) => {
+                const user = JSON.parse(loginDetails);
+                if (user) {
+                    Axios.get(
+                        'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                        {
+                            params: {
+                                email: user.user_email,
+                                consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
+                                consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
+                            },
+                        },
+                    )
+                        .then(res => {
+                            this.setState({
+                                userDetails: res.data[0]
+                            })
+                            this.setState({ isLoading: false })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                } else {
+                    this.props.navigation.navigate("Account");
+                }
+            })
         })
     };
 
@@ -76,11 +83,10 @@ class ManageAddress extends Component {
                                     {`${billing.first_name} ${billing.last_name}`}
                                 </Text>
                                 <Text style={styles.subHeading}>
-                                    {
-                                        billing.address_1 + ', ' + billing.address_2 + ', ' +
-                                        billing.city + ', ' + billing.state + ', ' +
-                                        billing.country
-                                    }
+                                    {billing.address_1 + ', ' + billing.address_2 + ','}
+                                </Text>
+                                <Text>
+                                    {billing.city + ', ' + billing.state + ', ' + billing.country}
                                 </Text>
                             </View>
                         </View>
@@ -138,11 +144,10 @@ class ManageAddress extends Component {
                                     {`${shipping.first_name} ${shipping.last_name}`}
                                 </Text>
                                 <Text style={styles.subHeading}>
-                                    {
-                                        shipping.address_1 + ', ' + shipping.address_2 + ', ' +
-                                        shipping.city + ', ' + shipping.state + ', ' +
-                                        shipping.country
-                                    }
+                                    {shipping.address_1 + ', ' + shipping.address_2 + ', '}
+                                </Text>
+                                <Text>
+                                    {shipping.city + ', ' + shipping.state + ', ' + shipping.country}
                                 </Text>
                             </View>
                         </View>

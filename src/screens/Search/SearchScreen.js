@@ -17,12 +17,13 @@ import AddCart from '../../components/AddCart/AddCart';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import ViewCart from '../../components/ViewCart/ViewCart';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MenuLoader from '../../components/Loader/MenuLoader';
 
 class SearchScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      IsLoaded: false,
+      isLoading: false,
       search: '',
       productList: [],
       isLoadingSearch: false,
@@ -36,6 +37,7 @@ class SearchScreen extends Component {
   }
 
   componentDidMount = async () => {
+    this.onPageLoad();
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.onPageLoad();
     });
@@ -340,17 +342,18 @@ class SearchScreen extends Component {
               borderBottomColor: 'transparent',
             }}
             inputContainerStyle={{
-              backgroundColor: ThemeColor.PrimaryColor,
+              backgroundColor: '#ebebeb',
               color: ThemeColor.DarkTextColor,
+              borderRadius:0,
               height: 45,
             }}
-            placeholderTextColor={ThemeColor.DarkTextColor}
+            placeholderTextColor='grey'
             searchIcon={
-              <Icon name="search" size={15} color={ThemeColor.DarkTextColor} />
+              <Icon name="search" size={15} color='#000' />
             }
             cancelIcon={{color: ThemeColor.DarkTextColor}}
             inputStyle={{
-              color: ThemeColor.DarkTextColor,
+              color: '#000',
               fontSize: 14,
               paddingLeft: 0,
             }}
@@ -427,7 +430,8 @@ class SearchScreen extends Component {
             />
           </View>
         </View>
-        {this.state.isViewCart && (
+        
+        {this.state.isViewCart  && !this.state.isLoading && (
           <ViewCart
             productCount={this.state.productCount}
             productAmount={this.state.productAmount}

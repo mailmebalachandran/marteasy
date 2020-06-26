@@ -17,6 +17,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Header from '../../components/Header/Header';
 import ViewCart from '../../components/ViewCart/ViewCart';
+import * as Images from '../../assets/index';
+import * as CommonConstants from '../../constants';
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -335,6 +337,39 @@ class ProductsScreen extends Component {
     }
   };
 
+  onAvatarImage = item => {
+    if (item.gravatar !== undefined) {
+      if (item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)) {
+        return (
+          <Avatar
+            rounded
+            size="large"
+            containerStyle={{margin: 5}}
+            source={Images.NOSTORE}
+          />
+        );
+      } else {
+        return (
+          <Avatar
+            rounded
+            size="large"
+            containerStyle={{margin: 5}}
+            source={{uri: item.gravatar}}
+          />
+        );
+      }
+    } else {
+      return (
+        <Avatar
+        rounded
+        size="large"
+        containerStyle={{margin: 5}}
+        source={Images.NOSTORE}
+      />
+      );
+    }
+  };
+
   render() {
     return (
       <>
@@ -344,7 +379,7 @@ class ProductsScreen extends Component {
           <View style={{flex: 1}}>
             <StatusBarComponent styleType={0} />
             <Header
-              navigationScreenValue="HomeScreen"
+              navigationScreenValue="Products"
               navigation={this.props.navigation}
             />
             {/* <Image
@@ -363,14 +398,7 @@ class ProductsScreen extends Component {
               <View style={{height: 70}}>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                   <View style={{flex: 0.2}}>
-                    <Avatar
-                      rounded
-                      size="large"
-                      containerStyle={{margin: 5}}
-                      source={{
-                        uri: this.state.storeDetail.gravatar,
-                      }}
-                    />
+                    {this.onAvatarImage(this.state.storeDetail)}
                   </View>
                   <View style={{flex: 0.6, marginLeft: 20}}>
                     <Text
@@ -399,7 +427,9 @@ class ProductsScreen extends Component {
                 <Line />
               </View>
               <View style={{height: 50}}>
-                {this.state.storeDetail.store_open_close && <OpeningHour {...this.state} />}
+                {this.state.storeDetail.store_open_close && (
+                  <OpeningHour {...this.state} />
+                )}
               </View>
               <View style={{height: 20}}>
                 <Line />
@@ -415,12 +445,10 @@ class ProductsScreen extends Component {
                 />
               )}
               {this.state.productList.length == 0 && (
-                <View style={{flex:1, margin:20}}>
+                <View style={{flex: 1, margin: 20}}>
                   <Text>No Products in store</Text>
                 </View>
-              )
-
-              }
+              )}
             </View>
             {this.state.isViewCart && (
               <ViewCart
