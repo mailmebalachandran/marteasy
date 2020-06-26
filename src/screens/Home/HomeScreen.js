@@ -25,14 +25,9 @@ class HomeScreen extends Component {
   }
 
   componentDidMount = () => {
-    console.log("componentDidMount")
     this.setState({ isLoading: true });
-
-
     NetInfo.addEventListener(this.handleConnectivityChange);
-
     NetInfo.fetch().done((isConnected) => {
-      console.log('isConnected.fetch : ' + isConnected.isConnected)
       if (isConnected.isConnected == true) {
         this.setState({ IsInternetConnected: true })
       }
@@ -50,7 +45,6 @@ class HomeScreen extends Component {
 
   };
   handleConnectivityChange = (isConnected) => {
-    console.log('handleConnectivityChange isConnected : ' + isConnected.isConnected)
     if (isConnected.isConnected == true) {
       this.setState({ IsInternetConnected: true })
     }
@@ -61,7 +55,6 @@ class HomeScreen extends Component {
 
   getStoresOnLoad = async () => {
     let result = await HomeAPI.GetStores();
-    console.log('result :' + result.isError)
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
 
       this.setState({ isShowError: true, isLoading: false });

@@ -11,7 +11,7 @@ import CartScreen from './src/screens/Cart/CartScreen';
 import SearchScreen from './src/screens/Search/SearchScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 import ManageAddress from './src/screens/ManageAddress/ManageAddress';
-import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay"
+import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
 
 class App extends Component {
   loginScreenNavigator = () => {
@@ -41,7 +41,7 @@ class App extends Component {
     const Tab = createBottomTabNavigator();
     return (
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Search"
         header={{visible:true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>

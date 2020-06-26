@@ -128,6 +128,7 @@ class ProductsScreen extends Component {
     }
     this.setState({productList: productList, storeDetail: storeDetail}, () => {
       this.setState({isLoading: false});
+      this.onAddressDetailsBind();
     });
   };
 
@@ -339,7 +340,9 @@ class ProductsScreen extends Component {
 
   onAvatarImage = item => {
     if (item.gravatar !== undefined) {
-      if (item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)) {
+      if (
+        item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)
+      ) {
         return (
           <Avatar
             rounded
@@ -361,13 +364,38 @@ class ProductsScreen extends Component {
     } else {
       return (
         <Avatar
-        rounded
-        size="large"
-        containerStyle={{margin: 5}}
-        source={Images.NOSTORE}
-      />
+          rounded
+          size="large"
+          containerStyle={{margin: 5}}
+          source={Images.NOSTORE}
+        />
       );
     }
+  };
+
+  onAddressDetailsBind = () => {
+    return (
+      <Text style={{fontSize: 10}}>
+        {this.state.storeDetail !== undefined && this.state.storeDetail !== null
+          ? this.state.storeDetail.address !== undefined
+            ? this.state.storeDetail.address.street_1
+            : ''
+          : ''}
+        {'  '}
+        {this.state.storeDetail !== undefined && this.state.storeDetail !== null
+          ? this.state.storeDetail.address !== undefined
+            ? this.state.storeDetail.address.street_2
+            : ''
+          : ''}
+        {'  '}
+        {this.state.storeDetail !== undefined && this.state.storeDetail !== null
+          ? this.state.storeDetail.address !== undefined
+            ? this.state.storeDetail.address.city
+            : ''
+          : ''}
+        {'  '}
+      </Text>
+    );
   };
 
   render() {
@@ -400,7 +428,7 @@ class ProductsScreen extends Component {
                   <View style={{flex: 0.2}}>
                     {this.onAvatarImage(this.state.storeDetail)}
                   </View>
-                  <View style={{flex: 0.6, marginLeft: 20}}>
+                  <View style={{flex: 0.8, marginLeft: 20}}>
                     <Text
                       style={{
                         fontSize: 20,
@@ -409,7 +437,7 @@ class ProductsScreen extends Component {
                       }}>
                       {this.state.storeDetail.store_name}
                     </Text>
-                    <Text style={{fontSize: 10}}>Description</Text>
+                    {this.onAddressDetailsBind()}
                     <Text style={{fontSize: 10, marginTop: 5}}>
                       <Icon name="star" size={10} color="grey" /> 0 reviews
                     </Text>
