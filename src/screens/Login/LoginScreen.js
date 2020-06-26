@@ -8,7 +8,7 @@ import ButtonComponent from '../../components/Button/Button';
 import LoginAPI from '../../api/Login/LoginAPI';
 import Validation from '../../validation/Login/LoginValidation';
 import Toast, {DURATION} from 'react-native-easy-toast';
-import { LOGO } from '../../assets/index';
+import {LOGO} from '../../assets/index';
 import * as ThemeColor from '../../themes/colors';
 import * as Constants from './constants';
 
@@ -16,7 +16,7 @@ class LoginScreen extends Component {
   state = {
     UserName: '',
     Password: '',
-    IsLoaded: false
+    IsLoaded: false,
   };
 
   onSubmitHandler = async () => {
@@ -30,12 +30,11 @@ class LoginScreen extends Component {
       let result = await LoginAPI.LoginValidation(userDetails);
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
-      }else{
+      } else {
         this.props.navigation.navigate('HomeScreen');
       }
       this.setState({IsLoaded: false});
-    }
-    else{
+    } else {
       this.refs.toast.show(validationResult.message, DURATION.LENGTH_LONG);
       this.setState({IsLoaded: false});
     }
@@ -44,7 +43,9 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.containerStyle}>
-        {this.state.IsLoaded && <ActivityIndicator size='large' color={ThemeColor.DarkColor} />}
+        {this.state.IsLoaded && (
+          <ActivityIndicator size="large" color={ThemeColor.DarkColor} />
+        )}
         <StatusBarComponent styleType={0} />
         <View style={styles.logoStyle}>
           <Image source={LOGO} />
@@ -59,7 +60,7 @@ class LoginScreen extends Component {
           iconColor={ThemeColor.DarkColor}
           secureText={false}
           textStyle={{fontSize: 10}}
-          autoCapitalize='none'
+          autoCapitalize="none"
           onChangedTextHandler={text => {
             this.setState({UserName: text});
           }}
@@ -73,7 +74,7 @@ class LoginScreen extends Component {
           iconSize={25}
           iconColor={ThemeColor.DarkColor}
           secureText={true}
-          autoCapitalize='none'
+          autoCapitalize="none"
           onChangedTextHandler={text => {
             this.setState({Password: text});
           }}
@@ -81,6 +82,12 @@ class LoginScreen extends Component {
         <ButtonComponent
           titleValue={Constants.BUTTON_LOGIN}
           onPressHandler={this.onSubmitHandler}
+        />
+        <ButtonComponent
+          titleValue={Constants.BUTTON_CANCEL}
+          onPressHandler={() => {
+            this.props.navigation.navigate('HomeScreen');
+          }}
         />
         <Toast
           ref="toast"

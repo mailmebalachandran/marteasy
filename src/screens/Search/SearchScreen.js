@@ -289,9 +289,10 @@ class SearchScreen extends Component {
 
   onChangeTextHandler = async searchText => {
     if (searchText !== '') {
-      this.setState({isLoadingSearch: true});
+      this.setState({productList: [], isLoadingSearch: true});
       let productDetails = await SearchAPI.GetProductBasedOnSearch(searchText);
-      let productList = productDetails;
+      let productList = [];
+      productList = productDetails;
       let productListWithAdd = [];
 
       productList.map(item => {
