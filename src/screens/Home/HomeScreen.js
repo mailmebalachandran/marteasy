@@ -8,8 +8,10 @@ import HomeAPI from '../../api/Home/HomeAPI';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import * as Images from '../../assets/index';
 import MenuLoader from '../../components/Loader/MenuLoader';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon, { FA5Style } from 'react-native-vector-icons/FontAwesome5';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay'
+// import NetInfo from '@react-native-community/netinfo'
+import NetInfo from '@react-native-community/netinfo'
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -19,13 +21,50 @@ class HomeScreen extends Component {
       isLoading: true,
       refreshing: false,
       isShowError:false,
+      IsInternetConnected:true,
     };
   }
 
   componentDidMount = () => {
     console.log("componentDidMount")
     this.setState({isLoading: true});
+    
+
+    NetInfo.addEventListener(this.handleConnectivityChange);
+
+    NetInfo.fetch().done((isConnected) => {
+      console.log('isConnected.fetch : ' + isConnected.isConnected)
+      if (isConnected.isConnected == true) {
+        this.setState({ IsInternetConnected: true })
+      }
+      else {
+        this.setState({ IsInternetConnected: false })
+      }
+    });
+
+    
     this.getStoresOnLoad();
+
+  };
+
+  // handleConnectivityChange = state => {
+  //   console.log('handleConnectivityChange isConnected.fetch : ' + JSON.stringify(state.isConnected))
+  //   if (state.isConnected) {
+  //     this.setState({ IsInternetConnected: true })
+  //   } else {
+  //     this.setState({ IsInternetConnected: false })
+  //   }
+  // };
+
+
+  handleConnectivityChange = (isConnected) => {
+    console.log('handleConnectivityChange isConnected : ' + isConnected.isConnected)
+    if (isConnected.isConnected == true) {
+      this.setState({ IsInternetConnected: true })
+    }
+    else {
+      this.setState({ IsInternetConnected: false })
+    }
   };
 
   getStoresOnLoad = async () => {
@@ -67,9 +106,9 @@ this.setState({isShowError:true, isLoading: false});
     ];
     return (
       <SafeAreaView style={{flex: 1}}>
-        {this.state.isLoading ? (
+        { !this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
           <MenuLoader />
-        ) : this.state.isShowError ? <ErrorOverlay reload={this.componentDidMount} /> : (
+        ) : this.state.isShowError ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
           <>
             <ScrollView refreshControl={<RefreshControl
             refreshing={this.state.refreshing}
