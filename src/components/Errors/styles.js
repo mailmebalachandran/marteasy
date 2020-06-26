@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   padding30: {
-    padding: 30
+    padding: 30,
+    width:'80%'
   },
   imgViewStyle: {
     alignItems: "center"
