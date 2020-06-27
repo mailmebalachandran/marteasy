@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
-import { Button, Overlay } from "react-native-elements";
+import { View, Image } from "react-native";
+import { Overlay } from "react-native-elements";
 import { NO_INTERNET } from "../../assets/index";
+
 class LoginErrorOverlay extends React.Component {
     constructor(props) {
         super(props);

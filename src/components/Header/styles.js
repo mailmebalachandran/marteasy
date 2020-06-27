@@ -35,6 +35,12 @@ const styles = StyleSheet.create({
   badgeBadgeStyle: {
     backgroundColor: 'red',
   },
+  centerViewStyle: {
+    flex: 0.2,
+  },
+  rightViewStyle: {
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

@@ -1,15 +1,7 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Image,
-  FlatList,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Image, FlatList, Text, TouchableOpacity} from 'react-native';
 import styles from './styles';
 import {Card} from 'react-native-elements';
-import * as ThemeColor from '../../themes/colors';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 
@@ -19,46 +11,24 @@ class StoreList extends Component {
   }
 
   onAvatarImage = item => {
-    if (item.gravatar !== undefined) {   
-      if (item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)) {
+    if (item.gravatar !== undefined) {
+      if (
+        item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)
+      ) {
         return (
-          <Image
-            source={Images.NOSTORE}
-            style={{
-              resizeMode: 'contain',
-              height: 100,
-              width: '100%',
-              shadowColor: 'black',
-              shadowOffset: {height: 2},
-              shadowOpacity: 0.3,
-            }}
-          />
+          <Image source={Images.NOSTORE} style={styles.gravatarImageStyle} />
         );
       } else {
         return (
           <Image
             source={{uri: item.gravatar}}
-            style={{
-              resizeMode: 'contain',
-              height: 100,
-              width: '100%',
-            }}
+            style={styles.gravatarImageDefaultStyle}
           />
         );
       }
     } else {
       return (
-        <Image
-          source={Images.NOSTORE}
-          style={{
-            resizeMode: 'contain',
-            height: 100,
-            width: '80%',
-            shadowColor: 'black',
-            shadowOffset: {height: 2},
-            shadowOpacity: 0.3,
-          }}
-        />
+        <Image source={Images.NOSTORE} style={styles.gravatarImageStyle} />
       );
     }
   };
@@ -71,7 +41,7 @@ class StoreList extends Component {
           columnWrapperStyle={styles.row}
           data={this.props.dataValues}
           renderItem={({item}) => (
-            <Card containerStyle={{flex: 0.5, backgroundColor: '#fff'}}>
+            <Card containerStyle={styles.cardContainerStyle}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('ProductScreen', {
@@ -80,27 +50,10 @@ class StoreList extends Component {
                     storeOpen: item.store_open_close,
                   });
                 }}>
-                <View
-                  style={{
-                    backgroundColor: 'transparent',
-                    width: '100%',
-                    shadowColor: '#000',
-                    shadowOffset: {width: 0, height: 3},
-                    shadowOpacity: 0.5,
-                    shadowRadius: 5,
-                    elevation: 25,
-                  }}>
+                <View style={styles.gravatarViewStyle}>
                   {this.onAvatarImage(item)}
                 </View>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: ThemeColor.DarkColor,
-                    fontWeight: 'bold',
-                  }}>
-                  {' '}
-                  {item.store_name}{' '}
-                </Text>
+                <Text style={styles.storeTextStyle}> {item.store_name} </Text>
               </TouchableOpacity>
             </Card>
           )}

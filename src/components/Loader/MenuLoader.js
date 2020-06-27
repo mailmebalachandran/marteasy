@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import React, {Component} from 'react';
+import {AppRegistry, View} from 'react-native';
 import Animation from 'lottie-react-native';
-import { screenHeight, screenWidth } from "../../utils"
 import menuLoader from '../../assets/images/menu-loading.json';
+import styles from './styles';
 
 export default class MenuLoader extends Component {
   componentDidMount() {
@@ -25,19 +25,9 @@ export default class MenuLoader extends Component {
             source={menuLoader}
           />
         </View>
-
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF'
-  },
-});
 
 AppRegistry.registerComponent('MenuLoader', () => MenuLoader);

@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {View, Text, Image, ScrollView} from 'react-native';
 import {getItemTransformedItemDesc} from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
@@ -87,22 +86,14 @@ class Product extends React.Component {
         <View style={styles.productScreenContainer}>
           {this.state.productList.map(product => (
             <View style={styles.productContainer}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                }}>
+              <View style={styles.imageViewContainerStyle}>
                 {this.onAvatarImage(product)}
                 <View>
                   <Text style={styles.productName}>{product.name}</Text>
                   <Text style={styles.productDesc}>
                     {getItemTransformedItemDesc(product.short_description)}
                   </Text>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                    }}>
+                  <View style={styles.priceViewContainerStyle}>
                     <View style={styles.pricingContainer}>
                       {product.regular_price !== '' &&
                         product.regular_price !== null &&
@@ -115,12 +106,8 @@ class Product extends React.Component {
                         Rs.{product.sale_price}
                       </Text>
                     </View>
-                    <View style={{marginTop: 10, width: '35%'}}>
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: 'row',
-                        }}>
+                    <View style={styles.addCartOuterViewContainerStyle}>
+                      <View style={styles.imageViewContainerStyle}>
                         <AddCart
                           productValue={product}
                           onAddHandler={product => {
