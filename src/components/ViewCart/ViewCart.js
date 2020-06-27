@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ThemeColor from '../../themes/colors';
 import styles from './styles';
@@ -10,10 +10,8 @@ class ViewCart extends Component {
   }
   render() {
     return (
-      <View
-        style={styles.ViewContainerStyle}>
-        <View
-          style={styles.InnerContainerStyle}>
+      <View style={styles.ViewContainerStyle}>
+        <View style={styles.InnerContainerStyle}>
           <View style={styles.LeftItemContainerStyle}>
             <Text style={styles.LeftTextColor}>
               {this.props.productCount} item
@@ -31,11 +29,16 @@ class ViewCart extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.ViewCartIconStyle}>
-            <Icon
-              name="shopping-cart"
-              size={20}
-              color={ThemeColor.DarkTextColor}
-            />
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Cart');
+              }}>
+              <Icon
+                name="shopping-cart"
+                size={20}
+                color={ThemeColor.DarkTextColor}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

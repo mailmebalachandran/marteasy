@@ -13,7 +13,7 @@ class AddCart extends Component {
     let bindingValues;
     if (this.props.productValue.isAdd) {
       bindingValues = (
-        <View style={{width: 75, height: 35}}>
+        <View style={styles.addViewStyle}>
           <TouchableOpacity
             onPress={() => {
               this.props.onAddHandler(this.props.productValue);
@@ -30,36 +30,13 @@ class AddCart extends Component {
               onPress={() =>
                 this.props.handleQuantityChange(this.props.productValue, 'DEC')
               }>
-              <View
-                style={{
-                  backgroundColor:'#ededed',
-                  borderColor: ThemeColor.DarkColor,
-                  borderStyle: 'solid',
-                  borderWidth: 1,
-                  padding: 5,
-                  height: 35,
-                  borderRightColor: ThemeColor.DarkTextColor,
-                  borderRightWidth:0,
-                }}>
+              <View style={styles.minusViewStyle}>
                 <Icon name="minus" size={15} style={{marginTop: 5}} />
               </View>
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-             
-              borderColor: ThemeColor.DarkColor,
-              borderStyle: 'solid',
-              borderWidth: 1,
-              padding: 5,
-              height: 35,
-              borderLeftColor: ThemeColor.DarkTextColor,
-              borderRightColor: ThemeColor.DarkTextColor,
-              borderLeftWidth:0,
-              borderRightWidth:0,
-              borderRightWidth: 0,
-            }}>
-            <Text style={{margin: 5, marginTop: 0}}>
+          <View style={styles.textViewStyle}>
+            <Text style={styles.textTextStyle}>
               {this.props.productValue.count}
             </Text>
           </View>
@@ -68,17 +45,7 @@ class AddCart extends Component {
               onPress={() =>
                 this.props.handleQuantityChange(this.props.productValue, 'INC')
               }>
-              <View
-                style={{
-                  backgroundColor:'#e9fae8',
-                  borderColor: ThemeColor.DarkColor,
-                  borderLeftColor: ThemeColor.DarkTextColor,
-                  borderLeftWidth:0,
-                  borderStyle: 'solid',
-                  borderWidth: 1,
-                  padding: 5,
-                  height: 35,
-                }}>
+              <View style={styles.plusViewStyle}>
                 <Icon name="plus" size={15} style={{marginTop: 5}} />
               </View>
             </TouchableOpacity>

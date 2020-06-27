@@ -7,7 +7,6 @@ const GetStores = async storeId => {
     res = await Axios.get(Constants.GetShopsAPI);
     return res.data;
   } catch (err) {
-    console.log(JSON.stringify(err))
     return JSON.parse('{"isError" : true}');
   }
 };

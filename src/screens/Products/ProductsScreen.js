@@ -19,6 +19,8 @@ import Header from '../../components/Header/Header';
 import ViewCart from '../../components/ViewCart/ViewCart';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
+import ErrorOverlay from '../../components/Errors/ErrorOverlay';
+import NetInfo from '@react-native-community/netinfo';
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -34,6 +36,8 @@ class ProductsScreen extends Component {
       productAmount: 0,
       storeId: 0,
       isRunning: false,
+      isShowError: false,
+      IsInternetConnected: true,
     };
   }
 
@@ -41,15 +45,45 @@ class ProductsScreen extends Component {
     this.onPageLoad();
   };
 
+  handleConnectivityChange = isConnected => {
+    if (isConnected.isConnected == true) {
+      this.setState({IsInternetConnected: true});
+    } else {
+      this.setState({IsInternetConnected: false});
+    }
+  };
+
   onPageLoad = async () => {
     this.setState({isLoading: true, storeId: this.props.route.params.storeId});
+    NetInfo.addEventListener(this.handleConnectivityChange);
+    NetInfo.fetch().done(isConnected => {
+      if (isConnected.isConnected == true) {
+        this.setState({IsInternetConnected: true});
+      } else {
+        this.setState({IsInternetConnected: false});
+      }
+    });
     const storedId = this.props.route.params.storeId;
-    const storeDetail = await ProductAPI.GetStoreBasedonStoreId(
+    let storeDetail = await ProductAPI.GetStoreBasedonStoreId(
       this.props.route.params.storeId,
     );
-    const productList = await ProductAPI.GetProductBasedonStoreId(
+    let productList = await ProductAPI.GetProductBasedonStoreId(
       this.props.route.params.storeId,
     );
+    if (
+      storeDetail !== undefined &&
+      storeDetail.isError !== undefined &&
+      storeDetail.isError === true
+    ) {
+      this.setState({isShowError: true, isLoading: false});
+    }
+    if (
+      productList !== undefined &&
+      productList.isError !== undefined &&
+      productList.isError === true
+    ) {
+      this.setState({isShowError: true, isLoading: false});
+    }
 
     let list = [];
     this.state.list = [];
@@ -401,91 +435,90 @@ class ProductsScreen extends Component {
   render() {
     return (
       <>
-        {this.state.isLoading ? (
+        {!this.state.IsInternetConnected ? (
+          <ErrorOverlay errorType={'NetWork'} />
+        ) : this.state.isLoading ? (
           <MenuLoader />
+        ) : this.state.isShowError ? (
+          <ErrorOverlay errorType={'API'} reload={this.componentDidMount} />
         ) : (
-          <View style={{flex: 1}}>
-            <StatusBarComponent styleType={0} />
-            <Header
-              navigationScreenValue="Products"
-              navigation={this.props.navigation}
-            />
-            {/* <Image
-            source={{
-              uri: this.state.storeDetail.banner,
-            }}
-            style={{ width: '100%', height: 100 }}
-            PlaceholderContent={<ActivityIndicator isLoading={true} />}
-          /> */}
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}>
-              <View style={{height: 70}}>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View style={{flex: 0.2}}>
-                    {this.onAvatarImage(this.state.storeDetail)}
-                  </View>
-                  <View style={{flex: 0.8, marginLeft: 20}}>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        marginTop: 10,
-                      }}>
-                      {this.state.storeDetail.store_name}
-                    </Text>
-                    {this.onAddressDetailsBind()}
-                    <Text style={{fontSize: 10, marginTop: 5}}>
-                      <Icon name="star" size={10} color="grey" /> 0 reviews
-                    </Text>
-                  </View>
-                  {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
+          <>
+            <View style={{flex: 1}}>
+              <StatusBarComponent styleType={0} />
+              <Header
+                navigationScreenValue="Products"
+                navigation={this.props.navigation}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{height: 70}}>
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                    <View style={{flex: 0.2}}>
+                      {this.onAvatarImage(this.state.storeDetail)}
+                    </View>
+                    <View style={{flex: 0.8, marginLeft: 20}}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                          marginTop: 10,
+                        }}>
+                        {this.state.storeDetail.store_name}
+                      </Text>
+                      {this.onAddressDetailsBind()}
+                      <Text style={{fontSize: 10, marginTop: 5}}>
+                        <Icon name="star" size={10} color="grey" /> 0 reviews
+                      </Text>
+                    </View>
+                    {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
                     <Rating
                       style={{width: 20, backgroundColor: 'transparent'}}
                       imageSize={20}
                     />
                     <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
                   </View> */}
+                  </View>
                 </View>
-              </View>
-              <View style={{height: 20}}>
-                <Line />
-              </View>
-              <View style={{height: 50}}>
-                {this.state.storeDetail.store_open_close && (
-                  <OpeningHour {...this.state} />
+                <View style={{height: 20}}>
+                  <Line />
+                </View>
+                <View style={{height: 50}}>
+                  {this.state.storeDetail.store_open_close && (
+                    <OpeningHour {...this.state} />
+                  )}
+                </View>
+                <View style={{height: 20}}>
+                  <Line />
+                </View>
+                {this.state.productList.length > 0 && (
+                  <Product
+                    {...this.state}
+                    onAddHandler={product => this.onAddHandler(product)}
+                    storeId={this.props.route.params.storeId}
+                    handleQuantityChange={(item, type) => {
+                      this.handleQuantityChange(item, type);
+                    }}
+                  />
+                )}
+                {this.state.productList.length == 0 && (
+                  <View style={{flex: 1, margin: 20}}>
+                    <Text>No Products in store</Text>
+                  </View>
                 )}
               </View>
-              <View style={{height: 20}}>
-                <Line />
-              </View>
-              {this.state.productList.length > 0 && (
-                <Product
-                  {...this.state}
-                  onAddHandler={product => this.onAddHandler(product)}
-                  storeId={this.props.route.params.storeId}
-                  handleQuantityChange={(item, type) => {
-                    this.handleQuantityChange(item, type);
-                  }}
+              {this.state.isViewCart && (
+                <ViewCart
+                  productCount={this.state.productCount}
+                  productAmount={this.state.productAmount}
+                  navigation={this.props.navigation}
                 />
               )}
-              {this.state.productList.length == 0 && (
-                <View style={{flex: 1, margin: 20}}>
-                  <Text>No Products in store</Text>
-                </View>
-              )}
             </View>
-            {this.state.isViewCart && (
-              <ViewCart
-                productCount={this.state.productCount}
-                productAmount={this.state.productAmount}
-                navigation={this.props.navigation}
-              />
-            )}
-          </View>
+          </>
         )}
       </>
     );

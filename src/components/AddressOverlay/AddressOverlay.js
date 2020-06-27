@@ -93,7 +93,6 @@ class AddressOverlay extends React.Component {
                             })
                             .catch(err => {
                                 console.log(err);
-                                console.log("err", err.data.message)
                             });
                     }
                 } else {
@@ -128,7 +127,6 @@ class AddressOverlay extends React.Component {
         const { isError } = addrValidation(this.state, isShipping)
         if (isError) {
             this.setState({ isLoading: false });
-            console.log("inside vali")
             this.setState({ state: addrValidation });
             return false;
         }
@@ -179,10 +177,8 @@ class AddressOverlay extends React.Component {
         })
             .catch((err) => {
                 this.setState({ isLoading: false });
-                console.log(err.response.data.data.params.billing);
                 if (err.response.data.data.params.billing) {
                     this.setState({ commonErr: err.response.data.data.params.billing })
-                    console.log("err", this.state.commonErr);
                 } else {
                     this.setState({ commonErr: "Oops Something went wrong!!!" })
                 }
