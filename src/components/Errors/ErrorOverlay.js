@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Image} from 'react-native';
-import {Button, Overlay} from 'react-native-elements';
+import {Overlay} from 'react-native-elements';
 import {INTERNALERROR, NO_INTERNET} from '../../assets/index';
 import ButtonComponent from '../Button/Button';
 import styles from './styles';
@@ -34,7 +34,9 @@ class LoginErrorOverlay extends React.Component {
               </View>
               {this.props.errorType === 'NetWork' ? (
                 <View>
-                  <Text style={styles.errorHeader}>{Constants.NO_INTERNET}</Text>
+                  <Text style={styles.errorHeader}>
+                    {Constants.NO_INTERNET}
+                  </Text>
                   <Text style={styles.errorSubText}>
                     {Constants.CHECK_INTERNET_CONNECTION}
                   </Text>
@@ -42,12 +44,13 @@ class LoginErrorOverlay extends React.Component {
               ) : (
                 <View>
                   <Text style={styles.errorHeader}>
-                    We have an internal {'\n'} server error
+                    {Constants.INTERNAL}
+                    {'\n'}
+                    {Constants.SERVER_ERROR}
                   </Text>
                   <Text style={styles.errorSubText}>
-                    Please try again later
+                    {Constants.PLEASE_TRY_AGAIN}
                   </Text>
-
                   <ButtonComponent
                     titleValue={'Retry'}
                     onPressHandler={this.props.reload}

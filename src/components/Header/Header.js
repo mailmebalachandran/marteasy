@@ -15,13 +15,13 @@ class Header extends Component {
         <View style={styles.drawerStyle}>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate("Home");
+              this.props.navigation.navigate('Home');
             }}>
             <IconFeather name="arrow-left" size={32} color="black" ic />
           </TouchableOpacity>
         </View>
-        <View style={{flex:0.2}}></View>
-        <View style={{justifyContent:'center'}}>
+        <View style={styles.centerViewStyle} />
+        <View style={styles.rightViewStyle}>
           <Text>{this.props.navigationScreenValue}</Text>
         </View>
       </View>

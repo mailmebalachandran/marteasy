@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
-import {Text, View, FlatList, Image, Dimensions} from 'react-native';
-import {Card, Divider} from 'react-native-elements';
+import {View, FlatList, Image} from 'react-native';
 import styles from './styles';
-import * as ThemeColor from '../../themes/colors';
-
-import Carousel from 'react-native-snap-carousel';
 
 export default class Slider extends Component {
   render() {
