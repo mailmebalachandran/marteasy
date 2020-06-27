@@ -135,7 +135,7 @@ class ProfileScreen extends Component {
         )
     }
     render() {
-        const { first_name, last_name, email } = this.state.userDetails;
+        const { first_name, last_name, email, billing } = this.state.userDetails;
         return (
             <SafeAreaView>
                 {this.state.isLoginOverlay ?
@@ -152,7 +152,7 @@ class ProfileScreen extends Component {
                                                 {(`${first_name} ${last_name}`).toUpperCase()}
                                             </Text>
                                             <Text style={styles.numEmail}>
-                                                {this.renderPhoneNum(this.state.billing)}
+                                                {this.renderPhoneNum(billing)}
                                                 <Text style={styles.dot}>{` . `}</Text>
                                                 {` ${email}`}
                                             </Text>

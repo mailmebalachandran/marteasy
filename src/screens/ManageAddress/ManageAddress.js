@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
 import {
     View,
-    Image,
-    ActivityIndicator,
     Text,
-    FlatList,
-    AsyncStorage,
 } from 'react-native';
 import Axios from "axios";
+import NetInfo from "@react-native-community/netinfo";
 import { Button, Divider } from 'react-native-elements';
-import * as Images from '../../assets/index';
 import Icon from 'react-native-vector-icons/Entypo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import styles from './styles';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
-import * as Theme from "../../themes/colors"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import { isUserLoggedIn } from "../../utils";
-
-
+import ErrorOverlay from "../../components/Errors/ErrorOverlay";
 
 class ManageAddress extends Component {
     constructor(props) {
@@ -28,13 +22,30 @@ class ManageAddress extends Component {
         this.state = {
             isLoading: false,
             userDetails: [],
+            IsInternetConnected: true,
         };
     }
     componentWillUnmount() {
         this._unsubscribe();
     }
-
+    handleConnectivityChange = (isConnected) => {
+        if (isConnected.isConnected == true) {
+            this.setState({ IsInternetConnected: true })
+        }
+        else {
+            this.setState({ IsInternetConnected: false })
+        }
+    }
     componentDidMount = async () => {
+        NetInfo.addEventListener(this.handleConnectivityChange);
+        NetInfo.fetch().done((isConnected) => {
+            if (isConnected.isConnected == true) {
+                this.setState({ IsInternetConnected: true })
+            }
+            else {
+                this.setState({ IsInternetConnected: false })
+            }
+        });
         this.setState({ isLoading: true });
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
             isUserLoggedIn().then((loginDetails) => {
@@ -224,7 +235,8 @@ class ManageAddress extends Component {
     render() {
         return (
             <SafeAreaView>
-                {this.state.isLoading ? <MenuLoader /> : (<>
+                {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : 
+                    this.state.isLoading ? <MenuLoader /> : (<>
                     <View style={styles.orderSectionTitleContainer}>
                         <TouchableOpacity
                             onPress={

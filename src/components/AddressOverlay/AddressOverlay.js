@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 import styles from "./styles";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -10,6 +11,7 @@ import { Input, Button } from 'react-native-elements';
 import { addrValidation } from "./validation";
 import { isUserLoggedIn } from "../../utils";
 import MenuLoader from "../../components/Loader/MenuLoader";
+import ErrorOverlay from "../../components/Errors/ErrorOverlay";
 
 class AddressOverlay extends React.Component {
     constructor(props) {
@@ -41,6 +43,7 @@ class AddressOverlay extends React.Component {
             emailVal: "",
             isLoading: false,
             commonErr: "Please Enter All Required Fields",
+            IsInternetConnected: true,
         }
     }
     setEditDetails = (data) => {
@@ -63,8 +66,24 @@ class AddressOverlay extends React.Component {
     componentWillUnmount() {
         this._unsubscribe();
     }
-
+    handleConnectivityChange = (isConnected) => {
+        if (isConnected.isConnected == true) {
+            this.setState({ IsInternetConnected: true })
+        }
+        else {
+            this.setState({ IsInternetConnected: false })
+        }
+    }
     componentDidMount = () => {
+        NetInfo.addEventListener(this.handleConnectivityChange);
+        NetInfo.fetch().done((isConnected) => {
+            if (isConnected.isConnected == true) {
+                this.setState({ IsInternetConnected: true })
+            }
+            else {
+                this.setState({ IsInternetConnected: false })
+            }
+        });
         this.setState({ isLoading: true });
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
             isUserLoggedIn().then((loginDetails) => {
@@ -188,7 +207,8 @@ class AddressOverlay extends React.Component {
         const { isShipping } = this.props.route.params;
         return (
             <SafeAreaView>
-                {this.state.isLoading ?
+                {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> :
+                this.state.isLoading ?
                     <MenuLoader />
                     :
                     (

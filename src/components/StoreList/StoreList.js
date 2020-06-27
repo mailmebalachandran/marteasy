@@ -68,8 +68,8 @@ class StoreList extends Component {
       <View style={styles.containerStyle}>
         <FlatList
           style={{flex: 1}}
-          columnWrapperStyle={styles.row}
           data={this.props.dataValues}
+          horizontal={true}
           renderItem={({item}) => (
             <Card containerStyle={{flex: 0.5, backgroundColor: '#fff'}}>
               <TouchableOpacity
@@ -107,7 +107,6 @@ class StoreList extends Component {
           keyExtractor={item => {
             item.id;
           }}
-          numColumns={2}
         />
       </View>
     );
