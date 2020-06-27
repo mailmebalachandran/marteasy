@@ -41,7 +41,7 @@ class App extends Component {
     const Tab = createBottomTabNavigator();
     return (
       <Tab.Navigator
-        initialRouteName="Search"
+        initialRouteName="Home"
         header={{visible:true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>
