@@ -17,7 +17,8 @@ import AddCart from '../../components/AddCart/AddCart';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import ViewCart from '../../components/ViewCart/ViewCart';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MenuLoader from '../../components/Loader/MenuLoader';
+import ErrorOverlay from '../../components/Errors/ErrorOverlay';
+import NetInfo from '@react-native-community/netinfo';
 
 class SearchScreen extends Component {
   constructor(props) {
@@ -32,20 +33,43 @@ class SearchScreen extends Component {
       productCount: 0,
       productAmount: 0,
       storeId: 0,
-      productInAsyncDetails: []
+      productInAsyncDetails: [],
+      IsInternetConnected: true,
+      isShowError: false,
     };
   }
 
   componentDidMount = async () => {
+    this.initialPageLoad();
+  };
+
+  initialPageLoad = () => {
     this.onPageLoad();
+    NetInfo.addEventListener(this.handleConnectivityChange);
+    NetInfo.fetch().done(isConnected => {
+      if (isConnected.isConnected == true) {
+        this.setState({IsInternetConnected: true});
+      } else {
+        this.setState({IsInternetConnected: false});
+      }
+    });
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.onPageLoad();
     });
+  }
+
+  handleConnectivityChange = isConnected => {
+    if (isConnected.isConnected == true) {
+      this.setState({IsInternetConnected: true});
+    } else {
+      this.setState({IsInternetConnected: false});
+    }
   };
 
   onPageLoad = async () => {
     let list = [];
     this.state.list = [];
+    this.setState({isShowError: false, search:''});
     let asyncDetails = await AsyncStorage.getItem('Cart');
     if (asyncDetails != null) {
       let asyncDetailsTemp = JSON.parse(asyncDetails);
@@ -291,33 +315,41 @@ class SearchScreen extends Component {
     if (searchText !== '') {
       this.setState({productList: [], isLoadingSearch: true});
       let productDetails = await SearchAPI.GetProductBasedOnSearch(searchText);
+      if (
+        productDetails !== undefined &&
+        productDetails.isError !== undefined &&
+        productDetails.isError === true
+      ) {
+        this.setState({isShowError: true, isLoadingSearch: false});
+      }
       let productList = [];
       productList = productDetails;
       let productListWithAdd = [];
+      if (productList.length > 0) {
+        productList.map(item => {
+          let element = [];
+          element = item;
 
-      productList.map(item => {
-        let element = [];
-        element = item;
+          let resultValue = this.state.productInAsyncDetails.filter(prod => {
+            return prod.storeId === item.store.id && prod.productId === item.id;
+          });
 
-        let resultValue = this.state.productInAsyncDetails.filter(prod => {
-          return prod.storeId === item.store.id && prod.productId === item.id;
-        });
-
-        if (
-          resultValue === null ||
-          resultValue === undefined ||
-          resultValue.length === 0
-        ) {
-          element.count = 0;
-          element.isAdd = true;
-        } else {
-          for (var i in resultValue) {
-            element.count = resultValue[i].count;
-            element.isAdd = false;
+          if (
+            resultValue === null ||
+            resultValue === undefined ||
+            resultValue.length === 0
+          ) {
+            element.count = 0;
+            element.isAdd = true;
+          } else {
+            for (var i in resultValue) {
+              element.count = resultValue[i].count;
+              element.isAdd = false;
+            }
           }
-        }
-        productListWithAdd.push(element);
-      });
+          productListWithAdd.push(element);
+        });
+      }
       this.setState({productList: productListWithAdd}, () => {
         this.setState({isLoadingSearch: false});
       });
@@ -328,118 +360,124 @@ class SearchScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, padding: 0}}>
-        <StatusBarComponent styleType={0} />
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-          }}>
-          <SearchBar
-            placeholder="Search products"
-            containerStyle={{
-              backgroundColor: 'transparent',
-              borderTopColor: 'transparent',
-              borderBottomColor: 'transparent',
-            }}
-            inputContainerStyle={{
-              backgroundColor: '#ebebeb',
-              color: ThemeColor.DarkTextColor,
-              borderRadius:0,
-              height: 45,
-            }}
-            placeholderTextColor='grey'
-            searchIcon={
-              <Icon name="search" size={15} color='#000' />
-            }
-            cancelIcon={{color: ThemeColor.DarkTextColor}}
-            inputStyle={{
-              color: '#000',
-              fontSize: 14,
-              paddingLeft: 0,
-            }}
-            showLoading={this.state.isLoadingSearch}
-            onChangeText={text => {
-              this.setState({search: text});
-              this.onChangeTextHandler(text);
-            }}
-            value={this.state.search}
-            onClear={() => {
-              this.setState({productList: []});
-            }}
-          />
-          <View style={styles.containerStyle}>
-            <FlatList
-              style={{backgroundColor: ThemeColor.DarkTextColor}}
-              data={this.state.productList}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    padding: 10,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 9,
-                    },
-                    shadowOpacity: 0.48,
-                    shadowRadius: 11.95,
-                    elevation: 18,
-                  }}>
-                  {this.onAvatarImage(item)}
-                  <View
-                    style={{
-                      marginLeft: 10,
-                      flex: 1,
-                      flexDirection: 'column',
-                    }}>
-                    <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                      {item.name}
-                    </Text>
-                    <Text style={{color: 'grey', fontSize: 12}}>
-                      {item.store.shop_name}
-                    </Text>
-                    <Text />
-                    <Text style={{fontSize: 12, marginTop: -15}}>
-                      Rs. {item.sale_price}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      width: 80,
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}>
-                    <AddCart
-                      productValue={item}
-                      onAddHandler={item => {
-                        this.onAddHandler(item);
-                      }}
-                      handleQuantityChange={(item, type) => {
-                        this.handleQuantityChange(item, type);
-                      }}
-                    />
-                  </View>
-                </View>
-              )}
-              keyExtractor={item => {
-                item.id;
-              }}
-            />
+      <>
+        {!this.state.IsInternetConnected ? (
+          <ErrorOverlay errorType={'NetWork'} />
+        ) : this.state.isShowError ? (
+          <ErrorOverlay errorType={'API'} reload={() => {this.initialPageLoad()}} />
+        ) : (
+          <View style={{flex: 1, padding: 0}}>
+            <StatusBarComponent styleType={0} />
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+              }}>
+              <SearchBar
+                placeholder="Search products"
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  borderTopColor: 'transparent',
+                  borderBottomColor: 'transparent',
+                }}
+                inputContainerStyle={{
+                  backgroundColor: '#ebebeb',
+                  color: ThemeColor.DarkTextColor,
+                  borderRadius: 0,
+                  height: 45,
+                }}
+                placeholderTextColor="grey"
+                searchIcon={<Icon name="search" size={15} color="#000" />}
+                cancelIcon={{color: ThemeColor.DarkTextColor}}
+                inputStyle={{
+                  color: '#000',
+                  fontSize: 14,
+                  paddingLeft: 0,
+                }}
+                showLoading={this.state.isLoadingSearch}
+                onChangeText={text => {
+                  this.setState({search: text});
+                  this.onChangeTextHandler(text);
+                }}
+                value={this.state.search}
+                onClear={() => {
+                  this.setState({productList: []});
+                }}
+              />
+              <View style={styles.containerStyle}>
+                <FlatList
+                  style={{backgroundColor: ThemeColor.DarkTextColor}}
+                  data={this.state.productList}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({item}) => (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        padding: 10,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 9,
+                        },
+                        shadowOpacity: 0.48,
+                        shadowRadius: 11.95,
+                        elevation: 18,
+                      }}>
+                      {this.onAvatarImage(item)}
+                      <View
+                        style={{
+                          marginLeft: 10,
+                          flex: 1,
+                          flexDirection: 'column',
+                        }}>
+                        <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                          {item.name}
+                        </Text>
+                        <Text style={{color: 'grey', fontSize: 12}}>
+                          {item.store.shop_name}
+                        </Text>
+                        <Text />
+                        <Text style={{fontSize: 12, marginTop: -15}}>
+                          Rs. {item.sale_price}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: 80,
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-end',
+                        }}>
+                        <AddCart
+                          productValue={item}
+                          onAddHandler={item => {
+                            this.onAddHandler(item);
+                          }}
+                          handleQuantityChange={(item, type) => {
+                            this.handleQuantityChange(item, type);
+                          }}
+                        />
+                      </View>
+                    </View>
+                  )}
+                  keyExtractor={item => {
+                    item.id;
+                  }}
+                />
+              </View>
+            </View>
+
+            {this.state.isViewCart && !this.state.isLoading && (
+              <ViewCart
+                productCount={this.state.productCount}
+                productAmount={this.state.productAmount}
+                navigation={this.props.navigation}
+              />
+            )}
           </View>
-        </View>
-        
-        {this.state.isViewCart  && !this.state.isLoading && (
-          <ViewCart
-            productCount={this.state.productCount}
-            productAmount={this.state.productAmount}
-            navigation={this.props.navigation}
-          />
         )}
-      </View>
+      </>
     );
   }
 }

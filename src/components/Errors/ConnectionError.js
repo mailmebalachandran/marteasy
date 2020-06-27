@@ -10,7 +10,6 @@ class LoginErrorOverlay extends React.Component {
         }
     }
     render() {
-        console.log("con in overlay",this.state.isConnected)
         return (
             <View>
                 {!this.props.isConnected ? (

@@ -9,8 +9,8 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import * as Images from '../../assets/index';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Icon, { FA5Style } from 'react-native-vector-icons/FontAwesome5';
-import ErrorOverlay from '../../components/Errors/ErrorOverlay'
-import NetInfo from '@react-native-community/netinfo'
+import ErrorOverlay from '../../components/Errors/ErrorOverlay';
+import NetInfo from '@react-native-community/netinfo';
 
 class HomeScreen extends Component {
   constructor(props) {

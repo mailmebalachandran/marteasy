@@ -14,7 +14,7 @@ const GetProductBasedonStoreId = async storeId => {
     }
     return data;
   } catch (err) {
-    return err;
+    return JSON.parse('{"isError" : true}');
   }
 };
 

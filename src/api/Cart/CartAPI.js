@@ -11,9 +11,15 @@ const GetCartDetails = async products => {
       '&include=' +
       products;
     const {data} = await Axios.get(url);
+    for(var item in data){
+      if(data[item].sale_price === '' || data[item].sale_price === undefined || data[item].sale_price === null){
+        data[item].sale_price = data[item].regular_price;
+        data[item].regular_price = '';
+      } 
+    }
     return data;
   } catch (err) {
-    return err;
+    return JSON.parse('{"isError" : true}');
   }
 };
 
