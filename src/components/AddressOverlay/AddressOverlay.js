@@ -88,6 +88,7 @@ class AddressOverlay extends React.Component {
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
             isUserLoggedIn().then((loginDetails) => {
                 const user = JSON.parse(loginDetails);
+                this.setState({ userEmail: user.user_rmail })
                 if (user) {
                     const { isEdit, isShipping } = this.props.route.params;
                     if (isEdit) {
@@ -107,7 +108,7 @@ class AddressOverlay extends React.Component {
                                 isShipping ?
                                     this.setEditDetails(data[0].shipping) : 
                                     this.setEditDetails(data[0].billing)
-                                this.setState({ userId: data[0].id })
+                                this.setState({ userId: data[0].id });
                                 this.setState({ isLoading: false })
                             })
                             .catch(err => {
@@ -185,7 +186,7 @@ class AddressOverlay extends React.Component {
             payload,
             {
                 params: {
-                    email: 'user_test2@gmail.com',
+                    email: this.state.user_email,
                     consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
                     consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
                 },
@@ -195,11 +196,15 @@ class AddressOverlay extends React.Component {
             this.navigateToManageAddr();
         })
             .catch((err) => {
+                console.log("update failed")
                 this.setState({ isLoading: false });
                 if (err.response.data.data.params.billing) {
-                    this.setState({ commonErr: err.response.data.data.params.billing })
+                    console.log("api email failed")
+                    console.log("api err msg", err.response.data.data.params.billing)
+                    this.setState({ commonErr: err.response.data.data.params.billing });
                 } else {
-                    this.setState({ commonErr: "Oops Something went wrong!!!" })
+                    console.log("went wrong")
+                    this.setState({ commonErr: "Oops Something went wrong!!!" });
                 }
             })
     }
