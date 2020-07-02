@@ -1,18 +1,11 @@
 import React, {Component} from 'react';
-import {Text, Image, Avatar, Rating} from 'react-native-elements';
-import {
-  SafeAreaView,
-  View,
-  ScrollView,
-  AsyncStorage,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, Avatar} from 'react-native-elements';
+import {View} from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Line from '../../components/Line/Line';
 import ProductAPI from '../../api/Products/ProductAPI';
 import OpeningHour from '../../components/OpeningHour/OpeningHour';
 import Product from '../../components/Products/Product';
-import * as ThemeColor from '../../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Header from '../../components/Header/Header';
@@ -21,6 +14,7 @@ import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class ProductsScreen extends Component {
   constructor(props) {

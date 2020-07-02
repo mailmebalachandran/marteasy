@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, ScrollView, RefreshControl } from 'react-native';
+import { View, SafeAreaView, ScrollView, RefreshControl, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Slider from '../../components/Slider/Slider';
@@ -105,8 +105,8 @@ class HomeScreen extends Component {
                   style={{
                     marginLeft: 10,
                     marginTop: 20,
-                    fontWeight: 'bold',
-                    fontSize: 20,
+                    fontFamily: Platform.OS == "android" ? 'Open Sans': '',
+                    fontSize: 17,
                   }}>
                   <Icon name="thumbs-up" size={20} color="grey" />
                   {'  '}Top picks
@@ -118,9 +118,8 @@ class HomeScreen extends Component {
                   style={{
                     marginLeft: 10,
                     marginTop: 20,
-                    fontFamily: 'notoserif',
-                    fontWeight: 'bold',
-                    fontSize: 20,
+                    fontFamily: Platform.OS == "android" ? 'Open Sans': '',
+                    fontSize: 17,
                   }}>
                   <Icon name="utensils" size={20} color="grey" />
                   {'  '}Featured Stores
