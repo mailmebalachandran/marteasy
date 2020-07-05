@@ -10,3 +10,4 @@ export const DarkLabelColor = "#087f23";
 export const BackgroundColorLight = "#FFFFFF";
 export const PlaceHolderColor = "#e0e0e0";
 export const LightDrawerColor = "#F5F5F6";
+export const LIGHT_BG = "#FCFEE9";
