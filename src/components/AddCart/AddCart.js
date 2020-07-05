@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import * as ThemeColor from '../../themes/colors';
 
 class AddCart extends Component {
   constructor(props) {

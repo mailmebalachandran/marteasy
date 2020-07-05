@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import styles from './styles';
-import {View, TouchableOpacity, Text, Image} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
 class ProfileHeader extends Component {

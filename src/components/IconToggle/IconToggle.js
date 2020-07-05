@@ -6,9 +6,7 @@ import { Icon } from "react-native-elements";
 class IconToggle extends Component {
     constructor(props, context) {
         super(props, context);
-
         const maxOpacity = 0.12;
-
         this.state = {
             maxOpacity,
             scaleValue: new Animated.Value(0.01),

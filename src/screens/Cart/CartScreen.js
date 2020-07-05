@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import {
   View,
   Image,
-  ActivityIndicator,
   Text,
-  AsyncStorage,
-  Dimensions,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -21,6 +18,8 @@ import MenuLoader from '../../components/Loader/MenuLoader';
 import * as CommonConstants from '../../constants';
 import NetInfo from '@react-native-community/netinfo';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
+import styles from './styles';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class CartScreen extends Component {
   constructor(props) {
@@ -416,8 +415,6 @@ class CartScreen extends Component {
   };
 
   render() {
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
     return (
       <>
         {!this.state.IsInternetConnected ? (
@@ -434,24 +431,13 @@ class CartScreen extends Component {
                   <MenuLoader />
                 ) : (
                   <View
-                    style={{
-                      backgroundColor: ThemeColor.DarkTextColor,
-                      flex: 1,
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                    }}>
+                    style={styles.wholeViewContainerStyle}>
                     <StatusBarComponent />
                     <Image
                       source={Images.EMPTYCART}
-                      style={{
-                        resizeMode: 'contain',
-                        height: 200,
-                        width: 200,
-                        backgroundColor: 'transparent',
-                        marginLeft: windowWidth / 4,
-                      }}
+                      style={styles.emptyCartViewStyle}
                     />
-                    <Text style={{marginLeft: windowWidth / 3, color: 'grey'}}>
+                    <Text style={styles.emptyCartTextStyle}>
                       Your cart is empty
                     </Text>
                     <ButtonComponent
@@ -469,7 +455,7 @@ class CartScreen extends Component {
                 {this.state.isLoading ? (
                   <MenuLoader />
                 ) : (
-                  <View style={{paddingTop: 15, paddingBottom: 15, flex: 1}}>
+                  <View style={styles.cartContainerStyle}>
                     <StatusBarComponent />
                     <ScrollView>
                       <View>
@@ -488,7 +474,7 @@ class CartScreen extends Component {
                               shadowOpacity: 0.25,
                               shadowRadius: 3.84,
                               elevation: 5,
-                            }}>
+                            }} key={item.id.toString()}>
                             <View style={{flex: 1, flexDirection: 'row'}}>
                               <View style={{flex: 1, flexDirection: 'column'}}>
                                 <Text style={{fontSize: 16}}>{item.name}</Text>
