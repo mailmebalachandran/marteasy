@@ -11,7 +11,8 @@ import CartScreen from './src/screens/Cart/CartScreen';
 import SearchScreen from './src/screens/Search/SearchScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 import ManageAddress from './src/screens/ManageAddress/ManageAddress';
-import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
+import AddressOverlay from './src/components/AddressOverlay/AddressOverlay';
+import SubCategoryScreen from './src/screens/SubCategory/SubCategoryScreen';
 
 class App extends Component {
   loginScreenNavigator = () => {
@@ -42,7 +43,7 @@ class App extends Component {
     return (
       <Tab.Navigator
         initialRouteName="Home"
-        header={{visible:true}}
+        header={{visible: true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>
             getTabIcons(route, focused, color, size),
@@ -65,18 +66,16 @@ class App extends Component {
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{headerShown: false}}
-          initialRouteName="HomeScreen">
-          <RootStack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-          />
+          initialRouteName="SubCategoryScreen">
+          <RootStack.Screen name="LoginScreen" component={LoginScreen} />
           <RootStack.Screen
             name="HomeScreen"
             component={this.homeScreenNavigator}
           />
+          <RootStack.Screen name="ProductScreen" component={ProductsScreen} />
           <RootStack.Screen
-            name="ProductScreen"
-            component={ProductsScreen}
+            name="SubCategoryScreen"
+            component={SubCategoryScreen}
           />
         </RootStack.Navigator>
       </NavigationContainer>

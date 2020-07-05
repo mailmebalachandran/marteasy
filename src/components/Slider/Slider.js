@@ -1,23 +1,21 @@
-import React, {Component} from 'react';
-import {View, FlatList, Image} from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 import styles from './styles';
+import { SliderBox } from "react-native-image-slider-box";
+import * as ThemeColors from "../../themes/colors";
 
 export default class Slider extends Component {
   render() {
     return (
       <View style={styles.containerStyle}>
-        <FlatList
-          data={this.props.dataValues}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => (
-            <View style={styles.flatListViewStyle}>
-              <Image source={item.name} style={styles.flatListImageStyle} />
-            </View>
-          )}
-          keyExtractor={(item, index) => {
-            return item.id.toString();
-          }}
+        <SliderBox
+          images={this.props.images}
+          onCurrentImagePressed={index => {}}
+          currentImageEmitter={index => {}}
+          autoplay={this.props.autoplay}
+          circleLoop={this.props.isLoop}
+          dotColor={ThemeColors.DarkColor}
+          imageLoadingColor={ThemeColors.DarkColor}
         />
       </View>
     );
