@@ -101,7 +101,6 @@ class HomeScreen extends Component {
       HOME_BANNER_IMAGE3,
       HOME_BANNER_IMAGE4,
     ];
-    console.log("home img1", HOME_PROMO_1)
     return (
       <SafeAreaView style={{ flex: 1 }}>
         {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
@@ -157,7 +156,7 @@ class HomeScreen extends Component {
                 <View style={styles.promoContainer}>
                   <Image
                     style={styles.promoImage}
-                    source={{ uri: HOME_PROMO_1 }}
+                    source={HOME_PROMO_1}
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>

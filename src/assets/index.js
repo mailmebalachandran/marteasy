@@ -6,15 +6,15 @@ export const EMPTYCART = require('./images/emptycart.png');
 export const NOSTORE = require('./images/nostore.png');
 export const NODISH = require('./images/nodish.png');
 //Home Slider Images
-export const HOME_BANNER_IMAGE1 = `${BASE_URL}/wp-content/uploads/HOME_BANNER_1.jpg`;
-export const HOME_BANNER_IMAGE2 = `${BASE_URL}/wp-content/uploads/HOME_BANNER_2.jpg`;
-export const HOME_BANNER_IMAGE3 = `${BASE_URL}/wp-content/uploads/HOME_BANNER_3.jpg`;
-export const HOME_BANNER_IMAGE4 = `${BASE_URL}/wp-content/uploads/HOME_BANNER_4.jpg`;
+export const HOME_BANNER_IMAGE1 = require('./images/HomeBanner/HOME_BANNER_1.jpg');
+export const HOME_BANNER_IMAGE2 = require('./images/HomeBanner/HOME_BANNER_2.jpg');
+export const HOME_BANNER_IMAGE3 = require('./images/HomeBanner/HOME_BANNER_3.jpg');
+export const HOME_BANNER_IMAGE4 = require('./images/HomeBanner/HOME_BANNER_4.jpg');
 //End Home Slider
 //Home Promo
-export const HOME_PROMO_1 = `${BASE_URL}/wp-content/uploads/HOME_PROMO_1.jpg`;
-export const HOME_PROMO_2 = `${BASE_URL}/wp-content/uploads/HOME_PROMO_2.jpg`;
-export const HOME_PROMO_3 = `${BASE_URL}/wp-content/uploads/HOME_PROMO_3.jpg`;
+export const HOME_PROMO_1 = require('./images/HomePromo/HOME_PROMO_1.jpg');
+export const HOME_PROMO_2 = require('./images/HomePromo/HOME_PROMO_2.jpg');
+export const HOME_PROMO_3 = require('./images/HomePromo/HOME_PROMO_3.jpg');
 //Home Promo Ends
 //Home Category
 export const CAT_FRUITS_VEG = require('./images/Categories/CAT_FRUITS_VEG.jpg');
