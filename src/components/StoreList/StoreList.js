@@ -33,6 +33,10 @@ class StoreList extends Component {
     }
   };
 
+  Capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   render() {
     return (
       <View style={styles.containerStyle}>
@@ -53,12 +57,12 @@ class StoreList extends Component {
                 <View style={styles.gravatarViewStyle}>
                   {this.onAvatarImage(item)}
                 </View>
-                <Text style={styles.storeTextStyle}> {item.store_name} </Text>
+                <Text style={styles.storeTextStyle}> {this.Capitalize(item.store_name)} </Text>
               </TouchableOpacity>
             </Card>
           )}
-          keyExtractor={item => {
-            item.id;
+          keyExtractor={(item, index) => {
+            return item.id.toString();
           }}
         />
       </View>

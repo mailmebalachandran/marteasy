@@ -36,6 +36,7 @@ class OpeningHour extends Component {
             size="small"
             rounded
             title={title}
+            key={title.toString()}
             titleStyle={styles.avatarTitleStyle}
             containerStyle={this.renderBgColor(
               title,

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import * as ThemeColor from '../../themes/colors';
 
 const styles = StyleSheet.create({
@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
   storeTextStyle: {
     textAlign: 'center',
     color: ThemeColor.DarkColor,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontFamily: Platform.OS == "android" ? 'Open Sans': '',
   },
 });
 

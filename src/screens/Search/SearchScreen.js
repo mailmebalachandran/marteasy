@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
 import {
   View,
-  Image,
-  ActivityIndicator,
   Text,
   FlatList,
-  AsyncStorage,
 } from 'react-native';
 import {SearchBar, Avatar, Divider, Overlay} from 'react-native-elements';
 import * as Images from '../../assets/index';
 import styles from './styles';
-import Axios from 'axios';
 import SearchAPI from '../../api/Search/SearchAPI';
 import * as ThemeColor from '../../themes/colors';
 import AddCart from '../../components/AddCart/AddCart';
@@ -19,6 +15,8 @@ import ViewCart from '../../components/ViewCart/ViewCart';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class SearchScreen extends Component {
   constructor(props) {

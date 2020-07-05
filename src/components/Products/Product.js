@@ -85,7 +85,7 @@ class Product extends React.Component {
       <ScrollView>
         <View style={styles.productScreenContainer}>
           {this.state.productList.map(product => (
-            <View style={styles.productContainer}>
+            <View style={styles.productContainer} key={product.id.toString()}>
               <View style={styles.imageViewContainerStyle}>
                 {this.onAvatarImage(product)}
                 <View>

@@ -15,7 +15,9 @@ export default class Slider extends Component {
               <Image source={item.name} style={styles.flatListImageStyle} />
             </View>
           )}
-          keyExtractor={item => {item.id}}
+          keyExtractor={(item, index) => {
+            return item.id.toString();
+          }}
         />
       </View>
     );

@@ -3,8 +3,6 @@ import {
   View,
   Image,
   Text,
-  AsyncStorage,
-  Dimensions,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -20,7 +18,8 @@ import MenuLoader from '../../components/Loader/MenuLoader';
 import * as CommonConstants from '../../constants';
 import NetInfo from '@react-native-community/netinfo';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
-import styles from '../../components/Button/styles';
+import styles from './styles';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class CartScreen extends Component {
   constructor(props) {
@@ -475,7 +474,7 @@ class CartScreen extends Component {
                               shadowOpacity: 0.25,
                               shadowRadius: 3.84,
                               elevation: 5,
-                            }}>
+                            }} key={item.id.toString()}>
                             <View style={{flex: 1, flexDirection: 'row'}}>
                               <View style={{flex: 1, flexDirection: 'column'}}>
                                 <Text style={{fontSize: 16}}>{item.name}</Text>
