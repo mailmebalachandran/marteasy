@@ -17,27 +17,38 @@ const styles = StyleSheet.create({
         paddingBottom: "3%",
     },
     //Category Styles
-    categoryContainer: {
+    mainCategoryContainer: {
         flex: 1,
+        flexWrap: "wrap",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: "stretch",
         alignItems: "center",
         backgroundColor: "#dfdfdf",
-        marginTop: "5%"
+        marginTop: "5%",
+    },
+    otherCategoryContainer: {
+        flex: 1,
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "stretch",
+        alignItems: "center",
+        backgroundColor: "#dfdfdf",
     },
     mainCategory: {
         marginBottom: "2%",
     },
     categoryItemContainer2Col: {
         backgroundColor: "#ffffff",
-        width: "50%",
+        width: "49%",
         margin: "0.3%",
         paddingTop: "3%",
         paddingBottom: "3%",
     },
     categoryItemContainer: {
         backgroundColor: "#ffffff",
-        width: "33%",
+        width: "32%",
         margin: "0.3%",
         paddingTop: "3%",
         paddingBottom: "3%",

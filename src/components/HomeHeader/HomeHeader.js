@@ -10,7 +10,6 @@ class HomeHeader extends Component {
     }
     render() {
         const { headerTitle } = this.props;
-        console.log(this.props.headerTitle);
         return (
             <View style={styles.containerStyle}>
                 <View style={styles.logoContainer}>

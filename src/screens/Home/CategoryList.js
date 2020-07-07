@@ -103,54 +103,10 @@ class CategoryList extends Component {
 
   render() {
     return (
-      <View style={styles.categoryContainer}>
+      <View style={styles.otherCategoryContainer}>
         {/* Main Category 2 column */}
-        <FlatList
-          style={{ flex: 1 }}
-          data={this.state.data}
-          horizontal={false}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <View style={[styles.categoryItemContainer2Col, styles.mainCategory]}>
-              <TouchableOpacity
-                onPress={() => { }}>
-                <View
-                  style={{
-                    backgroundColor: 'transparent',
-                    width: '100%',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 3 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 5,
-                    elevation: 25,
-                  }}>
-                  <Image
-                    source={{ uri: item.gravatar }}
-                    style={{
-                      resizeMode: 'contain',
-                      height: 100,
-                      width: '100%',
-                    }}
-                  />
-                </View>
-                <Text
-                  style={styles.categoryName}>
-                  {' '}
-                  {item.category_name}{' '}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          keyExtractor={item => {
-            item.id;
-          }}
-        />
-        <FlatList
-          style={{ flex: 1 }}
-          data={this.state.data2}
-          horizontal={false}
-          numColumns={3}
-          renderItem={({ item }) => (
+        {this.props.categories.map(cat => {
+          return (
             <View style={styles.categoryItemContainer}>
               <TouchableOpacity
                 onPress={() => { }}
@@ -166,7 +122,7 @@ class CategoryList extends Component {
                     elevation: 25,
                   }}>
                   <Image
-                    source={item.gravatar}
+                    source={{ uri: cat.image.src }}
                     style={{
                       resizeMode: 'contain',
                       height: 100,
@@ -177,18 +133,16 @@ class CategoryList extends Component {
                 <Text
                   style={styles.categoryName}>
                   {' '}
-                  {item.category_name}{' '}
+                  {cat.name}{' '}
                 </Text>
               </TouchableOpacity>
             </View>
-          )}
-          keyExtractor={item => {
-            item.id;
-          }}
-        />
+          )
+        })}
       </View>
-    );
+    )
   }
 }
+
 
 export default CategoryList;

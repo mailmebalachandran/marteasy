@@ -11,9 +11,16 @@ import CartScreen from './src/screens/Cart/CartScreen';
 import SearchScreen from './src/screens/Search/SearchScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 import ManageAddress from './src/screens/ManageAddress/ManageAddress';
-import AddressOverlay from './src/components/AddressOverlay/AddressOverlay';
-import SubCategoryScreen from './src/screens/SubCategory/SubCategoryScreen';
-
+import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
+import SubCategoryScreen from "./src/screens/SubCategory/SubCategoryScreen";
+import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
+import axios from "axios";
+axios.interceptors.request.use((config) => {
+  config.params = config.params || {};
+  config.params['consumer_key'] = CONSUMER_KEY;
+  config.params['consumer_secret'] = CONSUMER_SECRET;
+  return config;
+});
 class App extends Component {
   loginScreenNavigator = () => {
     let Stack = createStackNavigator();
@@ -43,7 +50,7 @@ class App extends Component {
     return (
       <Tab.Navigator
         initialRouteName="Home"
-        header={{visible: true}}
+        header={{visible:true}}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) =>
             getTabIcons(route, focused, color, size),
@@ -66,15 +73,21 @@ class App extends Component {
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{headerShown: false}}
-          initialRouteName="SubCategoryScreen">
-          <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+          initialRouteName="HomeScreen">
+          <RootStack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+          />
           <RootStack.Screen
             name="HomeScreen"
             component={this.homeScreenNavigator}
           />
-          <RootStack.Screen name="ProductScreen" component={ProductsScreen} />
           <RootStack.Screen
-            name="SubCategoryScreen"
+            name="ProductScreen"
+            component={ProductsScreen}
+          />
+          <RootStack.Screen
+            name="GroceryScreen"
             component={SubCategoryScreen}
           />
         </RootStack.Navigator>

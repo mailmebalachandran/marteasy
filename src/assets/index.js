@@ -25,6 +25,7 @@ export const CAT_ELECTRONICS = require('./images/Categories/CAT_ELECTRONICS.jpg'
 export const CAT_PETS = require('./images/Categories/CAT_PETS.jpg');
 export const CAT_PHARMA = require('./images/Categories/CAT_PHARMA.jpg');
 export const CAT_MOTOR = require('./images/Categories/CAT_MOTOR.png');
+export const CAT_DEFAULT = require('./images/Categories/CAT_DEFAULT.png');
 //End Home Category
 export const NO_INTERNET = require('./images/wentWrong.jpg');
 export const USER_LOGIN_ERROR = require('./images/userlogin.jpg');

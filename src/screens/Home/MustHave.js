@@ -83,14 +83,10 @@ class MustHave extends Component {
 
   render() {
     return (
-      <View style={styles.categoryContainer}>
+      <View style={styles.mainCategoryContainer}>
         {/* Main Category 2 column */}
-        <FlatList
-          style={{ flex: 1 }}
-          data={this.state.data}
-          horizontal={false}
-          numColumns={2}
-          renderItem={({ item }) => (
+        {this.state.data.map( cat => {
+          return (
             <View style={styles.categoryItemContainer2Col}>
               <TouchableOpacity
                 onPress={() => { }}>
@@ -105,7 +101,7 @@ class MustHave extends Component {
                     elevation: 25,
                   }}>
                   <Image
-                    source={{ uri: item.gravatar }}
+                    source={{ uri: cat.gravatar }}
                     style={{
                       resizeMode: 'contain',
                       height: 100,
@@ -116,17 +112,14 @@ class MustHave extends Component {
                 <Text
                   style={styles.categoryName}>
                   {' '}
-                  {item.category_name}{' '}
+                  {cat.category_name}{' '}
                 </Text>
               </TouchableOpacity>
             </View>
-          )}
-          keyExtractor={item => {
-            item.id;
-          }}
-        />
+          )
+        })}
       </View>
-    );
+    )
   }
 }
 

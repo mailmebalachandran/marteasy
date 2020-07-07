@@ -29,9 +29,11 @@ import {
   HOME_PROMO_3,
 } from "../../assets/index";
 import styles from './styles';
+import MainCategory from "./MainCategory";
 import CategoryList from "./CategoryList";
 import HomeHeader from "../../components/HomeHeader/HomeHeader";
 import MustHave from "./MustHave";
+import { transformCategoryList } from "./utils";
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +43,7 @@ class HomeScreen extends Component {
       refreshing: false,
       isShowError: false,
       IsInternetConnected: true,
+      categoryList: [],
       promoImages: [
         HOME_PROMO_2,
         HOME_PROMO_3
@@ -49,6 +52,7 @@ class HomeScreen extends Component {
   }
 
   componentDidMount = () => {
+    console.log("did mount");
     this.setState({ isLoading: true });
     NetInfo.addEventListener(this.handleConnectivityChange);
     NetInfo.fetch().done((isConnected) => {
@@ -60,11 +64,12 @@ class HomeScreen extends Component {
       }
     });
 
-
     this.getStoresOnLoad();
+    this.getCategoriesOnLoad();
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState({ isLoading: true });
       this.getStoresOnLoad();
+      this.getCategoriesOnLoad();
     });
 
   };
@@ -89,9 +94,22 @@ class HomeScreen extends Component {
       });
     }
   };
+  getCategoriesOnLoad = async () => {
+    let result = await HomeAPI.getParentCategories();
+    transformCategoryList(result);
+    if (result !== undefined && result.isError !== undefined && result.isError === true) {
+      this.setState({ isShowError: true, isLoading: false });
+    }
+    else if (result !== undefined) {
+      this.setState({ categoryList: result }, () => {
+        this.setState({ isLoading: false, isShowError: false });
+      });
+    }
+  };
 
   _onRefresh = () => {
     this.getStoresOnLoad();
+    this.getCategoriesOnLoad();
   }
 
   render() {
@@ -105,7 +123,7 @@ class HomeScreen extends Component {
       <SafeAreaView style={{ flex: 1 }}>
         {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
           <MenuLoader />
-        ) : this.state.isShowError ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
+        ) : false ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
           <>
             <HomeHeader
               headerTitle="MartEasy"
@@ -130,8 +148,12 @@ class HomeScreen extends Component {
                     <Anticons name="appstore-o" size={20} color="grey" />
                     {'  '}Shop By Category
                 </Text>
+                  <MainCategory 
+                    categories={transformCategoryList(this.state.categoryList, true)}
+                    navigation={this.props.navigation}
+                  />
                   <CategoryList
-                    dataValues={this.state.ShopList}
+                    categories={transformCategoryList(this.state.categoryList, false)}
                     navigation={this.props.navigation}
                   />
                 </View>
