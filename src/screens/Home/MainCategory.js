@@ -13,7 +13,7 @@ import * as ThemeColor from '../../themes/colors';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
-
+import unescape from "unescape";
 class MainCategory extends Component {
     constructor(props) {
         super(props);
@@ -112,8 +112,7 @@ class MainCategory extends Component {
                                 </View>
                                 <Text
                                     style={styles.categoryName}>
-                                    {' '}
-                                    {cat.name}{' '}
+                                    {unescape(cat.name)}
                                 </Text>
                             </TouchableOpacity>
                         </View>

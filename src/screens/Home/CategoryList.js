@@ -14,6 +14,7 @@ import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import unescape from "unescape";
 
 class CategoryList extends Component {
   constructor(props) {
@@ -107,7 +108,6 @@ class CategoryList extends Component {
       <View style={styles.otherCategoryContainer}>
         {/* Main Category 2 column */}
         {this.props.categories.map(cat => {
-          console.log(cat.image.src)
           return (
             <View style={styles.categoryItemContainer}>
               <TouchableNativeFeedback
@@ -140,8 +140,7 @@ class CategoryList extends Component {
                 </View>
                 <Text
                   style={styles.categoryName}>
-                  {' '}
-                  {cat.name}{' '}
+                  {unescape(cat.name)}
                 </Text>
               </TouchableNativeFeedback>
             </View>

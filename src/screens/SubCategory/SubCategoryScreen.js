@@ -21,6 +21,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MainCategory from "../Home/MainCategory";
 import { transformCategoryList } from "../Home/utils";
 import SubcategoryAPI from '../../api/Home/SubcategoryAPI';
+import unescape from 'unescape';
 
 class SubCategoryScreen extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class SubCategoryScreen extends Component {
           <Text
             style={styles.titleText}>
             {/* <MaterialIcons name="fruit-cherries" size={20} color="grey" /> */}
-            {'  '}Shop {this.props.route.params.catName}
+            {'  '}Shop By {unescape(this.props.route.params.catName)}
                   </Text>
           <CategoryList
             categories={this.state.SubCategoryList}
