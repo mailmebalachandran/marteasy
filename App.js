@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from './src/screens/Login/LoginScreen';
+import SignUpScreen from './src/screens/SignUp/SignUpScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import {getTabIcons} from './src/navigations/utils';
 import * as ThemeColor from './src/themes/colors';
@@ -73,10 +74,14 @@ class App extends Component {
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{headerShown: false}}
-          initialRouteName="HomeScreen">
+          initialRouteName="SignUpScreen">
           <RootStack.Screen
             name="LoginScreen"
             component={LoginScreen}
+          />
+          <RootStack.Screen
+            name="SignUpScreen"
+            component={SignUpScreen}
           />
           <RootStack.Screen
             name="HomeScreen"
