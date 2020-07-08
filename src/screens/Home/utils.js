@@ -8,14 +8,14 @@ export const transformCategoryList = (categories, isMain) => {
         let name = cat.name.toUpperCase();
         let src = isImageValid(cat.image);
 
-        if(fruitsPatt.test(name) || groceriesPatt.test(name)) {
-            mainCategories.push(cat);
-        }
-        else if(cat.name !== "All") {
-            otherCategories.push(cat)
+        // if(fruitsPatt.test(name) || groceriesPatt.test(name)) {
+        //     mainCategories.push(cat);
+        // }
+        if(cat.name !== "All") {
+            mainCategories.push(cat)
         }
     })
-    return isMain ? mainCategories : otherCategories;
+    return mainCategories;
 }
 const isImageValid = (img) => {
     if(img === null) {

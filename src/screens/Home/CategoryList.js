@@ -13,6 +13,7 @@ import * as ThemeColor from '../../themes/colors';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
 class CategoryList extends Component {
   constructor(props) {
@@ -106,10 +107,17 @@ class CategoryList extends Component {
       <View style={styles.otherCategoryContainer}>
         {/* Main Category 2 column */}
         {this.props.categories.map(cat => {
+          console.log(cat.image.src)
           return (
             <View style={styles.categoryItemContainer}>
-              <TouchableOpacity
-                onPress={() => { }}
+              <TouchableNativeFeedback
+                onPress={() => {
+                                    console.log(cat.id);
+                                    this.props.navigation.navigate('SubCategoryScreen', {
+                                    catId: cat.id,
+                                    catName: cat.name
+                                  })}
+                                }
               >
                 <View
                   style={{
@@ -122,7 +130,7 @@ class CategoryList extends Component {
                     elevation: 25,
                   }}>
                   <Image
-                    source={{ uri: cat.image.src }}
+                    source={{ uri: cat.image.src   }}
                     style={{
                       resizeMode: 'contain',
                       height: 100,
@@ -135,7 +143,7 @@ class CategoryList extends Component {
                   {' '}
                   {cat.name}{' '}
                 </Text>
-              </TouchableOpacity>
+              </TouchableNativeFeedback>
             </View>
           )
         })}

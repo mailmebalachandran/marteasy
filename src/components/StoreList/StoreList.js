@@ -48,7 +48,8 @@ class StoreList extends Component {
             <Card containerStyle={styles.cardContainerStyle}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('ProductScreen', {
+                    console.log(item.id);
+                    this.props.navigation.navigate('ProductScreen', {
                     storeId: item.id,
                     storeName: item.store_name,
                     storeOpen: item.store_open_close,

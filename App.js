@@ -87,7 +87,7 @@ class App extends Component {
             component={ProductsScreen}
           />
           <RootStack.Screen
-            name="GroceryScreen"
+            name="SubCategoryScreen"
             component={SubCategoryScreen}
           />
         </RootStack.Navigator>

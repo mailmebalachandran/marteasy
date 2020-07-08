@@ -4,7 +4,7 @@ import * as ThemeColor from '../../themes/colors';
 const styles = StyleSheet.create({
   containerStyle: {
     flexDirection: 'row',
-    backgroundColor: ThemeColor.BackgroundColorLight,
+    backgroundColor: ThemeColor.PrimaryColor,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
   rightViewStyle: {
     justifyContent: 'center',
   },
+  text:{
+    color: ThemeColor.PrimaryTextColor}
 });
 
 export default styles;

@@ -118,22 +118,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '35%',
   },
-  promoContainer: {
-    flex: 1,
-    marginTop: "1%",
-},
-titleText: {
-  marginLeft: 10,
-  marginRight: 10,
-  marginTop: 20,
-  fontFamily: 'notoserif',
-  fontWeight: '400',
-  fontSize: 20,
-  textAlign: "center",
-  backgroundColor: "#E5F4F9",
-  paddingTop: "3%",
-  paddingBottom: "3%",
-},
 });
 
 export default styles;

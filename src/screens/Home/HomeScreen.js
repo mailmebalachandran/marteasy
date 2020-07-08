@@ -34,6 +34,7 @@ import CategoryList from "./CategoryList";
 import HomeHeader from "../../components/HomeHeader/HomeHeader";
 import MustHave from "./MustHave";
 import { transformCategoryList } from "./utils";
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +53,6 @@ class HomeScreen extends Component {
   }
 
   componentDidMount = () => {
-    console.log("did mount");
     this.setState({ isLoading: true });
     NetInfo.addEventListener(this.handleConnectivityChange);
     NetInfo.fetch().done((isConnected) => {
@@ -96,7 +96,6 @@ class HomeScreen extends Component {
   };
   getCategoriesOnLoad = async () => {
     let result = await HomeAPI.getParentCategories();
-    transformCategoryList(result);
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
       this.setState({ isShowError: true, isLoading: false });
     }
@@ -119,6 +118,7 @@ class HomeScreen extends Component {
       HOME_BANNER_IMAGE3,
       HOME_BANNER_IMAGE4,
     ];
+    console.log(this.state.CategoryList);
     return (
       <SafeAreaView style={{ flex: 1 }}>
         {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
@@ -148,14 +148,15 @@ class HomeScreen extends Component {
                     <Anticons name="appstore-o" size={20} color="grey" />
                     {'  '}Shop By Category
                 </Text>
+                
                   <MainCategory 
                     categories={transformCategoryList(this.state.categoryList, true)}
                     navigation={this.props.navigation}
                   />
-                  <CategoryList
+                  {/* <CategoryList
                     categories={transformCategoryList(this.state.categoryList, false)}
                     navigation={this.props.navigation}
-                  />
+                  /> */}
                 </View>
                 <View style={styles.promoContainer}>
                   <Slider

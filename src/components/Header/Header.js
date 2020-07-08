@@ -17,12 +17,12 @@ class Header extends Component {
             onPress={() => {
               this.props.navigation.navigate('Home');
             }}>
-            <IconFeather name="arrow-left" size={32} color="black" ic />
+            <IconFeather name="arrow-left" size={32} color="white" ic />
           </TouchableOpacity>
         </View>
         <View style={styles.centerViewStyle} />
         <View style={styles.rightViewStyle}>
-          <Text>{this.props.navigationScreenValue}</Text>
+          <Text style={styles.text}>{this.props.navigationScreenValue}</Text>
         </View>
       </View>
     );

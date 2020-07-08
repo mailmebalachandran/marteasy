@@ -76,6 +76,7 @@ class MainCategory extends Component {
     };
 
     render() {
+
         return (
             <View style={styles.mainCategoryContainer}>
                 {/* Main Category 2 column */}
@@ -83,7 +84,13 @@ class MainCategory extends Component {
                     return (
                         <View style={[styles.categoryItemContainer2Col, styles.mainCategory]}>
                             <TouchableOpacity
-                                onPress={() => { }}>
+                                onPress={() => {
+                                    console.log(cat.id);
+                                    this.props.navigation.navigate('SubCategoryScreen', {
+                                    catId: cat.id,
+                                    catName: cat.name
+                                  });
+                                }}>
                                 <View
                                     style={{
                                         backgroundColor: 'transparent',

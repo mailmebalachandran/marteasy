@@ -30,3 +30,10 @@ export const CAT_DEFAULT = require('./images/Categories/CAT_DEFAULT.png');
 export const NO_INTERNET = require('./images/wentWrong.jpg');
 export const USER_LOGIN_ERROR = require('./images/userlogin.jpg');
 export const INTERNALERROR = require('./images/InternalServerError.jpg');
+
+//Fruits Category
+//Fruits_promo
+export const FRUIT_BANNER_IMAGE1=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE1.jpg');
+export const FRUIT_BANNER_IMAGE2=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE2.jpg');
+export const FRUIT_BANNER_IMAGE3=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE3.jpg');
+export const FRUIT_BANNER_IMAGE4=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE4.jpg');
