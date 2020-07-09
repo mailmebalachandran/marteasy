@@ -44,7 +44,11 @@ const styles = StyleSheet.create({
     },
     description: {
         marginTop: "-5%",
-    }
+    },
+    wholeViewContainerStyle: {
+        backgroundColor: ThemeColor.DarkTextColor,
+        flex: 1,
+      },
 });
 
 export default styles;
