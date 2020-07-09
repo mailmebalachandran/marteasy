@@ -118,7 +118,6 @@ class HomeScreen extends Component {
       HOME_BANNER_IMAGE3,
       HOME_BANNER_IMAGE4,
     ];
-    console.log(this.state.CategoryList);
     return (
       <SafeAreaView style={{ flex: 1 }}>
         {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (

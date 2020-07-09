@@ -8,17 +8,15 @@ class ActivityContainer extends React.Component {
         super(props)
     }
     render() {
-        return (this.props.isLoading &&
-            (
-                <View style={styles.activityContainer}>
-                    <ActivityIndicator
-                        size='large'
-                        color={ThemeColor.DarkColor}
-                        style={styles.activityIndicator}
-                    />
-                </View>
-            )
-
+        console.log("hit activity");
+        return(
+            <View style={styles.activityContainer}>
+                <ActivityIndicator
+                    size='large'
+                    color={ThemeColor.DarkColor}
+                    style={styles.activityIndicator}
+                />
+            </View>
         )
     }
 }

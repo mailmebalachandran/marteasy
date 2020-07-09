@@ -3,15 +3,13 @@ import { PrimaryColor } from '../../themes/colors';
 
 const styles = StyleSheet.create({
     activityContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: "absolute"
-     },
+        marginTop: "20%",
+        marginBottom: "20%"
+    },  
     activityIndicator: {
-        marginTop: "48%",
-        marginLeft: "50%",
-     },
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
 
 export default styles;
