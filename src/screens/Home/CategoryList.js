@@ -15,6 +15,8 @@ import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import unescape from "unescape";
+import SubcategoryAPI from '../../api/Home/SubcategoryAPI';
+import {IMAGE_LOADER} from "../../assets/index";
 
 class CategoryList extends Component {
   constructor(props) {
@@ -103,6 +105,11 @@ class CategoryList extends Component {
     }
   };
 
+  getStoreImages = async (storeId) => {
+    const result = await SubcategoryAPI.getSingleStore(storeId);
+    return result.gravatar;
+  }
+
   render() {
     return (
       <View style={styles.otherCategoryContainer}>
@@ -112,12 +119,12 @@ class CategoryList extends Component {
             <View style={styles.categoryItemContainer}>
               <TouchableNativeFeedback
                 onPress={() => {
-                                    console.log(cat.id);
-                                    this.props.navigation.navigate('SubCategoryScreen', {
-                                    catId: cat.id,
-                                    catName: cat.name
-                                  })}
-                                }
+                  this.props.navigation.navigate((!this.props.isShowStore ? 'SubCategoryProducts' : 'ProductScreen'), {
+                    storeId: cat.id,
+                    storeName: cat.name
+                  })
+                }
+                }
               >
                 <View
                   style={{
@@ -130,7 +137,9 @@ class CategoryList extends Component {
                     elevation: 25,
                   }}>
                   <Image
-                    source={{ uri: cat.image.src   }}
+                    source={this.props.isShowStore ? this.getStoreImages(cat.id) :
+                      { uri: cat.image.src }}
+                    defaultSource={IMAGE_LOADER}
                     style={{
                       resizeMode: 'contain',
                       height: 100,

@@ -22,12 +22,14 @@ import MainCategory from "../Home/MainCategory";
 import { transformCategoryList } from "../Home/utils";
 import SubcategoryAPI from '../../api/Home/SubcategoryAPI';
 import unescape from 'unescape';
+import { isShowStore, transformToStoreData } from "./utils";
+import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
 
 class SubCategoryScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       productList: [],
       infoMessage: '',
       storeDetail: {},
@@ -46,20 +48,27 @@ class SubCategoryScreen extends Component {
       ],
       IsInternetConnected: true,
       categoryList: [],
-      SubCategoryList:[]
+      SubCategoryList: [],
+      isShowStore: false,
     };
   }
 
-  componentDidMount=async ()=>{
-    console.log(this.props.route.params.catId);
+  componentDidMount = async () => {
+    this.setState({isLoading: true})
     this.getSubCategoriesOnLoad(this.props.route.params.catId);
   }
 
   getSubCategoriesOnLoad = async (catId) => {
-    console.log(catId)
-    let result = await SubcategoryAPI.getparentSubCategories(catId);
-    console.log(result[0]);
-    transformCategoryList(result);
+    const showStore = isShowStore(this.props.route.params.catName);
+
+    this.setState({ isShowStore: showStore });
+
+    let result = showStore ?
+      await SubcategoryAPI.getCatgeoryProducts(catId) :
+      await SubcategoryAPI.getparentSubCategories(catId);
+
+    result = showStore ? transformToStoreData(result) : result;
+
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
       this.setState({ isShowError: true, isLoading: false });
     }
@@ -69,8 +78,8 @@ class SubCategoryScreen extends Component {
       });
     }
   };
+
   render() {
-    console.log(this.state.SubCategoryList[0]);
     return (
 
       <View style={{ flex: 1, backgroundColor: '#cfcfd1' }}>
@@ -78,28 +87,34 @@ class SubCategoryScreen extends Component {
         <Header
           navigationScreenValue={this.props.route.params.catName}
           navigation={this.props.navigation}
+          navigateValue = "Home"
         />
         <ScrollView>
-        <View style={styles.promoContainer}>
-          <Slider
-            images={this.state.promoImages}
-            autoplay={true}
-            isLoop={true}
-            dotColor={"#689f39"}
-            sliderBoxHeight={175}
-          />
-        </View>
-        <View style={{ flex: 1,justifyContent: "flex-start", backgroundColor: 'white',marginTop: 5 }}>
-          <Text
-            style={styles.titleText}>
-            {/* <MaterialIcons name="fruit-cherries" size={20} color="grey" /> */}
-            {'  '}Shop By {unescape(this.props.route.params.catName)}
-                  </Text>
-          <CategoryList
-            categories={this.state.SubCategoryList}
-            navigation={this.props.navigation}
-          />
-        </View>
+          <View style={styles.promoContainer}>
+            <Slider
+              images={this.state.promoImages}
+              autoplay={true}
+              isLoop={true}
+              dotColor={"#689f39"}
+              sliderBoxHeight={175}
+            />
+          </View>
+          <View style={{ flex: 1, justifyContent: "flex-start", backgroundColor: 'white', marginTop: 5 }}>
+            <Text
+              style={styles.titleText}>
+              {/* <MaterialIcons name="fruit-cherries" size={20} color="grey" /> */}
+              {'  '}Shop By {unescape(this.props.route.params.catName)}
+            </Text>
+            {this.state.isLoading ? <ActivityContainer />
+              : (
+                <CategoryList
+                  categories={this.state.SubCategoryList}
+                  navigation={this.props.navigation}
+                  isShowStore={this.state.isShowStore}
+                />
+              )}
+
+          </View>
         </ScrollView>
       </View>
     );

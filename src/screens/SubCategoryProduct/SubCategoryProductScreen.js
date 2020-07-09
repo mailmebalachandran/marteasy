@@ -3,7 +3,6 @@ import {Text, Avatar} from 'react-native-elements';
 import {View} from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Line from '../../components/Line/Line';
-import ProductAPI from '../../api/Products/ProductAPI';
 import OpeningHour from '../../components/OpeningHour/OpeningHour';
 import Product from '../../components/Products/Product';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,7 +14,8 @@ import * as CommonConstants from '../../constants';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
-import SubCategoryAPI from '../../api/Home/SubcategoryAPI';
+import SubcategoryAPI from '../../api/Home/SubcategoryAPI';
+
 
 class SubCategoryProductScreen extends Component {
   constructor(props) {
@@ -59,8 +59,18 @@ class SubCategoryProductScreen extends Component {
       }
     });
     const storedId = 0;
-
-    let productList = await SubCategoryAPI.getSubCategoryProducts("147")
+    let storeDetail = await SubcategoryAPI.getSingleCategoryDetails(
+        this.props.route.params.storeId,
+      );
+    let productList = await SubcategoryAPI.getSubCategoryProducts(this.props.route.params.storeId);
+    if (
+        storeDetail !== undefined &&
+        storeDetail.isError !== undefined &&
+        storeDetail.isError === true
+      ) {
+        this.setState({isShowError: true, isLoading: false});
+      }
+  
     if (
         productList !== undefined &&
         productList.isError !== undefined &&
@@ -120,7 +130,7 @@ class SubCategoryProductScreen extends Component {
           }
         }
       }
-      this.setState({productList: productList});
+      this.setState({productList: productList, storeDetail: storeDetail});
       if (countForPageLoad.length > 0) {
         let amount = 0;
         let count = 0;
@@ -144,29 +154,29 @@ class SubCategoryProductScreen extends Component {
         }
       }
     }
-    this.setState({productList: productList, storeDetail: storeDetail}, () => {
+    this.setState({productList: productList}, () => {
       this.setState({isLoading: false});
       this.onAddressDetailsBind();
     });
   };
 
-//   componentDidUpdate = async prevProps => {
-//     if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
-//       this.state = {
-//         isLoading: false,
-//         productList: [],
-//         infoMessage: '',
-//         storeDetail: {},
-//         countDetail: [],
-//         isViewCart: false,
-//         productCount: 0,
-//         productAmount: 0,
-//       };
-//       this.setState({isLoading: true, productCount: 0, productAmount: 0});
-//       const storedId = 0;
-//       this.onPageLoad();
-//     }
-//   };
+  componentDidUpdate = async prevProps => {
+    if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
+      this.state = {
+        isLoading: false,
+        productList: [],
+        infoMessage: '',
+        storeDetail: {},
+        countDetail: [],
+        isViewCart: false,
+        productCount: 0,
+        productAmount: 0,
+      };
+      this.setState({isLoading: true, productCount: 0, productAmount: 0});
+      const storedId = 0;
+      this.onPageLoad();
+    }
+  };
 
   onAddHandler = item => {
     let list = [];
@@ -179,7 +189,7 @@ class SubCategoryProductScreen extends Component {
     });
     this.setState({productList: list});
     this.checkCountDetails(
-      this.state.storeDetail.id,
+      item.store.id,
       item.id,
       item.count,
       item.sale_price,
@@ -204,7 +214,7 @@ class SubCategoryProductScreen extends Component {
     });
     this.setState({productList: list});
     this.checkCountDetails(
-      this.state.storeDetail.id,
+      item.store.id,
       item.id,
       item.count,
       item.sale_price,
@@ -357,16 +367,17 @@ class SubCategoryProductScreen extends Component {
   };
 
   onAvatarImage = item => {
-    if (item.gravatar !== undefined) {
+    if (item.image !== undefined) {
       if (
-        item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)
+        item.image.src !== undefined
       ) {
         return (
+          
           <Avatar
             rounded
             size="large"
             containerStyle={{margin: 5}}
-            source={Images.NOSTORE}
+            source={{uri: item.image.src}}
           />
         );
       } else {
@@ -375,7 +386,7 @@ class SubCategoryProductScreen extends Component {
             rounded
             size="large"
             containerStyle={{margin: 5}}
-            source={{uri: item.gravatar}}
+            source={Images.NOSTORE}
           />
         );
       }
@@ -432,6 +443,7 @@ class SubCategoryProductScreen extends Component {
               <Header
                 navigationScreenValue="Products"
                 navigation={this.props.navigation}
+                navigateValue = "SubCategoryScreen"
               />
               <View
                 style={{
@@ -439,9 +451,9 @@ class SubCategoryProductScreen extends Component {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                 }}>
-                <View style={{height: 70}}>
+                <View style={{height: 80}}>
                   <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{flex: 0.2}}>
+                  <View style={{flex: 0.2}}>
                       {this.onAvatarImage(this.state.storeDetail)}
                     </View>
                     <View style={{flex: 0.8, marginLeft: 20}}>
@@ -451,11 +463,11 @@ class SubCategoryProductScreen extends Component {
                           fontWeight: 'bold',
                           marginTop: 10,
                         }}>
-                        {this.state.storeDetail.store_name}
+                        {this.state.storeDetail.name}
                       </Text>
-                      {this.onAddressDetailsBind()}
+                      
                       <Text style={{fontSize: 10, marginTop: 5}}>
-                        <Icon name="star" size={10} color="grey" /> 0 reviews
+                      
                       </Text>
                     </View>
                     {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
@@ -466,17 +478,6 @@ class SubCategoryProductScreen extends Component {
                     <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
                   </View> */}
                   </View>
-                </View>
-                <View style={{height: 20}}>
-                  <Line />
-                </View>
-                <View style={{height: 50}}>
-                  {this.state.storeDetail.store_open_close && (
-                    <OpeningHour {...this.state} />
-                  )}
-                </View>
-                <View style={{height: 20}}>
-                  <Line />
                 </View>
                 {this.state.productList.length > 0 && (
                   <Product

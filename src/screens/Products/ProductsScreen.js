@@ -442,6 +442,7 @@ class ProductsScreen extends Component {
               <Header
                 navigationScreenValue="Products"
                 navigation={this.props.navigation}
+                navigateValue = "HomeScreen"
               />
               <View
                 style={{

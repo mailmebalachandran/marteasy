@@ -15,6 +15,10 @@ import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
 import SubCategoryScreen from "./src/screens/SubCategory/SubCategoryScreen";
 import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
 import axios from "axios";
+import TestScreen from "./src/api/Home/TestScreen";
+import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
+
+
 axios.interceptors.request.use((config) => {
   config.params = config.params || {};
   config.params['consumer_key'] = CONSUMER_KEY;
@@ -89,6 +93,14 @@ class App extends Component {
           <RootStack.Screen
             name="SubCategoryScreen"
             component={SubCategoryScreen}
+          />
+          <RootStack.Screen
+            name="SubCategoryProducts"
+            component={SubCategoryProducts}
+          />
+          <RootStack.Screen
+            name="test"
+            component={TestScreen}
           />
         </RootStack.Navigator>
       </NavigationContainer>

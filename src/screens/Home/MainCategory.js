@@ -85,10 +85,10 @@ class MainCategory extends Component {
                         <View style={[styles.categoryItemContainer2Col, styles.mainCategory]}>
                             <TouchableOpacity
                                 onPress={() => {
-                                    console.log(cat.id);
+                                    catName = unescape(cat.name);
                                     this.props.navigation.navigate('SubCategoryScreen', {
                                     catId: cat.id,
-                                    catName: cat.name
+                                    catName: catName
                                   });
                                 }}>
                                 <View
