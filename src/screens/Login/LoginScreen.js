@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, Image, ActivityIndicator} from 'react-native';
+import React, { Component } from 'react';
+import { View, Image, ActivityIndicator, Text, TouchableNativeFeedback } from 'react-native';
 import TextBox from '../../components/TextBox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
@@ -7,8 +7,8 @@ import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import ButtonComponent from '../../components/Button/Button';
 import LoginAPI from '../../api/Login/LoginAPI';
 import Validation from '../../validation/Login/LoginValidation';
-import Toast, {DURATION} from 'react-native-easy-toast';
-import {LOGO} from '../../assets/index';
+import Toast, { DURATION } from 'react-native-easy-toast';
+import { LOGO } from '../../assets/index';
 import * as ThemeColor from '../../themes/colors';
 import * as Constants from './constants';
 
@@ -20,7 +20,7 @@ class LoginScreen extends Component {
   };
 
   onSubmitHandler = async () => {
-    this.setState({IsLoaded: true});
+    this.setState({ IsLoaded: true });
     const userDetails = {
       username: this.state.UserName,
       password: this.state.Password,
@@ -28,15 +28,16 @@ class LoginScreen extends Component {
     let validationResult = Validation.LoginValidation(userDetails);
     if (validationResult.isValidated) {
       let result = await LoginAPI.LoginValidation(userDetails);
+      console.log()
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
       } else {
         this.props.navigation.navigate('HomeScreen');
       }
-      this.setState({IsLoaded: false});
+      this.setState({ IsLoaded: false });
     } else {
       this.refs.toast.show(validationResult.message, DURATION.LENGTH_LONG);
-      this.setState({IsLoaded: false});
+      this.setState({ IsLoaded: false });
     }
   };
 
@@ -59,10 +60,10 @@ class LoginScreen extends Component {
           iconSize={25}
           iconColor={ThemeColor.DarkColor}
           secureText={false}
-          textStyle={{fontSize: 10}}
+          textStyle={{ fontSize: 10 }}
           autoCapitalize="none"
           onChangedTextHandler={text => {
-            this.setState({UserName: text});
+            this.setState({ UserName: text });
           }}
         />
         <Label labelValue={Constants.LABEL_PASSWORD} />
@@ -76,30 +77,44 @@ class LoginScreen extends Component {
           secureText={true}
           autoCapitalize="none"
           onChangedTextHandler={text => {
-            this.setState({Password: text});
+            this.setState({ Password: text });
           }}
         />
-        <ButtonComponent
-          titleValue={Constants.BUTTON_LOGIN}
-          onPressHandler={this.onSubmitHandler}
-        />
-        <ButtonComponent
-          titleValue={Constants.BUTTON_CANCEL}
-          onPressHandler={() => {
-            this.props.navigation.navigate('HomeScreen');
-          }}
-        />
-        <Toast
-          ref="toast"
-          style={{backgroundColor: '#dfdfdf'}}
-          position="top"
-          positionValue={100}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{color: 'black'}}
-        />
-      </View>
+        <View style={{ flex: 0.14, flexDirection: "row", marginTop: "5%" }}>
+          <View style={{ flex: 1 }}>
+            <ButtonComponent
+              titleValue={Constants.BUTTON_LOGIN}
+              onPressHandler={this.onSubmitHandler}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <ButtonComponent
+              titleValue={Constants.BUTTON_CANCEL}
+              onPressHandler={() => {
+                this.props.navigation.navigate('HomeScreen');
+              }}
+            />
+          </View>
+          </View>
+
+
+          <View style={{ flex: 0.01, flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: "10%" }}>
+            <Text style={{ fontSize: 17, color: "gray" }}>New User</Text>
+            <TouchableNativeFeedback style={{ marginLeft: "10%" }} onPress={() => this.props.navigation.navigate('SignUpScreen')}>
+              <Text style={{ fontSize: 18, marginLeft: 5, color: "green", textDecorationLine: "underline" }}>SignUp</Text>
+            </TouchableNativeFeedback>
+          </View>
+          <Toast
+            ref="toast"
+            style={{ backgroundColor: 'green' }}
+            position="top"
+            positionValue={30}
+            fadeInDuration={750}
+            fadeOutDuration={5000}
+            opacity={0.8}
+            textStyle={{ color: 'white' }}
+          />
+        </View>
     );
   }
 }
