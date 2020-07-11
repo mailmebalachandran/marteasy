@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#dfdfdf",
     },
     mainCategory: {
-        marginBottom: "2%",
+        marginBottom: "0.3%",
     },
     categoryItemContainer2Col: {
         backgroundColor: "#ffffff",

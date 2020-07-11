@@ -15,7 +15,7 @@ class Header extends Component {
         <View style={styles.drawerStyle}>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate('Home');
+              this.props.navigation.navigate(this.props.navigateValue);
             }}>
             <IconFeather name="arrow-left" size={32} color="white" ic />
           </TouchableOpacity>

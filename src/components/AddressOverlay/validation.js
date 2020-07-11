@@ -33,13 +33,10 @@ export const addrValidation = (state) => {
         state.postalCodeVal = "PostalCode Can't Be Empty"
     }
     if (!state.isShipping) {
-        console.log("in ship")
         if (state.email === "" || state.email === undefined) {
-            console.log("email empty");
             state.isError = true;
             state.emailVal = "Email Can't Be Empty";
         } else if (validateEmail(state.email)) {
-            console.log("email invalid");
             state.isError = true;
             state.emailVal = "Please Enter Valid Email";
         }
@@ -54,11 +51,9 @@ export const addrValidation = (state) => {
 validateEmail = (email) => {
     let mailformat = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
     if (email.match(mailformat)) {
-        console.log("email vali suc");
         return true;
     }
     else {
-        console.log("email vali fail");
         return false;
     }
 }

@@ -196,14 +196,10 @@ class AddressOverlay extends React.Component {
             this.navigateToManageAddr();
         })
             .catch((err) => {
-                console.log("update failed")
                 this.setState({ isLoading: false });
                 if (err.response.data.data.params.billing) {
-                    console.log("api email failed")
-                    console.log("api err msg", err.response.data.data.params.billing)
                     this.setState({ commonErr: err.response.data.data.params.billing });
                 } else {
-                    console.log("went wrong")
                     this.setState({ commonErr: "Oops Something went wrong!!!" });
                 }
             })
