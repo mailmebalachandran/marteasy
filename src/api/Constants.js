@@ -1,5 +1,6 @@
 export const GLOBAL_VALUE = 'https://marteasy.vasanthamveliyeetagam.com';
 export const LoginAPI = GLOBAL_VALUE + '/wp-json/jwt-auth/v1/token';
+export const SignUpAPI= GLOBAL_VALUE + '/wp-json/wp/v2/users'
 export const GetProductsAPI = GLOBAL_VALUE + '/wp-json/dokan/v1/stores/';
 export const GetShopsAPI = GLOBAL_VALUE + '/wp-json/dokan/v1/stores/';
 export const SearchProductsAPI =

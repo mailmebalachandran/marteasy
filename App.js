@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from './src/screens/Login/LoginScreen';
+import SignUpScreen from './src/screens/SignUp/SignUpScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import {getTabIcons} from './src/navigations/utils';
 import * as ThemeColor from './src/themes/colors';
@@ -12,7 +13,15 @@ import SearchScreen from './src/screens/Search/SearchScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 import ManageAddress from './src/screens/ManageAddress/ManageAddress';
 import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
-
+import SubCategoryScreen from "./src/screens/SubCategory/SubCategoryScreen";
+import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
+import axios from "axios";
+axios.interceptors.request.use((config) => {
+  config.params = config.params || {};
+  config.params['consumer_key'] = CONSUMER_KEY;
+  config.params['consumer_secret'] = CONSUMER_SECRET;
+  return config;
+});
 class App extends Component {
   loginScreenNavigator = () => {
     let Stack = createStackNavigator();
@@ -65,10 +74,14 @@ class App extends Component {
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{headerShown: false}}
-          initialRouteName="HomeScreen">
+          initialRouteName="SignUpScreen">
           <RootStack.Screen
             name="LoginScreen"
             component={LoginScreen}
+          />
+          <RootStack.Screen
+            name="SignUpScreen"
+            component={SignUpScreen}
           />
           <RootStack.Screen
             name="HomeScreen"
@@ -77,6 +90,10 @@ class App extends Component {
           <RootStack.Screen
             name="ProductScreen"
             component={ProductsScreen}
+          />
+          <RootStack.Screen
+            name="SubCategoryScreen"
+            component={SubCategoryScreen}
           />
         </RootStack.Navigator>
       </NavigationContainer>
