@@ -78,7 +78,7 @@ class App extends Component {
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{headerShown: false}}
-          initialRouteName="SignUpScreen">
+          initialRouteName="HomeScreen">
           <RootStack.Screen
             name="LoginScreen"
             component={LoginScreen}

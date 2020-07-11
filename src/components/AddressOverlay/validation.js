@@ -1,4 +1,4 @@
-export const addrValidation = (state) => {
+export const addrValidation = (state, isShipping) => {
     state.isError = false;
     if (state.firstName === "" || state.firstName === undefined) {
         state.isError = true;
@@ -32,7 +32,7 @@ export const addrValidation = (state) => {
         state.isError = true;
         state.postalCodeVal = "PostalCode Can't Be Empty"
     }
-    if (!state.isShipping) {
+    if (!isShipping) {
         if (state.email === "" || state.email === undefined) {
             state.isError = true;
             state.emailVal = "Email Can't Be Empty";
