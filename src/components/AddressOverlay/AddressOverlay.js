@@ -76,7 +76,6 @@ class AddressOverlay extends React.Component {
         }
     }
     componentDidMount = () => {
-        console.log("Did Mount")
         NetInfo.addEventListener(this.handleConnectivityChange);
         NetInfo.fetch().done((isConnected) => {
             if (isConnected.isConnected == true) {
@@ -118,7 +117,6 @@ class AddressOverlay extends React.Component {
                             this.setState({ isLoading: false })
                         })
                         .catch(err => {
-                            console.log(err);
                         });
                 } else {
                     this.setState({ isLoading: false });
@@ -151,10 +149,8 @@ class AddressOverlay extends React.Component {
     updateAddr = () => {
         this.setState({ isLoading: true });
         const { isShipping, userId } = this.props.route.params;
-        console.log("is ship",isShipping);
         let payload = {}
         const { isError } = addrValidation(this.state, isShipping)
-        console.log("is err",isError);
         if (isError) {
             this.setState({ isLoading: false });
             this.setState({ state: addrValidation });
@@ -205,7 +201,6 @@ class AddressOverlay extends React.Component {
         })
             .catch((err) => {
                 this.setState({ isLoading: false });
-                console.log(err.response.data.data.params.billing);
                 this.setState({isError: true});
                 if (err.response.data.data.params.billing) {
                     this.setState({ commonErr: err.response.data.data.params.billing });

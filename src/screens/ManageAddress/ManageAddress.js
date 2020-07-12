@@ -72,7 +72,6 @@ class ManageAddress extends Component {
                         this.setState({ isLoading: false })
                     })
                     .catch(err => {
-                        console.log(err);
                     });
             } else {
                 this.props.navigation.navigate("Account");
