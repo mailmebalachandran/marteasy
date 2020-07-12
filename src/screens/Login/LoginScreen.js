@@ -28,7 +28,7 @@ class LoginScreen extends Component {
     let validationResult = Validation.LoginValidation(userDetails);
     if (validationResult.isValidated) {
       let result = await LoginAPI.LoginValidation(userDetails);
-      console.log()
+      console.log("login res",result);
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
       } else {

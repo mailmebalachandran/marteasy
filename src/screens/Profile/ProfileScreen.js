@@ -212,15 +212,21 @@ class ProfileScreen extends Component {
                                                             key={order.store.id}
                                                             style={styles.orderDetailsContainer}
                                                         >
-                                                            <Text style={styles.storeName}>
+                                                            <Text
+                                                                key={`storName${order.store.id}`} 
+                                                                style={styles.storeName}>
                                                                 {order.store.name}
                                                             </Text>
-                                                            <Text style={styles.storeCity}>
+                                                            <Text
+                                                                key={`storeAddr${order.store.id}`} 
+                                                                style={styles.storeCity}>
                                                                 {order.store.address.street_2
                                                                     && order.store.address.street_2}
                                                             </Text>
                                                             <View style={styles.orderPriceContainer}>
-                                                                <Text style={styles.orderPrice}>
+                                                                <Text
+                                                                    key={`storePrice${order.store.id}`} 
+                                                                    style={styles.orderPrice}>
                                                                     {order.line_items.map((item) => {
                                                                         total += item.total
                                                                         return (
@@ -228,7 +234,9 @@ class ProfileScreen extends Component {
                                                                         )
                                                                     })}
                                                                 </Text>
-                                                                <Text style={styles.orderPrice}>
+                                                                <Text
+                                                                    key={`totalAmt${order.store.id}`} 
+                                                                    style={styles.orderPrice}>
                                                                     {`Total = ${total}`},
                                                     {` ${order.date_created_gmt}`}
                                                                 </Text>
