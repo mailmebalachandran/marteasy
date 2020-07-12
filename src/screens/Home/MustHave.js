@@ -17,18 +17,22 @@ class MustHave extends Component {
     this.state = {
         data: [
           {
+            id: "1",
             category_name: "Tea, Coffee etc.",
             gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_12_v_3_500_1580062743.jpg"
           },
           {
+            id: "2",
             category_name: "Dairy Products",
             gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_14_v_3_500_1580063018.jpg"
           },
           {
+            id: "3",
             category_name: "Home Needs",
             gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_1379_v_3_500_1580064374.jpg"
           },
           {
+            id: "4",
             category_name: "Baby Care",
             gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_7_v_3_500_1580062720.jpg"
           }
@@ -91,6 +95,7 @@ class MustHave extends Component {
               <TouchableOpacity
                 onPress={() => { }}>
                 <View
+                  key={cat.id}
                   style={{
                     backgroundColor: 'transparent',
                     width: '100%',

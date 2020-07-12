@@ -15,7 +15,7 @@ class ActivityOverlay extends React.Component {
         return (
             <Overlay
                 isVisible={true}
-                onBackdropPress={true}
+                onBackdropPress={() => {}}
                 fullScreen={true}
                 overlayStyle={styles.activityOverlay}
             >

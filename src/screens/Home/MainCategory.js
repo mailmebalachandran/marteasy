@@ -82,7 +82,10 @@ class MainCategory extends Component {
                 {/* Main Category 2 column */}
                 {this.props.categories.map(cat => {
                     return (
-                        <View style={[styles.categoryItemContainer2Col, styles.mainCategory]}>
+                        <View 
+                            style={[styles.categoryItemContainer2Col, styles.mainCategory]}
+                            key={cat.id}
+                        >
                             <TouchableOpacity
                                 onPress={() => {
                                     catName = unescape(cat.name);
