@@ -1,114 +1,116 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {Component} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import LoginScreen from './src/screens/Login/LoginScreen';
+import SignUpScreen from './src/screens/SignUp/SignUpScreen';
+import HomeScreen from './src/screens/Home/HomeScreen';
+import {getTabIcons} from './src/navigations/utils';
+import * as ThemeColor from './src/themes/colors';
+import ProductsScreen from './src/screens/Products/ProductsScreen';
+import CartScreen from './src/screens/Cart/CartScreen';
+import SearchScreen from './src/screens/Search/SearchScreen';
+import ProfileScreen from './src/screens/Profile/ProfileScreen';
+import ManageAddress from './src/screens/ManageAddress/ManageAddress';
+import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
+import SubCategoryScreen from "./src/screens/SubCategory/SubCategoryScreen";
+import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
+import axios from "axios";
+import TestScreen from "./src/api/Home/TestScreen";
+import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+axios.interceptors.request.use((config) => {
+  config.params = config.params || {};
+  config.params['consumer_key'] = CONSUMER_KEY;
+  config.params['consumer_secret'] = CONSUMER_SECRET;
+  return config;
 });
+class App extends Component {
+  loginScreenNavigator = () => {
+    let Stack = createStackNavigator();
+    return (
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    );
+  };
+  profileStack = () => {
+    let Stack = createStackNavigator();
+    return (
+      <Stack.Navigator
+        initialRouteName="Profile"
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="ManageAddr" component={ManageAddress} />
+        <Stack.Screen name="AddressEdit" component={AddressOverlay} />
+      </Stack.Navigator>
+    );
+  };
+
+  homeScreenNavigator = () => {
+    const Tab = createBottomTabNavigator();
+    return (
+      <Tab.Navigator
+        initialRouteName="Home"
+        header={{visible:true}}
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) =>
+            getTabIcons(route, focused, color, size),
+        })}
+        tabBarOptions={{
+          activeTintColor: ThemeColor.DarkColor,
+          inactiveTintColor: 'gray',
+        }}>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Cart" component={CartScreen} />
+        <Tab.Screen name="Account" component={this.profileStack} />
+      </Tab.Navigator>
+    );
+  };
+
+  render() {
+    const RootStack = createStackNavigator();
+    return (
+      <NavigationContainer>
+        <RootStack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName="SignUpScreen">
+          <RootStack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+          />
+          <RootStack.Screen
+            name="SignUpScreen"
+            component={SignUpScreen}
+          />
+          <RootStack.Screen
+            name="HomeScreen"
+            component={this.homeScreenNavigator}
+          />
+          <RootStack.Screen
+            name="ProductScreen"
+            component={ProductsScreen}
+          />
+          <RootStack.Screen
+            name="SubCategoryScreen"
+            component={SubCategoryScreen}
+          />
+          <RootStack.Screen
+            name="SubCategoryProducts"
+            component={SubCategoryProducts}
+          />
+          <RootStack.Screen
+            name="test"
+            component={TestScreen}
+          />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
 
 export default App;
