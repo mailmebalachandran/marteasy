@@ -18,6 +18,7 @@ import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
 import axios from "axios";
 import TestScreen from "./src/api/Home/TestScreen";
 import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
+import CompareProducts from './src/screens/CompareProducts/CompareProduct';
 
 
 axios.interceptors.request.use((config) => {
@@ -78,7 +79,7 @@ class App extends Component {
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{headerShown: false}}
-          initialRouteName="SignUpScreen">
+          initialRouteName="HomeScreen">
           <RootStack.Screen
             name="LoginScreen"
             component={LoginScreen}
@@ -102,6 +103,10 @@ class App extends Component {
           <RootStack.Screen
             name="SubCategoryProducts"
             component={SubCategoryProducts}
+          />
+          <RootStack.Screen
+            name="CompareProducts"
+            component={CompareProducts}
           />
           <RootStack.Screen
             name="test"

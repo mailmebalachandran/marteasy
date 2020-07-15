@@ -493,6 +493,8 @@ class SubCategoryProductScreen extends Component {
                           handleQuantityChange={(item, type) => {
                             this.handleQuantityChange(item, type);
                           }}
+                          isCompareProduct={true}
+                          navigation={this.props.navigation}
                         />
                       )}
                       {this.state.productList.length == 0 && (

@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text, Image, ScrollView} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {getItemTransformedItemDesc} from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
+import ButtonComponent from '../Button/Button';
 
 class Product extends React.Component {
   constructor(props) {
@@ -23,7 +24,6 @@ class Product extends React.Component {
     });
     this.state = {
       productList: productListWithAdd,
-      storeId: props.storeDetail.id,
       countList: [],
     };
   }
@@ -89,10 +89,29 @@ class Product extends React.Component {
               <View style={styles.imageViewContainerStyle}>
                 {this.onAvatarImage(product)}
                 <View>
-                  <Text style={styles.productName}>{product.name}</Text>
+                  <View style={styles.productViewContainerStyle}>
+                    <View style={styles.productNameContainer}>
+                      <Text style={styles.productName}>{product.name}</Text>
+                    </View>
+                    {this.props.isCompareProduct === true &&
+                    product.tags.length > 0 ? (
+                      <View style={styles.compareViewStyle}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.props.navigation.navigate('CompareProducts', {
+                              tagId: product.tags[0].id,
+                              productId: product.id,
+                            });
+                          }}>
+                          <Text style={styles.compareTextStyle}>Compare</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
+                  </View>
                   <Text style={styles.productDesc}>
                     {getItemTransformedItemDesc(product.short_description)}
                   </Text>
+
                   <View style={styles.priceViewContainerStyle}>
                     <View style={styles.pricingContainer}>
                       {product.regular_price !== '' &&
