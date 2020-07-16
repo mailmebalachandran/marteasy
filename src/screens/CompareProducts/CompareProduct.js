@@ -11,6 +11,8 @@ import NetInfo from '@react-native-community/netinfo';
 import ViewCart from '../../components/ViewCart/ViewCart';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Header from '../../components/Header/Header';
+import MenuLoader from '../../components/Loader/MenuLoader';
+import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 
 class CompareProduct extends React.Component {
   constructor(props) {
@@ -54,19 +56,14 @@ class CompareProduct extends React.Component {
       }
     });
     const tagId = this.props.route.params.tagId;
-    let productList = await CompareProductAPI.GetCompareProducts(this.props.route.params.tagId);
+    let productList = await CompareProductAPI.GetCompareProducts(
+      this.props.route.params.tagId,
+    );
 
     let firstCompareProductDetail = await CompareProductAPI.GetProductBasedonProductId(
-      this.props.route.params.productId
+      this.props.route.params.productId,
     );
-    let element = {};
-    element = firstCompareProductDetail;
-    element.count = 0;
-    element.isAdd = true;
 
-    this.setState({
-      firstCompareProductDetail: element,
-    });
     if (
       firstCompareProductDetail !== undefined &&
       firstCompareProductDetail.isError !== undefined &&
@@ -82,9 +79,19 @@ class CompareProduct extends React.Component {
       this.setState({isShowError: true, isLoading: false});
     }
 
+    let element = {};
+    element = firstCompareProductDetail;
+    element.count = 0;
+    element.isAdd = true;
+    this.setState({
+      firstCompareProductDetail: element,
+    });
+
     let updatedProductList = productList.filter(function(item) {
       return item.id !== firstCompareProductDetail.id;
     });
+    console.log("get Count : " + productList.length)
+    console.log("Updated Count : " + updatedProductList.length)
     let list = [];
     this.state.list = [];
     let asyncDetails = await AsyncStorage.getItem('Cart');
@@ -94,7 +101,7 @@ class CompareProduct extends React.Component {
         return asyncDetailsTemp[k];
       });
       let currentStoreProduct = result.filter(function(item) {
-        return item.storeId === 0;
+        return item.storeId !== 0;
       });
       let compareProductId = 0;
       let countForPageLoad = [];
@@ -112,40 +119,42 @@ class CompareProduct extends React.Component {
               obj.amount = result[item].products[product].amount;
               compareProductId = result[item].products[product].productId;
               //countForPageLoad.push(obj);
+            } else {
             }
           }
         }
       }
       let objectValue = {};
-      if(compareProductId !== 0){
+      if (compareProductId !== 0) {
         objectValue = this.state.firstCompareProductDetail;
         objectValue.count = obj.count;
         objectValue.amount = obj.amount;
         objectValue.isAdd = false;
+        this.setState({firstCompareProductDetail: objectValue});
       }
 
-      this.setState({firstCompareProductDetail:objectValue});
-
       if (currentStoreProduct != null && currentStoreProduct.length > 0) {
-        productList.map(product => {
-          for (var item in currentStoreProduct[0].products) {
-            let obj = {};
-            if (currentStoreProduct[0].products[item] !== null) {
-              if (
-                currentStoreProduct[0].products[item].productId == product.id
-              ) {
-                product.isAdd = false;
-                product.count = currentStoreProduct[0].products[item].count;
-                product.amount = currentStoreProduct[0].products[item].amount;
-                obj.isAdd = false;
-                obj.count = currentStoreProduct[0].products[item].count;
-                obj.amount = currentStoreProduct[0].products[item].amount;
-                countForPageLoad.push(obj);
+        for (var j in currentStoreProduct) {
+          updatedProductList.map(product => {
+            for (var item in currentStoreProduct[j].products) {
+              let obj = {};
+              if (currentStoreProduct[j].products[item] !== null) {
+                if (
+                  currentStoreProduct[j].products[item].productId == product.id
+                ) {
+                  product.isAdd = false;
+                  product.count = currentStoreProduct[j].products[item].count;
+                  product.amount = currentStoreProduct[j].products[item].amount;
+                  obj.isAdd = false;
+                  obj.count = currentStoreProduct[j].products[item].count;
+                  obj.amount = currentStoreProduct[j].products[item].amount;
+                  countForPageLoad.push(obj);
+                }
               }
             }
-          }
-          list.push(product);
-        });
+            list.push(product);
+          });
+        }
       }
       let otherStoreProduct = result.filter(function(item) {
         return item.storeId !== 0;
@@ -189,7 +198,7 @@ class CompareProduct extends React.Component {
         }
       }
     }
-    this.setState({productList: productList}, () => {
+    this.setState({productList: updatedProductList}, () => {
       this.setState({isLoading: false});
     });
   };
@@ -199,7 +208,7 @@ class CompareProduct extends React.Component {
       this.state = {
         isLoading: false,
         productList: [],
-        firstCompareProductDetail:{},
+        firstCompareProductDetail: {},
         infoMessage: '',
         storeDetail: {},
         countDetail: [],
@@ -213,7 +222,6 @@ class CompareProduct extends React.Component {
   };
 
   onAvatarImage = item => {
-    console.log(item.gravatar);
     if (item.gravatar !== undefined) {
       if (
         item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)
@@ -481,82 +489,100 @@ class CompareProduct extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
-        <StatusBarComponent styleType={0} />
-        <Header
-          navigationScreenValue="Products"
-          navigation={this.props.navigation}
-          navigateValue="HomeScreen"
-        />
-        <View style={styles.productScreenContainer}>
-          <View style={styles.productContainer}>
-            <View style={styles.imageViewContainerStyle}>
-              {this.onAvatarImageHeaderProduct()}
-              <View>
-                <View style={styles.productViewContainerStyle}>
-                  <View style={styles.productNameContainer}>
-                    <Text style={styles.productName}>
-                      {this.state.firstCompareProductDetail.name}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.priceViewContainerStyle}>
-                  <View style={styles.pricingContainer}>
-                    {this.state.firstCompareProductDetail.regular_price !==
-                      '' &&
-                      this.state.firstCompareProductDetail.regular_price !==
-                        null &&
-                      this.state.firstCompareProductDetail.regular_price !==
-                        undefined && (
-                        <Text style={styles.regularPrice}>
-                          Rs.
-                          {this.state.firstCompareProductDetail.regular_price}
-                        </Text>
-                      )}
-                    <Text style={styles.salePrice}>
-                      Rs.{this.state.firstCompareProductDetail.sale_price}
-                    </Text>
-                  </View>
-                  <View style={styles.addCartOuterViewContainerStyle}>
-                    <View style={styles.imageViewContainerStyle}>
-                      <AddCart
-                        productValue={this.state.firstCompareProductDetail}
-                        onAddHandler={product => {
-                          this.onAddHandlerForCompareProduct(product);
-                        }}
-                        handleQuantityChange={(product, type) => {
-                          this.handleQuantityChangeCompareProduct(
-                            product,
-                            type,
-                          );
-                        }}
-                      />
+      <>
+        {!this.state.IsInternetConnected ? (
+          <ErrorOverlay errorType={'NetWork'} />
+        ) : this.state.isLoading ? (
+          <MenuLoader />
+        ) : this.state.isShowError ? (
+          <ErrorOverlay errorType={'API'} reload={this.componentDidMount} />
+        ) : (
+          <>
+            <View style={{flex: 1}}>
+              <StatusBarComponent styleType={0} />
+              <Header
+                navigationScreenValue="Compare Products"
+                navigation={this.props.navigation}
+                navigateValue="SubCategoryProducts"
+              />
+              <View style={styles.productScreenContainer}>
+                <View style={styles.productContainer}>
+                  <View style={styles.imageViewContainerStyle}>
+                    {this.onAvatarImageHeaderProduct()}
+                    <View>
+                      <View style={styles.productViewContainerStyle}>
+                        <View style={styles.productNameContainer}>
+                          <Text style={styles.productName}>
+                            {this.state.firstCompareProductDetail.name}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.priceViewContainerStyle}>
+                        <View style={styles.pricingContainer}>
+                          {this.state.firstCompareProductDetail
+                            .regular_price !== '' &&
+                            this.state.firstCompareProductDetail
+                              .regular_price !== null &&
+                            this.state.firstCompareProductDetail
+                              .regular_price !== undefined && (
+                              <Text style={styles.regularPrice}>
+                                Rs.
+                                {
+                                  this.state.firstCompareProductDetail
+                                    .regular_price
+                                }
+                              </Text>
+                            )}
+                          <Text style={styles.salePrice}>
+                            Rs.{this.state.firstCompareProductDetail.sale_price}
+                          </Text>
+                        </View>
+                        <View style={styles.addCartOuterViewContainerStyle}>
+                          <View style={styles.imageViewContainerStyle}>
+                            <AddCart
+                              productValue={
+                                this.state.firstCompareProductDetail
+                              }
+                              onAddHandler={product => {
+                                this.onAddHandlerForCompareProduct(product);
+                              }}
+                              handleQuantityChange={(product, type) => {
+                                this.handleQuantityChangeCompareProduct(
+                                  product,
+                                  type,
+                                );
+                              }}
+                            />
+                          </View>
+                        </View>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
+              <Text style={{marginLeft:10}}>Related Products</Text>
+              {this.state.productList.length > 0 && (
+                <Product
+                  {...this.state}
+                  onAddHandler={product => this.onAddHandler(product)}
+                  handleQuantityChange={(item, type) => {
+                    this.handleQuantityChange(item, type);
+                  }}
+                  isCompareProduct={false}
+                  navigation={this.props.navigation}
+                />
+              )}
+              {this.state.isViewCart && (
+                <ViewCart
+                  productCount={this.state.productCount}
+                  productAmount={this.state.productAmount}
+                  navigation={this.props.navigation}
+                />
+              )}
             </View>
-          </View>
-        </View>
-        {this.state.productList.length > 0 && (
-          <Product
-            {...this.state}
-            onAddHandler={product => this.onAddHandler(product)}
-            handleQuantityChange={(item, type) => {
-              this.handleQuantityChange(item, type);
-            }}
-            isCompareProduct={false}
-            navigation={this.props.navigation}
-          />
+          </>
         )}
-        {this.state.isViewCart && (
-          <ViewCart
-            productCount={this.state.productCount}
-            productAmount={this.state.productAmount}
-            navigation={this.props.navigation}
-          />
-        )}
-      </View>
+      </>
     );
   }
 }

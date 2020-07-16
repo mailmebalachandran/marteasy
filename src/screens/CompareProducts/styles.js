@@ -10,10 +10,10 @@ const styles = StyleSheet.create({
     height: 125,
     margin: 10,
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#ebfaef',
     borderRadius: 1,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: '#7ff59f',
     borderStyle: 'solid',
     shadowColor: '#000',
     shadowOffset: {
