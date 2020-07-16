@@ -27,6 +27,8 @@ import {
   HOME_PROMO_1,
   HOME_PROMO_2,
   HOME_PROMO_3,
+  MOTOR_WASH_IMAGE1,
+  MOTOR_WASH_IMAGE2
 } from "../../assets/index";
 import styles from './styles';
 import MainCategory from "./MainCategory";
@@ -35,6 +37,7 @@ import HomeHeader from "../../components/HomeHeader/HomeHeader";
 import MustHave from "./MustHave";
 import { transformCategoryList } from "./utils";
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import MotorScreen from '../../screens/MotorScreen/Motorscreen';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -43,8 +46,11 @@ class HomeScreen extends Component {
       isLoading: true,
       refreshing: false,
       isShowError: false,
+      isPressed: false,
       IsInternetConnected: true,
       categoryList: [],
+      constantsId: [],
+      tagDetails: [],
       promoImages: [
         HOME_PROMO_2,
         HOME_PROMO_3
@@ -66,6 +72,8 @@ class HomeScreen extends Component {
 
     this.getStoresOnLoad();
     this.getCategoriesOnLoad();
+    this.getConstantsOnLoad();
+   
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState({ isLoading: true });
       this.getStoresOnLoad();
@@ -106,6 +114,33 @@ class HomeScreen extends Component {
     }
   };
 
+  getConstantsOnLoad = async () => {
+    let result = await HomeAPI.getConstants();
+    if (result !== undefined && result.isError !== undefined && result.isError === true) {
+      this.setState({ isShowError: true, isLoading: false });
+    }
+    else if (result !== undefined) {
+      this.getTagDetailsOnLoad(result.motor_wash_tag_id);
+      this.setState({ constantsId: result }, () => {
+        this.setState({ isLoading: false, isShowError: false });
+      });
+    }
+  };
+
+  getTagDetailsOnLoad = async (id) => {
+    let result = await HomeAPI.getTagDetails(id); 
+    if (result !== undefined && result.isError !== undefined && result.isError === true) {
+
+      this.setState({ isShowError: true, isLoading: false });
+    }
+    else if (result !== undefined) {
+      this.setState({ tagDetails: result }, () => {
+        this.setState({ isLoading: false, isShowError: false });
+      });
+    }
+  };
+
+
   _onRefresh = () => {
     this.getStoresOnLoad();
     this.getCategoriesOnLoad();
@@ -119,7 +154,7 @@ class HomeScreen extends Component {
       HOME_BANNER_IMAGE4,
     ];
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, }}>
         {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
           <MenuLoader />
         ) : false ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
@@ -147,8 +182,8 @@ class HomeScreen extends Component {
                     <Anticons name="appstore-o" size={20} color="grey" />
                     {'  '}Shop By Category
                 </Text>
-                
-                  <MainCategory 
+
+                  <MainCategory
                     categories={transformCategoryList(this.state.categoryList, true)}
                     navigation={this.props.navigation}
                   />
@@ -157,6 +192,16 @@ class HomeScreen extends Component {
                     navigation={this.props.navigation}
                   /> */}
                 </View>
+                {/* MotorScreen */}
+                <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('MotorScreen',
+                  {tagId: this.state.tagDetails.id});}}>
+                  <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center" }}>
+                    <View>
+                      <Image source={MOTOR_WASH_IMAGE2} />
+                      <Text style={{textTransform: "capitalize", marginHorizontal:"40%"}}>{this.state.tagDetails.name}</Text>
+                    </View>
+                  </View>
+                </TouchableNativeFeedback>
                 <View style={styles.promoContainer}>
                   <Slider
                     images={this.state.promoImages}

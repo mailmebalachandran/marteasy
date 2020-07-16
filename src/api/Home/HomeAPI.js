@@ -21,7 +21,31 @@ const getParentCategories = async () => {
   }
 }
 
+const getConstants= async () =>{
+  let res;
+  try{
+    res=await Axios.get(Constants.getConstants);
+    return res.data;
+  }
+  catch(err){
+    return {isError: true}
+  }
+}
+
+const getTagDetails= async (id) =>{
+  let res;
+  try{
+    res=await Axios.get(Constants.GLOBAL_VALUE+'/wp-json/wc/v3/products/tags/'+id);
+    return res.data;
+  }
+  catch(err){
+    return {isError: "true"}
+  }
+} 
+
 module.exports = {
   GetStores,
   getParentCategories,
+  getConstants,
+  getTagDetails
 };

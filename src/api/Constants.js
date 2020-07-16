@@ -9,9 +9,13 @@ export const CartGetProductsAPI =
   GLOBAL_VALUE + '/wp-json/wc/v3/products?consumer_key=';
 
 export const getSubCategoryProducts =
-  'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products?category=';
+  GLOBAL_VALUE+'/wp-json/wc/v3/products?category=';
 
-export const getSingleSubCategoryDetails = "https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products/categories/";
+export const getSingleSubCategoryDetails = GLOBAL_VALUE+'/wp-json/wc/v3/products/categories/';
+export const getConstants=GLOBAL_VALUE+'/wp-json/custom-api/v1/constants';
+export const getTagDetails=GLOBAL_VALUE+'/wp-json/wc/v3/products/tags/';
+export const getMotorProducts=GLOBAL_VALUE+'/wp-json/wc/v3/products?tag=';
+export const getMotorProductsId=GLOBAL_VALUE+'/wp-json/wc/v3/products/'
 
 export const CONSUMER_KEY = 'ck_e50cc73036d4a2023cede3a734b41f742f7f29dd';
 export const CONSUMER_SECRET = 'cs_99f96f2ee5a1bb3df0dc3df27aec6726e1095402';

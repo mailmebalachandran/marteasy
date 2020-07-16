@@ -87,7 +87,6 @@ class ProfileScreen extends Component {
         })
     }
     renderName = ({first_name, last_name}) => {
-        console.log("fn ln",first_name,last_name);
         if ((first_name !== "" && first_name !== undefined) || (last_name !== "" && last_name !== undefined)) {
             return (`${first_name} ${last_name}`).toUpperCase();
         } else {

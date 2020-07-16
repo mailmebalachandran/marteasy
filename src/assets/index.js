@@ -38,3 +38,7 @@ export const FRUIT_BANNER_IMAGE1=require('./images/Categories/CatFruits/CAT_FRUI
 export const FRUIT_BANNER_IMAGE2=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE2.jpg');
 export const FRUIT_BANNER_IMAGE3=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE3.jpg');
 export const FRUIT_BANNER_IMAGE4=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE4.jpg');
+
+//Motor Wash 
+export const MOTOR_WASH_IMAGE1=require('../assets/images/motorwash.png');
+export const MOTOR_WASH_IMAGE2=require('../assets/images/motor.png')

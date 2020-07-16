@@ -18,6 +18,9 @@ import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
 import axios from "axios";
 import TestScreen from "./src/api/Home/TestScreen";
 import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
+import MotorScreen from './src/screens/MotorScreen/Motorscreen';
+import MotorProductScreen from './src/screens/MotorProductScreen/MotorProductScreen';
+import MotorMainCategory from './src/screens/MotorScreen/MotorMainCategoryScreen';
 
 
 axios.interceptors.request.use((config) => {
@@ -102,6 +105,14 @@ class App extends Component {
           <RootStack.Screen
             name="SubCategoryProducts"
             component={SubCategoryProducts}
+          />
+          <RootStack.Screen
+            name="MotorScreen"
+            component={MotorScreen}
+          />
+          <RootStack.Screen
+            name="MotorProductScreen"
+            component={MotorProductScreen}
           />
           <RootStack.Screen
             name="test"
