@@ -7,9 +7,12 @@ export const SearchProductsAPI =
   GLOBAL_VALUE + '/wp-json/wc/v3/products?search=';
 export const CartGetProductsAPI =
   GLOBAL_VALUE + '/wp-json/wc/v3/products?consumer_key=';
+export const CompareProductsAPI = GLOBAL_VALUE + "/wp-json/wc/v3/products?tag=";
 
 export const getSubCategoryProducts =
   'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products?category=';
+
+export const GetProductBasedOnProductIdAPI = GLOBAL_VALUE + "/wp-json/wc/v3/products/";
 
 export const getSingleSubCategoryDetails = "https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products/categories/";
 
