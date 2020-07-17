@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     color: ThemeColor.DarkTextColor,
   },
   CenterViewStyle: {
-    width: '30%',
+    width: '20%',
   },
   RightContainerStyle: {
     marginRight: 10,

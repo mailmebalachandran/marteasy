@@ -20,6 +20,7 @@ import TestScreen from "./src/api/Home/TestScreen";
 import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
 import MotorScreen from './src/screens/MotorScreen/Motorscreen';
 import MotorProductScreen from './src/screens/MotorProductScreen/MotorProductScreen';
+import CompareProducts from './src/screens/CompareProducts/CompareProduct';
 
 
 axios.interceptors.request.use((config) => {
@@ -104,6 +105,10 @@ class App extends Component {
           <RootStack.Screen
             name="SubCategoryProducts"
             component={SubCategoryProducts}
+          />
+          <RootStack.Screen
+            name="CompareProducts"
+            component={CompareProducts}
           />
           <RootStack.Screen
             name="MotorScreen"

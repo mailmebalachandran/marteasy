@@ -11,10 +11,12 @@ const styles = StyleSheet.create({
     borderColor: 'green',
     borderRadius: 1,
     borderWidth: 1,
+    fontSize:10 
   },
   addViewStyle: {
-    width: 75,
-    height: 35,
+    width: 80,
+    height: 30,
+    alignItems:'center'
   },
   minusViewStyle: {
     backgroundColor: '#ededed',
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     padding: 5,
-    height: 35,
+    height: 30,
     borderRightColor: ThemeColor.DarkTextColor,
     borderRightWidth: 0,
   },
@@ -31,16 +33,17 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     padding: 5,
-    height: 35,
+    height: 30,
     borderLeftColor: ThemeColor.DarkTextColor,
     borderRightColor: ThemeColor.DarkTextColor,
     borderLeftWidth: 0,
     borderRightWidth: 0,
-    borderRightWidth: 0,
+    borderRightWidth: 0
   },
   textTextStyle: {
     margin: 5,
     marginTop: 0,
+    fontSize:10
   },
   plusViewStyle: {
     backgroundColor: '#e9fae8',
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     padding: 5,
-    height: 35,
+    height: 30,
   },
 });
 
