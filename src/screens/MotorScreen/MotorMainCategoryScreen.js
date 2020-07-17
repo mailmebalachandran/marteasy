@@ -75,9 +75,15 @@ class MotorMainCategory extends Component {
             );
         }
     };
+    isVariant = (product) => {
+        if(product.variations.length !== 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     render() {
-
         return (
             <View style={styles.mainCategoryContainer}>
                 {/* Main Category 2 column */}
@@ -89,12 +95,11 @@ class MotorMainCategory extends Component {
                         >
                             <TouchableOpacity
                                 onPress={() => {
-                                    let data = [];
-                                    data.push(cat);
                                     catName = unescape(cat.name);
                                     this.props.navigation.navigate('MotorProductScreen', {
                                         storeId: cat.store.id,
-                                        productDetail: data,
+                                        product: cat,
+                                        isVariant: this.isVariant(cat),
                                     });
                                 }}>
                                 <View

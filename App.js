@@ -20,7 +20,6 @@ import TestScreen from "./src/api/Home/TestScreen";
 import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
 import MotorScreen from './src/screens/MotorScreen/Motorscreen';
 import MotorProductScreen from './src/screens/MotorProductScreen/MotorProductScreen';
-import MotorMainCategory from './src/screens/MotorScreen/MotorMainCategoryScreen';
 
 
 axios.interceptors.request.use((config) => {

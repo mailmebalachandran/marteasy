@@ -51,25 +51,12 @@ const styles = StyleSheet.create({
         flex: 1,
       },
       productCompContainer: {
-        height: '100%',
+        flex: 1, 
+        backgroundColor: "white"
       },
-      productContainer: {
-        height: 125,
-        margin: 10,
-        padding: 10,
-        backgroundColor: 'white',
-        borderRadius: 1,
-        borderWidth: 1,
-        borderColor: 'white',
-        borderStyle: 'solid',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+      imageView:{
+        width: 200,
+        height: 200
       },
       //Product Image Styles
       productImageContainer: {
@@ -82,7 +69,8 @@ const styles = StyleSheet.create({
       },
       //Products Details
       productName: {
-        marginLeft: 10,
+        fontSize: 25,
+        textTransform:"capitalize"
       },
       productDesc: {
         marginLeft: 10,
@@ -116,6 +104,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '35%',
       },
+
+      //MotorProductList Style
+      container:{
+        flex: 1,
+        flexDirection: "column"
+      }
 });
 
 export default styles;

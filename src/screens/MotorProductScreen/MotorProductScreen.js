@@ -1,60 +1,49 @@
 import React, { Component } from 'react';
-import { Text, Avatar, } from 'react-native-elements';
+import { Text, Avatar, Divider } from 'react-native-elements';
 import { View, Image, Dimensions, Picker } from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
-import Line from '../../components/Line/Line';
-import OpeningHour from '../../components/OpeningHour/OpeningHour';
-import Product from '../../components/Products/Product';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import Header from '../../components/Header/Header';
-import ViewCart from '../../components/ViewCart/ViewCart';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
-import AsyncStorage from '@react-native-community/async-storage';
-import ButtonComponent from '../../components/Button/Button';
-import MotorProductList from '../../screens/MotorProductScreen/MotorProductList';
 import MotorAPI from '../../api/Motor/MotorAPI';
+import * as ThemeColor from '../../themes/colors';
+import ButtonComponent from '../../components/Button/Button';
+import ActivityOverlay from "../../components/ActivityOverlay/ActivityOverlay";
 
 
 class MotorProductScreen extends Component {
   constructor(props) {
     super(props);
+    const params = props.route.params;
     this.state = {
       isLoading: false,
-      productList: [],
+      product: params.product,
+      isVariant: params.isVariant,
       infoMessage: '',
-      storeDetail: {
-        id: this.props.route.params.storeId,
-      },
-      countDetail: [],
-      storeId: this.props.route.params.storeId,
-      cat: [this.props.route.params.cat],
-      isViewCart: false,
-      productCount: 0,
-      productAmount: 0,
-      storeId: 0,
       isRunning: false,
       isShowError: false,
       IsInternetConnected: true,
       productVariance: [],
       selectedValue: "Select a Variant",
-      price: 0,
+      price: params.isVariant ? 0 : params.product.regular_price,
+      deliverFee: 50,
     };
   }
 
   componentDidMount = async () => {
+    this.setState({ isLoading: true })
     await this.onPageLoad();
-    this.onMotorProductIdOnLoad(this.state.productList[0].id);
-    
+    this.onMotorProductIdOnLoad(this.state.product.id);
   };
 
   onMotorProductIdOnLoad = async (id) => {
     const result = await MotorAPI.getMotorProductId(id);
-    console.log("In response motoAPI", result[0].attributes);
-    this.setState({ productVariance: result })
+    this.setState({ productVariance: result }, () => {
+      this.setState({ isLoading: false })
+    });
   }
 
   handleConnectivityChange = isConnected => {
@@ -66,7 +55,6 @@ class MotorProductScreen extends Component {
   };
 
   onPageLoad = async () => {
-    this.setState({ isLoading: true });
     NetInfo.addEventListener(this.handleConnectivityChange);
     NetInfo.fetch().done(isConnected => {
       if (isConnected.isConnected == true) {
@@ -75,306 +63,12 @@ class MotorProductScreen extends Component {
         this.setState({ IsInternetConnected: false });
       }
     });
-    const storedId = 0;
-    let productList = await this.props.route.params.productDetail;
-    if (
-      productList !== undefined &&
-      productList.isError !== undefined &&
-      productList.isError === true
-    ) {
-      this.setState({ isShowError: true, isLoading: false });
-    }
-
-    let list = [];
-    this.state.list = [];
-    let asyncDetails = await AsyncStorage.getItem('Cart');
-    if (asyncDetails != null) {
-      let asyncDetailsTemp = JSON.parse(asyncDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function (k) {
-        return asyncDetailsTemp[k];
-      });
-      let currentStoreProduct = result.filter(function (item) {
-        return item.storeId == storedId;
-      });
-
-      let countForPageLoad = [];
-      if (currentStoreProduct != null && currentStoreProduct.length > 0) {
-        productList.map(product => {
-          for (var item in currentStoreProduct[0].products) {
-            let obj = {};
-            if (currentStoreProduct[0].products[item] !== null) {
-              if (
-                currentStoreProduct[0].products[item].productId == product.id
-              ) {
-                product.isAdd = false;
-                product.count = currentStoreProduct[0].products[item].count;
-                product.amount = currentStoreProduct[0].products[item].amount;
-                obj.isAdd = false;
-                obj.count = currentStoreProduct[0].products[item].count;
-                obj.amount = currentStoreProduct[0].products[item].amount;
-                countForPageLoad.push(obj);
-              }
-            }
-          }
-          list.push(product);
-        });
-      }
-      let otherStoreProduct = result.filter(function (item) {
-        return item.storeId !== storedId;
-      });
-
-      for (var item in otherStoreProduct) {
-        if (otherStoreProduct[item] !== null) {
-          for (var product in otherStoreProduct[item].products) {
-            if (otherStoreProduct[item].products[product] !== null) {
-              let obj = {};
-              obj.isAdd = false;
-              obj.count = otherStoreProduct[item].products[product].count;
-              obj.amount = otherStoreProduct[item].products[product].amount;
-              countForPageLoad.push(obj);
-            }
-          }
-        }
-      }
-      this.setState({ productList: productList });
-      if (countForPageLoad.length > 0) {
-        let amount = 0;
-        let count = 0;
-        let i = 0;
-        for (var item in countForPageLoad) {
-          if (
-            countForPageLoad[item].count !== undefined &&
-            countForPageLoad[item].count !== 0
-          ) {
-            amount +=
-              parseInt(countForPageLoad[item].amount) *
-              countForPageLoad[item].count;
-            count += countForPageLoad[item].count;
-          }
-        }
-        this.setState({ productCount: count, productAmount: amount });
-        if (count !== 0) {
-          this.setState({ isViewCart: true });
-        } else {
-          this.setState({ isViewCart: false });
-        }
-      }
-    }
-    this.setState({ productList: productList }, () => {
-      this.setState({ isLoading: false });
-    });
-  };
-
-  componentDidUpdate = async prevProps => {
-    if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
-      this.state = {
-        isLoading: false,
-        productList: [],
-        infoMessage: '',
-        countDetail: [],
-        isViewCart: false,
-        productCount: 0,
-        productAmount: 0,
-      };
-      this.setState({ isLoading: true, productCount: 0, productAmount: 0 });
-      const storedId = 0;
-      await this.onPageLoad();
-      this.onMotorProductIdOnLoad(this.state.productList.id);
-    }
-  };
-
-  onAddHandler = item => {
-    let list = [];
-    this.state.productList.map(product => {
-      if (product.id === item.id) {
-        product.isAdd = false;
-        product.count++;
-      }
-      list.push(product);
-    });
-    this.setState({ productList: list });
-    this.checkCountDetails(
-      item.store.id,
-      item.id,
-      item.count,
-      item.sale_price,
-    );
-  };
-  handleQuantityChange = (item, type) => {
-    if (this.state.isRunning) return;
-    // this.state.isRunning = true;
-    this.setState({ isRunning: true }, () => { });
-
-    let list = [];
-    this.state.productList.map(product => {
-      if (product.id === item.id) {
-        if (item.count > 0) {
-          type === 'INC' ? product.count++ : product.count--;
-        }
-        if (product.count === 0) {
-          product.isAdd = true;
-        }
-      }
-      list.push(product);
-    });
-    this.setState({ productList: list });
-    this.checkCountDetails(
-      item.store.id,
-      item.id,
-      item.count,
-      item.sale_price,
-    );
-    this.setState({ isRunning: false });
-    this.state.isRunning = false;
-  };
-
-  checkCountDetails = async (storeId, productId, count, amount) => {
-    let countDetail = [];
-
-    this.state.countDetail = [];
-    let asyncDetails = await AsyncStorage.getItem('Cart');
-    if (asyncDetails != null) {
-      let asyncDetailsTemp = JSON.parse(asyncDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function (k) {
-        return asyncDetailsTemp[k];
-      });
-      this.state.countDetail = result.slice();
-    }
-
-    if (this.state.countDetail.length > 0) {
-      let storeCount = this.state.countDetail;
-      let isStoreAvailable = false;
-      for (var item in storeCount) {
-        if (
-          storeCount[item].storeId === storeId &&
-          storeCount[item].products.length > 0
-        ) {
-          let isProductAvailable = false;
-          for (var product in storeCount[item].products) {
-            if (
-              storeCount[item].products[product] !== null &&
-              storeCount[item].products[product].productId === productId
-            ) {
-              storeCount[item].products[product].count = count;
-              storeCount[item].products[product].amount = amount;
-              isProductAvailable = true;
-              isStoreAvailable = true;
-            }
-          }
-          if (!isProductAvailable) {
-            let obj = {};
-            obj.productId = productId;
-            obj.count = count;
-            obj.amount = amount;
-            if (storeCount[item].products[product] === null) {
-              storeCount[item].products = [];
-            }
-            storeCount[item].products.push(obj);
-            isStoreAvailable = true;
-          }
-        }
-      }
-      if (!isStoreAvailable) {
-        let storeObj = {};
-        let productObj = {};
-        storeObj.products = [];
-        productObj.productId = productId;
-        productObj.count = count;
-        productObj.amount = amount;
-        storeObj.storeId = storeId;
-        storeObj.products.push(productObj);
-        storeCount.push(storeObj);
-      }
-      this.setState({ countDetail: storeCount });
-      if (storeCount.length > 0) {
-        let amount = 0;
-        let count = 0;
-        for (var item in storeCount) {
-          for (var product in storeCount[item].products) {
-            if (
-              storeCount[item].products[product] !== null &&
-              storeCount[item].products[product].count !== 0
-            ) {
-              amount +=
-                parseInt(storeCount[item].products[product].amount) *
-                storeCount[item].products[product].count;
-              count += storeCount[item].products[product].count;
-            } else {
-              delete storeCount[item].products[product];
-            }
-          }
-        }
-        if (count !== 0) {
-          this.setState({ isViewCart: true });
-        } else {
-          this.setState({ isViewCart: false });
-        }
-        this.setState({ productCount: count, productAmount: amount }, () => {
-          this.storeDataToStorage(storeCount);
-        });
-      }
-    } else {
-      var storeObj = {};
-      storeObj.storeId = storeId;
-      storeObj.products = [];
-      var productDetail = {};
-      productDetail.productId = productId;
-      productDetail.count = count;
-      productDetail.amount = amount;
-      storeObj.products.push(productDetail);
-      countDetail.push(storeObj);
-      this.setState({ countDetail: countDetail });
-      if (countDetail.length > 0) {
-        let amount = 0;
-        let count = 0;
-        for (var item in countDetail) {
-          for (var product in countDetail[item].products) {
-            if (countDetail[item].products[product].count !== 0) {
-              amount +=
-                parseInt(countDetail[item].products[product].amount) *
-                countDetail[item].products[product].count;
-              count += countDetail[item].products[product].count;
-            } else {
-              delete countDetail[item].products[product];
-            }
-          }
-        }
-        if (count !== 0) {
-          this.setState({ isViewCart: true });
-        } else {
-          this.setState({ isViewCart: false });
-        }
-        this.setState({ productCount: count, productAmount: amount }, () => {
-          this.storeDataToStorage(countDetail);
-        });
-      }
-    }
-  };
-
-  storeDataToStorage = async storeCount => {
-    try {
-      // let isValueDeleted = await this.removeDataToStorage('Cart');
-      // if (isValueDeleted) {
-      await AsyncStorage.setItem('Cart', JSON.stringify(storeCount));
-      // }
-    } catch (err) {
-      console.log('Error Details ' + err);
-    }
-  };
-
-  removeDataToStorage = async key => {
-    try {
-      await AsyncStorage.removeItem(key);
-      return true;
-    } catch (exception) {
-      return false;
-    }
   };
 
   onAvatarImage = item => {
-    if (item.image !== undefined) {
+    if (item.images !== undefined) {
       if (
-        item.image.src !== undefined
+        item.images[0].src !== undefined
       ) {
         return (
 
@@ -382,7 +76,7 @@ class MotorProductScreen extends Component {
             rounded
             size="large"
             containerStyle={{ margin: 5 }}
-            source={{ uri: item.image.src }}
+            source={{ uri: item.images[0].src }}
           />
         );
       } else {
@@ -410,91 +104,125 @@ class MotorProductScreen extends Component {
     let varianceItems = [];
     productVariance.map(p => {
       varianceItems.push(
-        <Picker.Item key={p.id} label={p.attributes[0].option} value={p.regular_price} />
+        <Picker.Item key={p.id} label={p.attributes[0].option} value={p.id} />
       )
     })
     return varianceItems;
   }
 
+  renderTotal = () => {
+    let total = parseFloat(this.state.price) + parseFloat(this.state.deliverFee);
+    return total;
+  }
+
   render() {
-    const windowWidth = Dimensions.get('window').width;
+    const isVariant = this.state.isVariant;
     return (
       <>
         {!this.state.IsInternetConnected ? (
           <ErrorOverlay errorType={'NetWork'} />
-        ) : this.state.isLoading ? (
-          <MenuLoader />
         ) : this.state.isShowError ? (
           <ErrorOverlay errorType={'API'} reload={this.componentDidMount} />
         ) : (
-                <>
-                  <View style={{ flex: 1 }}>
-                    <StatusBarComponent styleType={0} />
-                    <Header
-                      navigationScreenValue="Motor Products"
-                      navigation={this.props.navigation}
-                      navigateValue="MotorMainCategoryScreen"
-                    />
-                    <View style={{ flex: 0.4, backgroundColor: "white" }}>
-                      {this.state.productList.length > 0 && (
-                        <MotorProductList
-                          {...this.state}
-                          onAddHandler={product => this.onAddHandler(product)}
-                          storeId={this.props.route.params.storeId}
-                          handleQuantityChange={(item, type) => {
-                            this.handleQuantityChange(item, type);
-                          }}
-                        />
-                      )}
-                    </View>
-                    {/* {this.state.productList.length == 0 && (
-                        <View style={{ flex: 1, backgroundColor: "white", marginTop: "2%" }}>
-                          <Image
-                            source={Images.EMPTYCART}
-                            style={{ flex: 0.5, width: "100%", marginTop: "15%" }}
-                          />
-                          <View style={{
-                            flex: 1, flexDirection: "row",
-                            justifyContent: "center",
-                            marginTop: "5%"
-                          }}>
-                            <Text style={{ fontSize: 20 }}>No Products Available</Text>
-                          </View>
-                          <ButtonComponent
-                            titleValue="Browse Categories"
-                            onPressHandler={() => {
-                              this.props.navigation.navigate('Home');
-                            }}
-                          />
+              <>
+                {this.state.isLoading && <ActivityOverlay />}
+                <View style={{ flex: 1 }}>
+                  <StatusBarComponent styleType={0} />
+                  <Header
+                    navigationScreenValue="Motor Products"
+                    navigation={this.props.navigation}
+                    navigateValue="MotorScreen"
+                  />
+                  <View style={{ flex: 1, backgroundColor: "white" }}>
+                    <View style={{ flex: 0.35, backgroundColor: "white" }}>
+                      <View style={{ flex: 1.5, flexDirection: 'row', backgroundColor: "#ccc" }}>
+                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
+                          <View>{this.onAvatarImage(this.state.product)}</View>
                         </View>
-                      )} */}
-                      
-                    <View style={{ flex: 1, backgroundColor: "white", }}>
-                      <Picker
-                        selectedValue={this.state.selectedValue}
-                        mode={"dropdown"}
-                        style={{ height: 50, width: "90%", borderRadius: 25, marginLeft: "5%", marginRight: "5%" }}
-                        onValueChange={(itemValue, itemIndex) => {
-                          this.setState({ 
-                            selectedValue: itemValue,
-                            price: parseFloat(itemValue),
-                            productType: this.state.productVariance[itemIndex].attributes[0].option,
-                          })
-                        }}
-                      >
-                          {this.renderPickerItems(this.state.productVariance)}
-                      </Picker>
+                        <View style={{ flex: 1, justifyContent: "center" }}>
+                          <Text style={{ fontSize: 25, textTransform: "capitalize", marginLeft: "15%" }}>{this.state.product.name}</Text>
+                        </View>
+                      </View>
                     </View>
-                    {this.state.isViewCart && (
-                      <ViewCart
-                        productCount={this.state.productCount}
-                        productAmount={this.state.productAmount}
-                        navigation={this.props.navigation}
-                      />
-                    )}
+                    <View style={{ flex: 1, backgroundColor: "white" }}>
+                      {isVariant &&
+                        <View style={{ flex: 0.2, backgroundColor: "white", }}>
+                          <Picker
+                            selectedValue={this.state.selectedValue}
+                            mode={"dropdown"}
+                            style={{ height: 50, width: "90%", borderRadius: 25, marginLeft: "5%", marginRight: "5%", }}
+                            onValueChange={(itemValue, itemIndex) => {
+                              console.log("value, index", itemValue, itemIndex);
+                              this.setState({
+                                selectedValue: itemValue,
+                                price: parseFloat(this.state.productVariance[itemIndex].regular_price),
+                                productType: this.state.productVariance[itemIndex].attributes[0].option,
+                              })
+                            }}
+                          >
+                            {this.renderPickerItems(this.state.productVariance)}
+                          </Picker>
+                        </View>}
+                      <View
+                        style={{
+                          backgroundColor: ThemeColor.DarkTextColor,
+                          paddingTop: 15,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                          flex: 1,
+                        }}>
+                        <View style={{ height: 40 }}>
+                          <Text>PRICE DETAILS</Text>
+                        </View>
+                        <Divider />
+                        <View style={{ flexDirection: 'row' }}>
+                          <View style={{ flex: 1, flexDirection: 'column' }}>
+                            {isVariant &&
+                              <Text style={{ margin: 10 }}>
+                                Item Type
+                            </Text>}
+                            <Text style={{ margin: 10 }}>
+                              Price
+                            </Text>
+                            <Text style={{ margin: 10 }}>Delivery Fee</Text>
+                          </View>
+                          <View>
+                            {isVariant &&
+                              <Text style={{ margin: 10 }}>{this.state.productType}</Text>}
+                            <Text style={{ margin: 10 }}>
+                              Rs. {this.state.price}
+                            </Text>
+                            <Text style={{ margin: 10 }}>
+                              Rs. {this.state.deliverFee.toString()}
+                            </Text>
+                          </View>
+                        </View>
+                        <Divider />
+                        <View style={{ flexDirection: 'row' }}>
+                          <View style={{ flex: 1, flexDirection: 'column' }}>
+                            <Text style={{ margin: 10, fontWeight: 'bold' }}>
+                              Total
+                            </Text>
+                          </View>
+                          <View>
+                            <Text style={{ margin: 10, fontWeight: 'bold' }}>
+                              Rs. {this.renderTotal()}
+                            </Text>
+                          </View>
+                        </View>
+                        <Divider style={{ marginBottom: 15 }} />
+                      </View>
+                      <View>
+                        <ButtonComponent
+                          titleValue="Book Now"
+                          onPressHandler={() => this.onSubmitHandler()}
+                        />
+                      </View>
+                    </View>
                   </View>
-                </>
-              )}
+                </View>
+              </>
+            )}
       </>
     );
   }

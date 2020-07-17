@@ -32,7 +32,9 @@ class MotorScreen extends Component {
             motorList: [],
         };
     }
-
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
     componentDidMount = () => {
         this.setState({ isLoading: true });
         NetInfo.addEventListener(this.handleConnectivityChange);
@@ -88,7 +90,7 @@ class MotorScreen extends Component {
                 ) : false ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
                     <>
                         <Header
-                           navigationScreenValue="Motor Wash"
+                            navigateValue="HomeScreen"
                             navigation={this.props.navigation}
                         />
                         <ScrollView refreshControl={<RefreshControl

@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, Image, ScrollView, Picker} from 'react-native';
-import {getItemTransformedItemDesc} from '../../screens/MotorProductScreen/utils';
+import { View, Text, Image, ScrollView, Picker } from 'react-native';
+import { getItemTransformedItemDesc } from '../../screens/MotorProductScreen/utils';
 import styles from '../../screens/MotorProductScreen/styles';
 import AddCart from '../../components/AddCart/AddCart';
 import * as Images from '../../assets/index';
@@ -50,7 +50,7 @@ class MotorProductList extends React.Component {
             <Image
               style={styles.productImage}
               resizeMode="cover"
-              source={{uri: item.images[0].src}}
+              source={{ uri: item.images[0].src }}
             />
           </View>
         );
@@ -68,65 +68,47 @@ class MotorProductList extends React.Component {
     }
   };
 
-  renderProductImage = ({src}) => {
+  renderProductImage = ({ src }) => {
     return (
       <View style={styles.productImageContainer}>
         <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{uri: src}}
+          source={{ uri: src }}
         />
       </View>
     );
   };
 
   render() {
+    const productList = this.state.productList;
     return (
-      <ScrollView>
-        <View style={styles.productScreenContainer}>
-          {this.state.productList.map(product => {
-            product.sale_price = this.props.price;
-            return (
-            <View style={styles.productContainer} key={product.id.toString()}>
-              <View style={styles.imageViewContainerStyle}>
-                {this.onAvatarImage(product)}
-                <View>
-                  <Text style={styles.productName}>{product.name}</Text>
-                  <Text style={styles.productDesc}>
-                    {getItemTransformedItemDesc(product.short_description)}
-                  </Text>
-                  <View style={styles.priceViewContainerStyle}>
-                    <View style={styles.pricingContainer}>
-                      <Text style={styles.salePrice}>
-                        Rs.{this.props.price}
-                      </Text>
-                    </View>
-                    <View style={styles.addCartOuterViewContainerStyle}>
-                      <View style={styles.imageViewContainerStyle}>
-                        <AddCart
-                          productValue={product}
-                          onAddHandler={product => {
-                            this.props.onAddHandler(product);
-                          }}
-                          handleQuantityChange={(product, type) => {
-                            this.props.handleQuantityChange(product, type);
-                          }}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.pricingContainer}>
-                      <Text style={styles.salePrice}>
-                        Type: {this.props.productType}
-                      </Text>
-                    </View>
-                </View>
+      <View style={{ flex: 1 }}>
+        {productList.map(product =>
+          <View style={styles.container}>
+            <View style={{ flex: 1.5, flexDirection: 'row',backgroundColor:"#ccc" }}>
+              <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
+                <View>{this.onAvatarImage(product)}</View>
+              </View>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={{ fontSize: 25, textTransform: "capitalize", marginLeft: "15%" }}>{product.name}</Text>
               </View>
             </View>
-          )})}
-        </View>
-      </ScrollView>
-    );
+            {/* <View style={{ flex: 0.35, flexDirection: "row" }}>
+              <View style={{ flex: 1, justifyContent: "center", alignItems:"center" }}>
+                <Text style={{fontSize:15, color: "green"}}>Type: {this.props.productType}</Text>
+              </View>
+              <View style={{ flex: 1, justifyContent: "center", alignItems:"center" }}>
+                <Text style={{fontSize:30, color: "green"}}>Rs.{product.price}</Text>
+              </View>
+            </View> */}
+          </View>)}
+
+      </View>
+    )
+
+
   }
 }
+
 export default MotorProductList;
