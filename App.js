@@ -18,6 +18,8 @@ import {CONSUMER_KEY, CONSUMER_SECRET} from "./src/api/Constants";
 import axios from "axios";
 import TestScreen from "./src/api/Home/TestScreen";
 import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
+import MotorScreen from './src/screens/MotorScreen/Motorscreen';
+import MotorProductScreen from './src/screens/MotorProductScreen/MotorProductScreen';
 import CompareProducts from './src/screens/CompareProducts/CompareProduct';
 
 
@@ -107,6 +109,14 @@ class App extends Component {
           <RootStack.Screen
             name="CompareProducts"
             component={CompareProducts}
+          />
+          <RootStack.Screen
+            name="MotorScreen"
+            component={MotorScreen}
+          />
+          <RootStack.Screen
+            name="MotorProductScreen"
+            component={MotorProductScreen}
           />
           <RootStack.Screen
             name="test"

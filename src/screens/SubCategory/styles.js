@@ -123,9 +123,7 @@ const styles = StyleSheet.create({
     marginTop: "1%",
 },
 titleText: {
-  marginLeft: 10,
-  marginRight: 10,
-  marginTop: 20,
+  margin: 10,
   fontFamily: 'notoserif',
   fontWeight: '400',
   fontSize: 20,
