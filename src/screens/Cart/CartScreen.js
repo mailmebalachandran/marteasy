@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, Image, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {Avatar, Divider, Overlay} from 'react-native-elements';
 import * as Images from '../../assets/index';
 import ButtonComponent from '../../components/Button/Button';
@@ -16,7 +10,9 @@ import CartAPI from '../../api/Cart/CartAPI';
 import AddCart from '../../components/AddCart/AddCart';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import * as CommonConstants from '../../constants';
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, {
+  NetInfoCellularGeneration,
+} from '@react-native-community/netinfo';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import styles from './styles';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -35,6 +31,8 @@ class CartScreen extends Component {
       overlayVisible: false,
       isShowError: false,
       IsInternetConnected: true,
+      taxAmount: 0,
+      taxDetailForProducts: [],
     };
     this.getCartDetails();
   }
@@ -115,8 +113,10 @@ class CartScreen extends Component {
           productListData.length > 0
         ) {
           let productWithCount = [];
+          let productWithTax = [];
           productListData.map(items => {
             let obj = {};
+            let taxDetail = {};
             obj = items;
             for (var item in otherStoreProduct) {
               if (otherStoreProduct[item] !== null) {
@@ -128,13 +128,30 @@ class CartScreen extends Component {
                   ) {
                     obj.count = otherStoreProduct[item].products[product].count;
                     productWithCount.push(obj);
+                    let categoryObjectwithTax = obj.categories.filter(cate => {
+                      return cate.id === CommonConstants.CATEGORY_TAX_ID;
+                    });
+                    if (
+                      categoryObjectwithTax !== null &&
+                      categoryObjectwithTax !== undefined
+                    ) {
+                      taxDetail.productId = items.id;
+                      taxDetail.count =
+                        otherStoreProduct[item].products[product].count;
+                      taxDetail.amount = items.sale_price;
+                      productWithTax.push(taxDetail);
+                    }
                   }
                 }
               }
             }
           });
           this.setState(
-            {productList: productWithCount, isCartEmpty: false},
+            {
+              productList: productWithCount,
+              isCartEmpty: false,
+              taxDetailForProducts: productWithTax,
+            },
             () => {
               this.totalAmountCountHandler();
               this.setState({isLoading: false});
@@ -236,8 +253,11 @@ class CartScreen extends Component {
 
   checkCountDetails = async (storeId, productId, count, amount) => {
     let countDetail = [];
-
     this.state.countDetail = [];
+    if(count === 0)
+    {
+      this.setState({isLoading: true});
+    }
     let asyncDetails = await AsyncStorage.getItem('Cart');
     if (asyncDetails != null) {
       let asyncDetailsTemp = JSON.parse(asyncDetails);
@@ -350,11 +370,32 @@ class CartScreen extends Component {
         } else {
           this.setState({isViewCart: false});
         }
-        this.setState({productCount: count, productAmount: amount}, () => {
+        this.setState({productCount: count, productAmount: amount, isLoading: false}, () => {
           this.storeDataToStorage(countDetail);
+          this.taxUpdateDetails(countDetail);
         });
       }
     }
+  };
+
+  taxUpdateDetails = countDetail => {
+    let productWithTax = [];
+    countDetail.map(item => {
+      let categoryObjectwithTax = item.categories.filter(cate => {
+        return cate.id === CommonConstants.CATEGORY_TAX_ID;
+      });
+      if (
+        categoryObjectwithTax !== null &&
+        categoryObjectwithTax !== undefined
+      ) {
+        let taxDetail = {};
+        taxDetail.productId = items.id;
+        taxDetail.count = otherStoreProduct[item].products[product].count;
+        taxDetail.amount = items.sale_price;
+        productWithTax.push(taxDetail);
+      }
+    });
+    this.setState({taxDetailForProducts: productWithTax});
   };
 
   storeDataToStorage = async storeCount => {
@@ -402,15 +443,19 @@ class CartScreen extends Component {
   totalAmountCountHandler = () => {
     let totalCount = 0;
     let totalAmount = 0;
+    let taxAmount = 0;
     this.state.productList.map(item => {
       totalCount += item.count;
       totalAmount += item.count * item.sale_price;
+      taxAmount +=
+          ((item.count * item.sale_price) / 100) * CommonConstants.TAX_AMOUNT;
     });
-    let totalAllAmount = totalAmount + this.state.deliveryAmount;
+    let totalAllAmount = Math.round(totalAmount + this.state.deliveryAmount + taxAmount);
     this.setState({
       totalCount: totalCount,
       totalAmount: totalAmount,
       totalAllAmount: totalAllAmount,
+      taxAmount:taxAmount
     });
   };
 
@@ -430,8 +475,7 @@ class CartScreen extends Component {
                 {this.state.isLoading ? (
                   <MenuLoader />
                 ) : (
-                  <View
-                    style={styles.wholeViewContainerStyle}>
+                  <View style={styles.wholeViewContainerStyle}>
                     <StatusBarComponent />
                     <Image
                       source={Images.EMPTYCART}
@@ -474,7 +518,8 @@ class CartScreen extends Component {
                               shadowOpacity: 0.25,
                               shadowRadius: 3.84,
                               elevation: 5,
-                            }} key={item.id.toString()}>
+                            }}
+                            key={item.id.toString()}>
                             <View style={{flex: 1, flexDirection: 'row'}}>
                               <View style={{flex: 1, flexDirection: 'column'}}>
                                 <Text style={{fontSize: 16}}>{item.name}</Text>
@@ -561,11 +606,16 @@ class CartScreen extends Component {
                               Price ( {this.state.totalCount} Item
                               {this.state.totalCount > 1 ? 's' : ''} )
                             </Text>
+                            <Text style={{marginTop: 10,marginLeft: 10, marginRight: 10}}>Tax </Text>
+                            <Text style={{fontSize:9, marginLeft: 10}}>(Tax applicable to food items only)</Text>
                             <Text style={{margin: 10}}>Delivery Fee</Text>
                           </View>
                           <View>
                             <Text style={{margin: 10}}>
                               Rs. {this.state.totalAmount}
+                            </Text>
+                            <Text style={{margin: 10}}>
+                              Rs. {this.state.taxAmount}
                             </Text>
                             <Text style={{margin: 10}}>
                               Rs. {this.state.deliveryAmount}
