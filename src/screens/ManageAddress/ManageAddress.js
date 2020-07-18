@@ -47,35 +47,37 @@ class ManageAddress extends Component {
             }
         });
         this.setState({ isLoading: true });
+        this.getAddress();
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
-            isUserLoggedIn().then((loginDetails) => {
-                const user = JSON.parse(loginDetails);
-                if (user) {
-                    Axios.get(
-                        'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-                        {
-                            params: {
-                                email: user.user_email,
-                                consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                                consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
-                            },
-                        },
-                    )
-                        .then(res => {
-                            this.setState({
-                                userDetails: res.data[0]
-                            })
-                            this.setState({ isLoading: false })
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                } else {
-                    this.props.navigation.navigate("Account");
-                }
-            })
+            this.getAddress();
         })
     };
+
+    getAddress = () => {
+        isUserLoggedIn().then((loginDetails) => {
+            const user = JSON.parse(loginDetails);
+            if (user) {
+                Axios.get(
+                    'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                    {
+                        params: {
+                            email: user.user_email,
+                        },
+                    },
+                )
+                    .then(res => {
+                        this.setState({
+                            userDetails: res.data[0]
+                        })
+                        this.setState({ isLoading: false })
+                    })
+                    .catch(err => {
+                    });
+            } else {
+                this.props.navigation.navigate("Account");
+            }
+        })
+    }
 
     renderBillingAddress = (userDetails) => {
         if (userDetails !== undefined) {
@@ -235,28 +237,28 @@ class ManageAddress extends Component {
     render() {
         return (
             <SafeAreaView>
-                {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : 
+                {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> :
                     this.state.isLoading ? <MenuLoader /> : (<>
-                    <View style={styles.orderSectionTitleContainer}>
-                        <TouchableOpacity
-                            onPress={
-                                this.navigateToProfile
-                            }
-                        >
-                            <FeatherIcon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
-                        </TouchableOpacity>
-                        <Text style={styles.orderSectionTitle}>Manage Address</Text>
-                    </View>
-                    <ScrollView>
-                        <StatusBarComponent styleType={0} />
-                        <View style={styles.continerStyles}>
-                            <View style={styles.innerContainer}>
-                                {this.renderBillingAddress(this.state.userDetails)}
-                                {this.renderShippingAddress(this.state.userDetails)}
-                            </View>{/* End InnerContainer */}
+                        <View style={styles.orderSectionTitleContainer}>
+                            <TouchableOpacity
+                                onPress={
+                                    this.navigateToProfile
+                                }
+                            >
+                                <FeatherIcon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
+                            </TouchableOpacity>
+                            <Text style={styles.orderSectionTitle}>Manage Address</Text>
                         </View>
-                    </ScrollView>
-                </>)}
+                        <ScrollView>
+                            <StatusBarComponent styleType={0} />
+                            <View style={styles.continerStyles}>
+                                <View style={styles.innerContainer}>
+                                    {this.renderBillingAddress(this.state.userDetails)}
+                                    {this.renderShippingAddress(this.state.userDetails)}
+                                </View>{/* End InnerContainer */}
+                            </View>
+                        </ScrollView>
+                    </>)}
             </SafeAreaView>
         );
     }

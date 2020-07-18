@@ -44,7 +44,6 @@ class CartScreen extends Component {
       let value = await AsyncStorage.getItem('Cart');
       return JSON.stringify(value);
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -361,7 +360,6 @@ class CartScreen extends Component {
     try {
       await AsyncStorage.setItem('Cart', JSON.stringify(storeCount));
     } catch (err) {
-      console.log('Error Details ' + err);
     }
   };
 

@@ -1,10 +1,10 @@
-import { Dimensions, AsyncStorage } from "react-native";
+import { Dimensions } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 export const screenWidth = Math.round(Dimensions.get('window').width);
 export const screenHeight = Math.round(Dimensions.get('window').height);
 
 export const isUserLoggedIn = async () => {
     const userDetails = await AsyncStorage.getItem('userAuth');
-    console.log("async dets", userDetails);
     if (userDetails !== null) {
         return userDetails;
     } else {

@@ -30,7 +30,7 @@ class AddCart extends Component {
                 this.props.handleQuantityChange(this.props.productValue, 'DEC')
               }>
               <View style={styles.minusViewStyle}>
-                <Icon name="minus" size={15} style={{marginTop: 5}} />
+                <Icon name="minus" size={13} style={{marginTop: 5}} />
               </View>
             </TouchableOpacity>
           </View>
@@ -45,7 +45,7 @@ class AddCart extends Component {
                 this.props.handleQuantityChange(this.props.productValue, 'INC')
               }>
               <View style={styles.plusViewStyle}>
-                <Icon name="plus" size={15} style={{marginTop: 5}} />
+                <Icon name="plus" size={13} style={{marginTop: 5}} />
               </View>
             </TouchableOpacity>
           </View>

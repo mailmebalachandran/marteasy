@@ -30,11 +30,9 @@ class SignUpScreen extends Component {
       password: this.state.Password,
       roles: this.state.Roles
     };
-    console.log(userDetails);
     let validationResult = Validation.SignUpValidation(userDetails);
     if (validationResult.isValidated) {
       let result = await SignUpAPI.SignUpValidation(userDetails);
-      console.log(result)
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
       } else {

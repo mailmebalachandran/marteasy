@@ -14,7 +14,8 @@ import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
 import unescape from "unescape";
-class MainCategory extends Component {
+import MotorProductScreen from '../../screens/MotorProductScreen/MotorProductScreen'
+class MotorMainCategory extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,25 +75,32 @@ class MainCategory extends Component {
             );
         }
     };
+    isVariant = (product) => {
+        if(product.variations.length !== 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     render() {
-
         return (
             <View style={styles.mainCategoryContainer}>
                 {/* Main Category 2 column */}
                 {this.props.categories.map(cat => {
                     return (
-                        <View 
+                        <View
                             style={[styles.categoryItemContainer2Col, styles.mainCategory]}
                             key={cat.id}
                         >
                             <TouchableOpacity
                                 onPress={() => {
                                     catName = unescape(cat.name);
-                                    this.props.navigation.navigate('SubCategoryScreen', {
-                                    catId: cat.id,
-                                    catName: catName
-                                  });
+                                    this.props.navigation.navigate('MotorProductScreen', {
+                                        storeId: cat.store.id,
+                                        product: cat,
+                                        isVariant: this.isVariant(cat),
+                                    });
                                 }}>
                                 <View
                                     style={{
@@ -105,7 +113,7 @@ class MainCategory extends Component {
                                         elevation: 25,
                                     }}>
                                     <Image
-                                        source={{ uri: cat.image.src }}
+                                        source={{ uri: cat.images[0].src }}
                                         style={{
                                             resizeMode: 'contain',
                                             height: 100,
@@ -125,4 +133,4 @@ class MainCategory extends Component {
         )
     }
 }
-export default MainCategory;
+export default MotorMainCategory;
