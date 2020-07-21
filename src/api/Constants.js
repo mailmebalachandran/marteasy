@@ -20,5 +20,6 @@ export const getMotorProductsId = GLOBAL_VALUE + '/wp-json/wc/v3/products/';
 export const GetProductBasedOnProductIdAPI = GLOBAL_VALUE + "/wp-json/wc/v3/products/";
 export const getSubCategoryBasedOnStoreAPI= GLOBAL_VALUE+'/wp-json/custom-api/v1/store/subcatagory/';
 export const getProductsBasedOnStoreSubcategoryAPI=GLOBAL_VALUE+'/wp-json/custom-api/v1/store/productsbycatagory?';
+
 export const CONSUMER_KEY = 'ck_e50cc73036d4a2023cede3a734b41f742f7f29dd';
 export const CONSUMER_SECRET = 'cs_99f96f2ee5a1bb3df0dc3df27aec6726e1095402';
