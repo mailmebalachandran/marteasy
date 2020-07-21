@@ -19,7 +19,5 @@ export const getMotorProducts = GLOBAL_VALUE + '/wp-json/wc/v3/products?tag=';
 export const getMotorProductsId = GLOBAL_VALUE + '/wp-json/wc/v3/products/';
 export const GetProductBasedOnProductIdAPI = GLOBAL_VALUE + "/wp-json/wc/v3/products/";
 
-export const getSingleSubCategoryDetails = "https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/products/categories/";
-
 export const CONSUMER_KEY = 'ck_e50cc73036d4a2023cede3a734b41f742f7f29dd';
 export const CONSUMER_SECRET = 'cs_99f96f2ee5a1bb3df0dc3df27aec6726e1095402';
