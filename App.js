@@ -21,6 +21,7 @@ import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryPro
 import MotorScreen from './src/screens/MotorScreen/Motorscreen';
 import MotorProductScreen from './src/screens/MotorProductScreen/MotorProductScreen';
 import CompareProducts from './src/screens/CompareProducts/CompareProduct';
+import CategoryProductScreen from './src/screens/Products/CategoryProductScreen';
 
 
 axios.interceptors.request.use((config) => {
@@ -117,6 +118,10 @@ class App extends Component {
           <RootStack.Screen
             name="MotorProductScreen"
             component={MotorProductScreen}
+          />
+           <RootStack.Screen
+            name="CategoryProductScreen"
+            component={CategoryProductScreen}
           />
           <RootStack.Screen
             name="test"

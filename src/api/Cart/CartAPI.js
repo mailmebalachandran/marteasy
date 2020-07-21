@@ -2,6 +2,7 @@ import Axios from 'axios';
 import * as Constants from '../Constants';
 
 const GetCartDetails = async products => {
+  console.log("prod",products);
   try {
     const url =
       Constants.CartGetProductsAPI +

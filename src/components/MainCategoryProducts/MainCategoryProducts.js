@@ -7,14 +7,16 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native';
-import styles from './styles';
+import styles from '../../components/MainCategoryProducts/styles';
 import { Card } from 'react-native-elements';
 import * as ThemeColor from '../../themes/colors';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
 import unescape from "unescape";
-class MainCategory extends Component {
+import ProductsScreen from '../../screens/Products/ProductsScreen';
+import ProductAPI from '../../api/Products/ProductAPI';
+class MainCategoryProducts extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,6 +30,7 @@ class MainCategory extends Component {
                     gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_1616_v_3_500_1592303534.jpg"
                 }
             ],
+            productList: this.props.categories
         }
     }
     onAvatarImage = item => {
@@ -76,23 +79,23 @@ class MainCategory extends Component {
     };
 
     render() {
-
         return (
             <View style={styles.mainCategoryContainer}>
                 {/* Main Category 2 column */}
                 {this.props.categories.map(cat => {
                     return (
-                        <View 
+                        <View
                             style={[styles.categoryItemContainer2Col, styles.mainCategory]}
                             key={cat.id}
                         >
                             <TouchableOpacity
-                                onPress={() => {
+                                onPress={async () => {
+                                    const catid = cat.term_id;
                                     catName = unescape(cat.name);
-                                    this.props.navigation.navigate('SubCategoryScreen', {
-                                    catId: cat.id,
-                                    catName: catName
-                                  });
+                                    this.props.navigation.navigate('ProductScreen', {
+                                            storeId: this.props.storeId,
+                                            catId: cat.term_id,
+                                    });
                                 }}>
                                 <View
                                     style={{
@@ -104,15 +107,15 @@ class MainCategory extends Component {
                                         shadowRadius: 5,
                                         elevation: 25,
                                     }}>
-                                        
-                                    <Image
+
+                                    {/* <Image
                                         source={{ uri: cat.image.src }}
                                         style={{
                                             resizeMode: 'contain',
                                             height: 100,
                                             width: '100%',
                                         }}
-                                    />
+                                    /> */}
                                 </View>
                                 <Text
                                     style={styles.categoryName}>
@@ -126,4 +129,4 @@ class MainCategory extends Component {
         )
     }
 }
-export default MainCategory;
+export default MainCategoryProducts;

@@ -15,9 +15,10 @@ import * as CommonConstants from '../../constants';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
-import CartAPI from '../../api/Cart/CartAPI';
+import MainCategory from '../Home/MainCategory';
+import MainCategoryProducts from '../../components/MainCategoryProducts/MainCategoryProducts';
 
-class ProductsScreen extends Component {
+class CategoryProductScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,15 +63,9 @@ class ProductsScreen extends Component {
     let storeDetail = await ProductAPI.GetStoreBasedonStoreId(
       this.props.route.params.storeId,
     );
-    const productId=await ProductAPI.getProductsBasedOnStoreSubcategory(this.props.route.params.storeId, this.props.route.params.catId);
-    let tempString='';
-    productId.map(product=>{
-      tempString += product.product_id + ",";
-    })
-    const productList=await ProductAPI.getProductsDataBasedOnStoreSubcategory(tempString);
-    this.setState({productList})
-    
-
+    let productList = await ProductAPI.GetSubcategoryBasedOnStore(
+      this.props.route.params.storeId,
+    );
     if (
       storeDetail !== undefined &&
       storeDetail.isError !== undefined &&
@@ -85,6 +80,7 @@ class ProductsScreen extends Component {
     ) {
       this.setState({isShowError: true, isLoading: false});
     }
+
     let list = [];
     this.state.list = [];
     let asyncDetails = await AsyncStorage.getItem('Cart');
@@ -446,9 +442,9 @@ class ProductsScreen extends Component {
             <View style={{flex: 1}}>
               <StatusBarComponent styleType={0} />
               <Header
-                navigationScreenValue="Products"
+                navigationScreenValue="CategoryProducts"
                 navigation={this.props.navigation}
-                navigateValue = "CategoryProductScreen"
+                navigateValue = "HomeScreen"
               />
               <View
                 style={{
@@ -496,16 +492,9 @@ class ProductsScreen extends Component {
                   <Line />
                 </View>
                 {this.state.productList.length > 0 && (
-                  <Product
-                    {...this.state}
-                    onAddHandler={product => this.onAddHandler(product)}
-                    storeId={this.props.route.params.storeId}
-                    handleQuantityChange={(item, type) => {
-                      this.handleQuantityChange(item, type);
-                    }}
-                    isCompareProduct ={true}
-                    navigation={this.props.navigation}
-                  />
+                  <MainCategoryProducts categories={this.state.productList}
+                  storeId={this.props.route.params.storeId}
+                  navigation={this.props.navigation}/>
                 )}
                 {this.state.productList.length == 0 && (
                   <View style={{flex: 1, margin: 20}}>
@@ -528,4 +517,4 @@ class ProductsScreen extends Component {
   }
 }
 
-export default ProductsScreen;
+export default CategoryProductScreen;
