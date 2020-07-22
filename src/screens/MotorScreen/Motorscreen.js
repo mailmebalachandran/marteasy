@@ -19,6 +19,7 @@ import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import MotorMainCategory from './MotorMainCategoryScreen';
 import MotorAPI from '../../api/Motor/MotorAPI';
 import Header from '../../components/Header/Header';
+import MaterialIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 class MotorScreen extends Component {
     constructor(props) {
@@ -90,6 +91,7 @@ class MotorScreen extends Component {
                 ) : false ? <ErrorOverlay errorType={"API"} reload={this.componentDidMount} /> : (
                     <>
                         <Header
+                            navigationScreenValue="Motor Wash"
                             navigateValue="HomeScreen"
                             navigation={this.props.navigation}
                         />
@@ -98,7 +100,14 @@ class MotorScreen extends Component {
                             onRefresh={this._onRefresh}
                         />}>
                             <StatusBarComponent styleType={0} />
-                            <View style={{ flex: 1 }}>
+                            <View style={{ flex: 1, }}>
+                               
+                                <Text
+                                    style={styles.titleText}>
+                                         <MaterialIcons name='van-passenger' size={30}/>
+                                    {/* <MaterialIcons name="fruit-cherries" size={20} color="grey" /> */}
+                                    {'  '}Shop By Motor Wash
+            </Text>
                                 <View style={{ backgroundColor: 'white' }}>
                                     <MotorMainCategory
                                         categories={this.state.motorList}

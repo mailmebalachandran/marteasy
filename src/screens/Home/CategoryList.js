@@ -119,7 +119,7 @@ class CategoryList extends Component {
             <View style={styles.categoryItemContainer} key={cat.id}>
               <TouchableNativeFeedback
                 onPress={() => {
-                  this.props.navigation.navigate((!this.props.isShowStore ? 'SubCategoryProducts' : 'ProductScreen'), {
+                  this.props.navigation.navigate((!this.props.isShowStore ? 'SubCategoryProducts' : 'CategoryProductScreen'), {
                     storeId: cat.id,
                     storeName: cat.name
                   })

@@ -28,7 +28,9 @@ import {
   HOME_PROMO_2,
   HOME_PROMO_3,
   MOTOR_WASH_IMAGE1,
-  MOTOR_WASH_IMAGE2
+  MOTOR_WASH_IMAGE2,
+  MOTOR_WASH_IMAGE3,
+  MOTOR_WASH_IMAGE8
 } from "../../assets/index";
 import styles from './styles';
 import MainCategory from "./MainCategory";
@@ -195,10 +197,10 @@ class HomeScreen extends Component {
                 {/* MotorScreen */}
                 <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('MotorScreen',
                   {tagId: this.state.tagDetails.id});}}>
-                  <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center" }}>
+                  <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center",alignItems: "center", backgroundColor: "white" }}>
                     <View>
-                      <Image source={MOTOR_WASH_IMAGE2} />
-                      <Text style={{textTransform: "capitalize", marginHorizontal:"40%"}}>{this.state.tagDetails.name}</Text>
+                      <Image source={MOTOR_WASH_IMAGE8} />
+                      <Text style={{textTransform: "capitalize",fontWeight:"bold", marginHorizontal:"40%",margin:"5%"}}>{this.state.tagDetails.name}</Text>
                     </View>
                   </View>
                 </TouchableNativeFeedback>

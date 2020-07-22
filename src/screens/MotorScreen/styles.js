@@ -67,7 +67,17 @@ const styles = StyleSheet.create({
         height: 200,
         width: "100%",
         resizeMode: 'contain',
-    }
+    },
+    titleText: {
+        margin: 10,
+        fontFamily: 'notoserif',
+        fontWeight: '400',
+        fontSize: 20,
+        textAlign: "center",
+        backgroundColor: "#E5F4F9",
+        paddingTop: "3%",
+        paddingBottom: "3%",
+      },
 });
 
 export default styles;
