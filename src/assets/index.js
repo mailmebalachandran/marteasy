@@ -42,3 +42,5 @@ export const FRUIT_BANNER_IMAGE4=require('./images/Categories/CatFruits/CAT_FRUI
 //Motor Wash 
 export const MOTOR_WASH_IMAGE1=require('../assets/images/motorwash.png');
 export const MOTOR_WASH_IMAGE2=require('../assets/images/motor.png')
+export const MOTOR_WASH_IMAGE3=require('../assets/images/car.jpg');
+export const MOTOR_WASH_IMAGE8=require('../assets/images/carwashimage.jpg');

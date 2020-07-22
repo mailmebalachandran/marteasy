@@ -86,7 +86,7 @@ class MotorProductList extends React.Component {
       <View style={{ flex: 1 }}>
         {productList.map(product =>
           <View style={styles.container}>
-            <View style={{ flex: 1.5, flexDirection: 'row',backgroundColor:"#ccc" }}>
+            <View style={{ flex: 1, flexDirection: 'row',backgroundColor:"#ccc" }}>
               <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
                 <View>{this.onAvatarImage(product)}</View>
               </View>
