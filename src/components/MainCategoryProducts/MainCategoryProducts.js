@@ -108,14 +108,14 @@ class MainCategoryProducts extends Component {
                                         elevation: 25,
                                     }}>
 
-                                    {/* <Image
+                                    <Image
                                         source={{ uri: cat.image.src }}
                                         style={{
                                             resizeMode: 'contain',
                                             height: 100,
                                             width: '100%',
                                         }}
-                                    /> */}
+                                    />
                                 </View>
                                 <Text
                                     style={styles.categoryName}>
