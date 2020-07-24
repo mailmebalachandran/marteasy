@@ -200,7 +200,9 @@ class HomeScreen extends Component {
                   <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center",alignItems: "center", backgroundColor: "white" }}>
                     <View>
                       <Image source={MOTOR_WASH_IMAGE8} />
-                      <Text style={{textTransform: "capitalize",fontWeight:"bold", marginHorizontal:"40%",margin:"5%"}}>{this.state.tagDetails.name}</Text>
+                      <Text style={{textTransform: "capitalize",fontWeight:"bold",
+                      textAlign: 'center',margin: '5%',}}>
+                        {this.state.tagDetails.name}</Text>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
