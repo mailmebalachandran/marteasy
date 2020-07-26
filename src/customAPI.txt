@@ -1,0 +1,155 @@
+<?php
+/*
+Plugin Name: Custom API
+*/
+//Dashboard Screen APIs
+function getDashboardOrdersSummary( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $orderObj->sales = $wpdb->get_var( "SELECT SUM(order_total) FROM wp_dokan_orders WHERE seller_id = '$id'");
+  $orderObj->earning = $wpdb->get_var( "SELECT SUM(net_amount) FROM wp_dokan_orders WHERE seller_id = '$id'");
+  $orderObj->total = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id'");
+  $orderObj->processing = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id' AND order_status = 'wc-processing'" );
+  $orderObj->completed = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id' AND order_status = 'wc-completed'" );
+  $orderObj->pending = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id' AND order_status = 'wc-pending'" );
+  $orderObj->cancelled = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id' AND order_status = 'wc-cancelled'" );
+  $orderObj->refunded = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id' AND order_status = 'wc-refunded'" );
+  $orderObj->onhold = $wpdb->get_var( "SELECT COUNT(*) FROM wp_dokan_orders WHERE seller_id = '$id' AND order_status = 'wc-onhold'" );
+  
+  $results = $orderObj;
+  return $results;
+}
+//End Dashboard Screen APIs
+function getConstants(){
+    chdir('wp-content/plugins/custom-api/');
+    $string = file_get_contents("constants.json");
+    $json_a = json_decode($string, true);
+    $dir=getcwd();
+    return $json_a;
+}
+//ORDERS SCREEN
+//Get Store Orders
+function getStoreOrders( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $results = $wpdb->get_results( "SELECT wp_dokan_orders.order_id, order_total, net_amount as earning, order_status, date_created, user_nicename as customer_name FROM wp_dokan_orders 
+INNER JOIN wp_wc_order_stats ON (wp_dokan_orders.order_id = wp_wc_order_stats.order_id) 
+INNER JOIN wp_users ON (wp_users.ID = wp_wc_order_stats.customer_id)
+WHERE wp_dokan_orders.seller_id =  '$id'");
+  return $results;
+}
+
+//Get Store Products
+function getStoreproducts( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $results = $wpdb->get_results( "SELECT ID FROM wp_posts WHERE wp_posts.post_type='product' AND wp_posts.post_status!='trash'AND post_author = '$id'");
+  return $results;
+}
+
+//Get a Single Product Revenue
+function getSingleProductRevenue( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $results = $wpdb->get_results( "SELECT SUM(product_net_revenue) as revenue FROM wp_wc_order_product_lookup WHERE product_id = '$id'");
+  return $results;
+}
+
+//Get Store Products Report
+function getStoreproductsReport( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $orderObj->total = $wpdb->get_var( "SELECT COUNT(*) FROM wp_posts WHERE post_type='product' AND post_author = '$id'");
+  $orderObj->pending = $wpdb->get_var( "SELECT COUNT(*) FROM wp_posts WHERE post_type='product' AND post_author = '$id'AND post_status='pending'");
+  $orderObj->oniline = $wpdb->get_var( "SELECT COUNT(*) FROM wp_posts WHERE post_type='product' AND post_author = '$id'AND post_status='publish'");
+  $orderObj->offline = $wpdb->get_var( "SELECT COUNT(*) FROM wp_posts WHERE post_type='product' AND post_author = '$id'AND post_status='trash'");
+  
+  $results = $orderObj;
+  return $results;
+}
+
+//Get Store Catagory
+function getStoreCatagory( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $results = $wpdb->get_results("SELECT wtt.term_id,wt.name, count(*) FROM wp_term_relationships wtr inner join wp_posts wp on wtr.object_id = wp.ID inner join wp_term_taxonomy wtt on wtt.term_taxonomy_id = wtr.term_taxonomy_id inner join wp_terms wt on wt.term_id = wtt.term_id where wp.post_author='$id' and wp.post_type ='product' and wtt.taxonomy='product_cat' and wtt.parent=0 group by wtt.term_id");
+  return $results;
+}
+
+//Get Store Sub Catagory
+function getStoreSubCatagory( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $results = $wpdb->get_results("SELECT (select guid from wp_posts where id in (SELECT meta_value FROM `wp_termmeta` where meta_key='thumbnail_id' and term_id = wt.term_id)) as image, wtt.term_id,wt.name FROM wp_term_relationships wtr inner join wp_posts wp on wtr.object_id = wp.ID inner join wp_term_taxonomy wtt on wtt.term_taxonomy_id = wtr.term_taxonomy_id inner join wp_terms wt on wt.term_id = wtt.term_id where wp.post_author='$id' and wp.post_type ='product' and wtt.taxonomy='product_cat' and wtt.parent in (select term_id from wp_term_taxonomy where parent=0) group by wtt.term_id");
+    $res = array_map(function ($post) {
+        $src->src = $post->image;
+        $post->image = $src;
+        return $post;
+    }, $results);
+  return $res;
+}
+
+function getProductsFromCatagory( $request ) {
+  global $wpdb;
+  $param = $request->get_params();
+  
+  $storeid=$param['store_id'];
+  $catagoryid = $param['catagory_id'];
+
+  $results = $wpdb->get_results("SELECT wtr.Object_Id as product_id FROM wp_term_relationships wtr 
+inner join wp_posts wp  on wtr.object_id = wp.ID
+inner join wp_term_taxonomy wtt on wtt.term_taxonomy_id = wtr.term_taxonomy_id
+inner join wp_terms wt on wt.term_id = wtt.term_id
+where wp.post_author='$storeid' 
+and wtt.term_taxonomy_id ='$catagoryid' or wtt.parent ='$catagoryid'
+and wtt.taxonomy='product_cat' group by wtr.object_Id");
+    
+  return $results;
+}
+
+//Custom Routes
+
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'custom-api/v1', '/dashboard/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getDashboardOrdersSummary',
+  ) );
+  
+  register_rest_route( 'custom-api/v1', '/constants/', array(
+    'methods' => 'GET',
+    'callback' => 'getConstants',
+  ) );
+  //Get Store Orders Details
+  register_rest_route( 'custom-api/v1', '/store/orders/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getStoreOrders',
+  ) );
+  //Get Store Products Details
+  register_rest_route( 'custom-api/v1', '/store/products/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getStoreproducts',
+  ) );
+  //Get Single Product Revenue
+  register_rest_route( 'custom-api/v1', '/store/product/revenue/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getSingleProductRevenue',
+  ) );
+  //Get Store Products Report
+  register_rest_route( 'custom-api/v1', '/store/products/report/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getStoreproductsReport',
+  ) );
+  //Get Store Catagory Details
+  register_rest_route( 'custom-api/v1', '/store/catagory/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getStoreCatagory',
+  ) );
+  register_rest_route( 'custom-api/v1', '/store/subcatagory/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getStoreSubCatagory',
+  ) );
+  register_rest_route( 'custom-api/v1', '/store/productsbycatagory', array(
+    'methods' => 'GET',
+    'callback' => 'getProductsFromCatagory',
+  ) );
+} );
