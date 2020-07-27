@@ -126,6 +126,10 @@ class App extends Component {
         component={CategoryProductScreen}
       />
       <RootStack.Screen
+        name="Account"
+        component={this.profileStack}
+      />
+      <RootStack.Screen
         name="test"
         component={TestScreen}
       />

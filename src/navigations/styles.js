@@ -26,7 +26,7 @@ const styles=StyleSheet.create({
     },
     email:{
         fontSize:17,
-        textTransform: "lowercase",
+        textTransform: "capitalize",
         color: "green"
     },
     drawerSection:{
