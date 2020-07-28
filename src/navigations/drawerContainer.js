@@ -15,9 +15,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import ShopByCategory from "../navigations/shopByCategoryMenu";
 import HomeAPI from '../api/Home/HomeAPI';
 
-
-
-
 class DrawerContainer extends Component {
 
     state = {
@@ -57,7 +54,8 @@ class DrawerContainer extends Component {
                         (<ShopByCategory onPress={(data) => {
                             this.setState({ viewShop: data })
                         }}
-                            categoryList={this.state.categoryList}
+                           
+                        categoryList={this.state.categoryList}
                         />)
                         :
                         (<DrawerContentScrollView {...this.props}>
