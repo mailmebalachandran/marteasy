@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight:'bold',
         color: "#4a4a4a",
-        fontWeight: "normal"
+        fontWeight: "normal",
+        marginLeft: "3%"
     },
     row:{
         flexDirection: 'row',
         justifyContent:'flex-start',
         width: "100%",
         height:56,
-        paddingLeft:25,
         paddingRight:18,
         alignItems:'center',
     },
