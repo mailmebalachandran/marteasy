@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, LayoutAnimation, Platform, UIManager } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer"
+import Accordian from '../components/Accordian/accordian';
 import styles from "./styles";
 import { Avatar, Divider } from 'react-native-elements';
 import { MOTOR_WASH_IMAGE1, MOTOR_WASH_IMAGE8 } from "../assets/index";
@@ -22,54 +23,53 @@ class ShopByCategory extends Component {
     state = {
         viewSection: false,
         viewShop: '',
-        categoryList:[]
+        categoryList: [],
+        pressIn: false,
     }
 
     componentDidMount = async () => {
-        const result= await HomeAPI.getParentCategories();
-        this.setState({categoryList: result})
+        const result = await HomeAPI.getParentCategories();
+        this.setState({ categoryList: result })
     }
 
-
-    handleShopByCategory = () => {
-        const Drawer = createDrawerNavigator();
-        <NavigationContainer>
-            <Drawer.Navigator
-                drawerContent={
-                    (props) => <DrawerContainer {...props} />}
-                drawerStyle={{ width: "85%" }}
-                {...this.props}
-            >
-            </Drawer.Navigator>
-        </NavigationContainer>
+    toggleExpand = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        this.setState({ expanded: !this.state.expanded })
     }
 
-
+    renderAccordians = () => {
+        const items = [];
+        let item;
+        console.log('In renderAccordians', this.props.categoryList)
+        const categoryList = this.props.categoryList
+        for (item of categoryList) {
+            items.push(
+                <Accordian
+                    title={item.name}
+                    data={item.name}
+                />
+            );
+        }
+        return items;
+    }
 
     render() {
         return (
             <DrawerContentScrollView {...this.props}>
-                <View style={{ flex: 1, flexDirection: "row", backgroundColor:"#4a4a4a"  }}>
+                <View style={{ flex: 1, flexDirection: "row", backgroundColor: "#4a4a4a" }}>
                     <View style={{ flex: 0.4, }}>
                         <DrawerItem
-                            icon={() => (<FontAwesome5 name={'arrow-left'} size={20} color={"white"}/>)}
+                            icon={() => (<FontAwesome5 name={'arrow-left'} size={20} color={"white"} />)}
                             label=""
                             onPress={() => this.props.onPress(false)} />
                     </View>
                     <DrawerItem label="Shop By Category" inactiveTintColor={"white"} />
                 </View>
-                {this.props.categoryList && this.props.categoryList.map(category=>
-                    <TouchableOpacity>
-                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center",padding: "3%" }}>
-                        <View style={{ flex: 8, marginLeft:"1%",}}>
-                <Text style={{fontSize: 14, fontWeight: "normal", marginTop: "2%"}}>{unescape(category.name)}</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <AntDesign name={"plus"} size={20} />
-                        </View>
-                    </View>
-                    </TouchableOpacity>)}
-                
+                <View style={{
+                    flex: 1, flexDirection: "column",
+                }}>
+                    {this.renderAccordians()}
+                </View>
             </DrawerContentScrollView>
         )
     }
