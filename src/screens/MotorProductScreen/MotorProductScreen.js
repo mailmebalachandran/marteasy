@@ -141,7 +141,7 @@ class MotorProductScreen extends Component {
                           <View>{this.onAvatarImage(this.state.product)}</View>
                         </View>
                         <View style={{ flex: 1, justifyContent: "center" }}>
-                          <Text style={{ fontSize: 22, textTransform: "capitalize", marginLeft: "25%" }}>{this.state.product.name}</Text>
+                          <Text style={{ fontSize: 22, textTransform: "capitalize", marginLeft: "10%" }}>{this.state.product.name}</Text>
                         </View>
                       </View>
                     </View>
@@ -180,13 +180,13 @@ class MotorProductScreen extends Component {
                       <Divider />
                       <View style={{ flexDirection: 'row' }}>
                         <View style={{ flex: 1, flexDirection: 'column' }}>
+                        {isVariant &&
                           <View style={{flex: 1,flexDirection: "row"}}>
-                          <MaterialIcons style={{marginTop: "5%"}} name={'library-books'} color={ThemeColor.DarkColor} size={17} />
-                          {isVariant &&
+                          <MaterialIcons style={{marginTop: "5%"}} name={'library-books'} color={ThemeColor.DarkColor} size={17} />   
                             <Text style={{ margin: 10 }}>
                               Item Type
-                            </Text>}
-                          </View>
+                            </Text>
+                          </View>}
                           <View style={{flex: 1, flexDirection: "row"}}>
                           <MaterialIcons style={{marginTop: "5%"}}name={'monetization-on'} color={ThemeColor.DarkColor} size={17} />
                           <Text style={{ margin: 10 }}>

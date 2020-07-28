@@ -87,7 +87,7 @@ class App extends Component {
       initialRouteName="HomeScreen">
       <RootStack.Screen
         name="LoginScreen"
-        component={LoginScreen}
+        component={LoginScreen} 
       />
       <RootStack.Screen
         name="SignUpScreen"
