@@ -16,20 +16,21 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeAPI from '../api/Home/HomeAPI';
 import unescape from "unescape";
 import DrawerMenu from "./drawerMenu";
-import Theme from "../themes/colors"
-
+import Theme from "../themes/colors";
+let isAlreadyExpanded = false;
+var previousId = 0;
 class ShopByCategory extends Component {
 
     state = {
         viewSection: false,
         viewShop: '',
-        categoryList: [],
         pressIn: false,
+        isExpanded: false,
+        currentExpandedMenuId: 0,
+        isAlreadyExpanded: false,
     }
 
     componentDidMount = async () => {
-        const result = await HomeAPI.getParentCategories();
-        this.setState({ categoryList: result })
     }
 
     toggleExpand = () => {
@@ -40,31 +41,55 @@ class ShopByCategory extends Component {
     renderAccordians = () => {
         const items = [];
         let item;
-        console.log('In renderAccordians', this.props.categoryList)
         const categoryList = this.props.categoryList
         for (item of categoryList) {
             items.push(
                 <Accordian
                     title={item.name}
-                    data={item.name}
+                    subCatList={this.props.subCatList}
+                    parentId={item.id}
+                    isExpanded={this.getIsExpanded(item.id)}
+                    setCurrentExpandedMenu={(parentId) => this.setCurrentExpandedMenuId(parentId)}
                 />
             );
         }
         return items;
     }
+    setCurrentExpandedMenuId = (parentId) => {
+        this.setState({currentExpandedMenuId: parentId});
+    }
+    getIsExpanded = (currentId) => {
+        let status = false;
+        if(this.state.currentExpandedMenuId === currentId) {
+            console.log("is ids equal : yes")
+            console.log("prev,curr",previousId,currentId)
+            if(isAlreadyExpanded && previousId === currentId) {
+                console.log("in expanded state and same item");
+                isAlreadyExpanded = false;
+                status =  false;
+            } else {
+                console.log("is in expande state and diff item");
+                isAlreadyExpanded = true;
+                status = true;
+            }
+        } else {
+            status = false;
+        }
+        previousId = this.state.currentExpandedMenuId;
+        return status;
+    }
 
     render() {
         return (
             <DrawerContentScrollView {...this.props}>
-                <View style={{ flex: 1, flexDirection: "row", backgroundColor: "#4a4a4a" }}>
-                    <View style={{ flex: 0.4, }}>
+                { <View style={{ flex: 1, flexDirection: "row", backgroundColor: "#4a4a4a" }}> 
                         <DrawerItem
+                            style={{backgroundColor: "#4a4a4a", width: "100%",}}
                             icon={() => (<FontAwesome5 name={'arrow-left'} size={20} color={"white"} />)}
-                            label=""
-                            onPress={() => this.props.onPress(false)} />
-                    </View>
-                    <DrawerItem label="Shop By Category" inactiveTintColor={"white"} />
-                </View>
+                            label="Shop By Category"
+                            onPress={() => this.props.onPress(false)}
+                            inactiveTintColor={"white"} />
+                </View>}
                 <View style={{
                     flex: 1, flexDirection: "column",
                 }}>

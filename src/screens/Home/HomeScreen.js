@@ -41,6 +41,7 @@ import MustHave from "./MustHave";
 import { transformCategoryList } from "./utils";
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import MotorScreen from '../../screens/MotorScreen/Motorscreen';
+import { getOrderedParentCategories } from "../../utils";
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -188,7 +189,7 @@ class HomeScreen extends Component {
                   <Image source={HOME_SHOP_BY_CAT} style={{ width: "100%" }} resizeMode={"contain"} />
 
                   <MainCategory
-                    categories={transformCategoryList(this.state.categoryList, true)}
+                    categories={getOrderedParentCategories(this.state.categoryList)}
                     navigation={this.props.navigation}
                   />
                   {/* <CategoryList

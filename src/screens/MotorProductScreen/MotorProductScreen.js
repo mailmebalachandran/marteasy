@@ -155,7 +155,6 @@ class MotorProductScreen extends Component {
                             mode={"dropdown"}
                             style={{ height: 50, width: "90%", color: ThemeColor.DarkColor, borderRadius: 25, marginLeft: "5%", marginRight: "5%", }}
                             onValueChange={(itemValue, itemIndex) => {
-                              console.log("value, index", itemValue, itemIndex);
                               this.setState({
                                 selectedValue: itemValue,
                                 price: parseFloat(this.state.productVariance[itemIndex].regular_price),

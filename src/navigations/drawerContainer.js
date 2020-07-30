@@ -14,22 +14,27 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import ShopByCategory from "../navigations/shopByCategoryMenu";
 import HomeAPI from '../api/Home/HomeAPI';
+import { getOrderedParentCategories } from "../utils";
+import { getMenuSubcategories } from "./utils";
 
 class DrawerContainer extends Component {
 
     state = {
         viewSection: false,
         viewShop: false,
-        categoryList: []
+        categoryList: [],
+        subCatList: [],
     }
 
     componentDidMount = async () => {
         const result = await HomeAPI.getParentCategories();
-        this.setState({ categoryList: result })
+        const orderedParentCats = getOrderedParentCategories(result);
+        this.setState({ categoryList: orderedParentCats });
+        const subCatList = await getMenuSubcategories(orderedParentCats);
+        this.setState({ subCatList: subCatList });
     }
 
     handleShopByCategory = () => {
-        console.log('In shop')
         this.setState({ viewShop: true })
     }
 
@@ -40,8 +45,8 @@ class DrawerContainer extends Component {
                 <View style={styles.drawerHeader}>
                     <View style={styles.drawerHeaderImages}>
                         <Avatar
-                        size={70}
-                        source={PROFILE_IMAGE}/>
+                            size={70}
+                            source={PROFILE_IMAGE} />
                     </View>
                     <View style={styles.userDetail}>
                         <Text style={styles.name}>Welcome</Text>
@@ -54,8 +59,9 @@ class DrawerContainer extends Component {
                         (<ShopByCategory onPress={(data) => {
                             this.setState({ viewShop: data })
                         }}
-                           
-                        categoryList={this.state.categoryList}
+
+                            categoryList={this.state.categoryList}
+                            subCatList={this.state.subCatList}
                         />)
                         :
                         (<DrawerContentScrollView {...this.props}>
@@ -69,7 +75,6 @@ class DrawerContainer extends Component {
                                 label="Account"
                                 onPress={() => {
                                     this.setState({ viewSection: !this.state.viewSection })
-                                    console.log(this.state.viewSection);
                                     {
                                         this.state.viewSection === true ?
                                             (<View style={{ height: 100, width: 100 }}>
@@ -79,18 +84,21 @@ class DrawerContainer extends Component {
                                             </View>) : {}
                                     }
                                 }} />
-
-                            <DrawerItem
-                                icon={() => (<MaterialIcons name={'shopping-cart'} size={25} />)}
-                                label="Shop By Category"
-                                onPress={this.handleShopByCategory} />
+                            {/* <View style={{ flex: 1, flexDirection: "row" }}>
+                                <View style={{ flex: 1, }}> */}
+                                    <DrawerItem
+                                        // labelStyle={{fontWeight: "bold"}}
+                                        icon={() => (<MaterialIcons name={'shopping-cart'} size={25} />)}
+                                        label="Shop By Category"
+                                        onPress={this.handleShopByCategory} />
+                                {/* </View>
+                                <View style={{ flex: 0.1, justifyContent: "flex-end", marginBottom: "5.1%",alignItems: "center", marginRight: "5%" }}>
+                                    <FontAwesome5 name={'caret-right'} size={20} />
+                                </View>
+                            </View> */}
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'card-membership'} size={25} />)}
                                 label="MartEasy Membership"
-                                onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
-                            <DrawerItem
-                                icon={() => (<FontAwesome5 name={'user-friends'} size={20} />)}
-                                label="Refer Your Friends"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
                                 icon={() => (<FontAwesome5 name={'briefcase'} size={24} />)}

@@ -12,6 +12,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 
 
@@ -24,12 +25,9 @@ class DrawerMenu extends Component {
     }
     
     handleShopByCategory = () => {
-        console.log('In shop')
         this.setState({ viewShop: true })
     }
-
-
-
+    
     render() {
         return (
             <DrawerContentScrollView {...this.props}>
@@ -43,7 +41,6 @@ class DrawerMenu extends Component {
                     label="Account"
                     onPress={() => {
                         this.setState({ viewSection: !this.state.viewSection })
-                        console.log(this.state.viewSection);
                         {
                             this.state.viewSection === true ?
                                 (<View style={{ height: 100, width: 100 }}>
@@ -53,11 +50,14 @@ class DrawerMenu extends Component {
                                 </View>) : {}
                         }
                     }} />
-
+                <View style={{flex: 0.5, flexDirection: "row"}}>
                 <DrawerItem
                     icon={() => (<MaterialIcons name={'shopping-cart'} size={25} />)}
                     label="Shop By Category"
                     onPress={()=>{this.props.onPress(true)}} />
+                    <FontAwesome5 name={"caret-right"} size={"20"}/>
+                </View>
+                
 
                 <DrawerItem
                     icon={() => (<MaterialIcons name={'card-membership'} size={25} />)}
