@@ -54,15 +54,7 @@ const getProductsDataBasedOnStoreSubcategory = async products => {
       Constants.CONSUMER_SECRET +
       '&include=' +
       products;
-      console.log("url",Constants.CartGetProductsAPI +
-      Constants.CONSUMER_KEY +
-      '&consumer_secret=' +
-      Constants.CONSUMER_SECRET +
-      '&include=' +
-      products)
-      console.log("prod",products);
     const {data} = await Axios.get(url);
-    console.log("dt",data);
     for(var item in data){
       if(data[item].sale_price === '' || data[item].sale_price === undefined || data[item].sale_price === null){
         data[item].sale_price = data[item].regular_price;

@@ -30,7 +30,8 @@ import {
   MOTOR_WASH_IMAGE1,
   MOTOR_WASH_IMAGE2,
   MOTOR_WASH_IMAGE3,
-  MOTOR_WASH_IMAGE8
+  MOTOR_WASH_IMAGE8,
+  HOME_SHOP_BY_CAT
 } from "../../assets/index";
 import styles from './styles';
 import MainCategory from "./MainCategory";
@@ -40,6 +41,7 @@ import MustHave from "./MustHave";
 import { transformCategoryList } from "./utils";
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import MotorScreen from '../../screens/MotorScreen/Motorscreen';
+import { getOrderedParentCategories } from "../../utils";
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +77,7 @@ class HomeScreen extends Component {
     this.getStoresOnLoad();
     this.getCategoriesOnLoad();
     this.getConstantsOnLoad();
-   
+
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState({ isLoading: true });
       this.getStoresOnLoad();
@@ -130,7 +132,7 @@ class HomeScreen extends Component {
   };
 
   getTagDetailsOnLoad = async (id) => {
-    let result = await HomeAPI.getTagDetails(id); 
+    let result = await HomeAPI.getTagDetails(id);
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
 
       this.setState({ isShowError: true, isLoading: false });
@@ -179,14 +181,15 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
-                  <Text
+                  {/* <Text
                     style={styles.titleText}>
                     <Anticons name="appstore-o" size={20} color="grey" />
                     {'  '}Shop By Category
-                </Text>
+                </Text> */}
+                  <Image source={HOME_SHOP_BY_CAT} style={{ width: "100%" }} resizeMode={"contain"} />
 
                   <MainCategory
-                    categories={transformCategoryList(this.state.categoryList, true)}
+                    categories={getOrderedParentCategories(this.state.categoryList)}
                     navigation={this.props.navigation}
                   />
                   {/* <CategoryList
@@ -195,13 +198,17 @@ class HomeScreen extends Component {
                   /> */}
                 </View>
                 {/* MotorScreen */}
-                <TouchableNativeFeedback onPress={() => {this.props.navigation.navigate('MotorScreen',
-                  {tagId: this.state.tagDetails.id});}}>
-                  <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center",alignItems: "center", backgroundColor: "white" }}>
+                <TouchableNativeFeedback onPress={() => {
+                  this.props.navigation.navigate('MotorScreen',
+                    { tagId: this.state.tagDetails.id });
+                }}>
+                  <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
                     <View>
                       <Image source={MOTOR_WASH_IMAGE8} />
-                      <Text style={{textTransform: "capitalize",fontWeight:"bold",
-                      textAlign: 'center',margin: '5%',}}>
+                      <Text style={{
+                        textTransform: "capitalize", fontWeight: "bold",
+                        textAlign: 'center', margin: '5%',
+                      }}>
                         {this.state.tagDetails.name}</Text>
                     </View>
                   </View>

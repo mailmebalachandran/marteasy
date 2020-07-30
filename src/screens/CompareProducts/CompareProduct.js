@@ -90,8 +90,6 @@ class CompareProduct extends React.Component {
     let updatedProductList = productList.filter(function(item) {
       return item.id !== firstCompareProductDetail.id;
     });
-    console.log("get Count : " + productList.length)
-    console.log("Updated Count : " + updatedProductList.length)
     let list = [];
     this.state.list = [];
     let asyncDetails = await AsyncStorage.getItem('Cart');

@@ -44,3 +44,9 @@ export const MOTOR_WASH_IMAGE1=require('../assets/images/motorwash.png');
 export const MOTOR_WASH_IMAGE2=require('../assets/images/motor.png')
 export const MOTOR_WASH_IMAGE3=require('../assets/images/car.jpg');
 export const MOTOR_WASH_IMAGE8=require('../assets/images/carwashimage.jpg');
+
+//Home Screen
+export const HOME_SHOP_BY_CAT=require('../assets/images/Home/HOME_SHOP_BY_CAT.png');
+
+//Drawer screen 
+export const PROFILE_IMAGE=require('../assets/images/profile.png');
