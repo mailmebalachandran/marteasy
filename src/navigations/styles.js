@@ -22,7 +22,8 @@ const styles=StyleSheet.create({
     },
     name:{
         fontSize:17,
-        textTransform: "capitalize"
+        textTransform: "capitalize",
+        fontFamily: "Zocial"
     },
     email:{
         fontSize:17,

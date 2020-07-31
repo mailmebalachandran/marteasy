@@ -19,6 +19,7 @@ export default class Accordian extends Component {
     }
     toggleExpand = (parentId) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        //Set Expand State in Parent
         this.props.setCurrentExpandedMenu(parentId);
 
         this.props.subCatList.map(subCat => {
@@ -28,6 +29,21 @@ export default class Accordian extends Component {
                 });
             }
         })
+    }
+    checkIsExpanded = (parentId) => {
+        let status = undefined;
+        this.props.isExpanded.map(exp => {
+            if(exp.id === parentId) {
+                if(exp.isExpand === true) {
+                    console.log("if isExp is true->obj, parentId",this.props.isExpanded,parentId);
+                    status = true;
+                } else {
+                    status = false;
+                }
+            }
+        })
+        console.log("reds for check",status);
+        return status;
     }
 
     render() {
@@ -42,13 +58,15 @@ export default class Accordian extends Component {
                         <Text style={[styles.title, styles.font]}>{unescape(this.props.title)}</Text>
                     </View>
                     <AntDesign 
-                        name={this.props.isExpanded ? 'minus' : 'plus'} 
+                        name={this.checkIsExpanded(this.props.parentId) ? 'minus' : 'plus'} 
                         size={20} color={"darkgray"} 
                     />
+                    {
+                        console.log("title,parentId",this.checkIsExpanded(this.props.parentId),this.props.parentId)
+                    }
                 </TouchableOpacity>
                 <View style={styles.parentHr} />
-                {
-                this.props.isExpanded &&
+                {this.checkIsExpanded(this.props.parentId) &&
                 this.state.subMenu && this.state.subMenu.map(subCatList => {
                         return (
                             <View style={styles.child}>
