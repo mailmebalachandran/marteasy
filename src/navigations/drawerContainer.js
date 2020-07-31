@@ -56,9 +56,10 @@ class DrawerContainer extends Component {
                 <Divider />
                 <View style={styles.drawerSection}>
                     {this.state.viewShop === true ?
-                        (<ShopByCategory onPress={(data) => {
-                            this.setState({ viewShop: data })
-                        }}
+                        (<ShopByCategory 
+                            onPress={(data) => {
+                                this.setState({ viewShop: data })
+                            }}
 
                             categoryList={this.state.categoryList}
                             subCatList={this.state.subCatList}

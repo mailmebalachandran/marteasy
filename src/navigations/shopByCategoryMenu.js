@@ -21,16 +21,31 @@ let isAlreadyExpanded = false;
 var previousId = 0;
 class ShopByCategory extends Component {
 
-    state = {
-        viewSection: false,
-        viewShop: '',
-        pressIn: false,
-        isExpanded: false,
-        currentExpandedMenuId: 0,
-        isAlreadyExpanded: false,
+    constructor(props) {
+        super(props)
+        this.state = {
+            viewSection: false,
+            viewShop: '',
+            pressIn: false,
+            isExpanded: this.setInitialMenuExpandState(this.props.categoryList),
+            currentExpandedMenuId: 0,
+            isAlreadyExpanded: false,
+        }
     }
 
     componentDidMount = async () => {
+    }
+
+    setInitialMenuExpandState = (catList) => {
+        let expandState = [];
+        catList.map(cat => {
+            let tempObj = {
+                id: cat.id,
+                isExpand: false,
+            };
+            expandState.push(tempObj);
+        })
+        return expandState;
     }
 
     toggleExpand = () => {
@@ -48,7 +63,7 @@ class ShopByCategory extends Component {
                     title={item.name}
                     subCatList={this.props.subCatList}
                     parentId={item.id}
-                    isExpanded={this.getIsExpanded(item.id)}
+                    isExpanded={this.state.isExpanded}
                     setCurrentExpandedMenu={(parentId) => this.setCurrentExpandedMenuId(parentId)}
                 />
             );
@@ -56,39 +71,33 @@ class ShopByCategory extends Component {
         return items;
     }
     setCurrentExpandedMenuId = (parentId) => {
-        this.setState({currentExpandedMenuId: parentId});
-    }
-    getIsExpanded = (currentId) => {
-        let status = false;
-        if(this.state.currentExpandedMenuId === currentId) {
-            console.log("is ids equal : yes")
-            console.log("prev,curr",previousId,currentId)
-            if(isAlreadyExpanded && previousId === currentId) {
-                console.log("in expanded state and same item");
-                isAlreadyExpanded = false;
-                status =  false;
+        let tempArr = [...this.state.isExpanded];
+        tempArr.map(exp => {
+            if(exp.id === parentId) {
+                if(exp.isExpand === true) {
+                    exp.isExpand = false;
+                } else {
+                    exp.isExpand = true;
+                }
             } else {
-                console.log("is in expande state and diff item");
-                isAlreadyExpanded = true;
-                status = true;
+                exp.isExpand = false;
             }
-        } else {
-            status = false;
-        }
-        previousId = this.state.currentExpandedMenuId;
-        return status;
+        });
+        this.setState({isExpanded: tempArr});
+        console.log("after set",this.state.isExpanded);
     }
 
     render() {
+        console.log("render in shop");
         return (
             <DrawerContentScrollView {...this.props}>
-                { <View style={{ flex: 1, flexDirection: "row", backgroundColor: "#4a4a4a" }}> 
-                        <DrawerItem
-                            style={{backgroundColor: "#4a4a4a", width: "100%",}}
-                            icon={() => (<FontAwesome5 name={'arrow-left'} size={20} color={"white"} />)}
-                            label="Shop By Category"
-                            onPress={() => this.props.onPress(false)}
-                            inactiveTintColor={"white"} />
+                {<View style={{ flex: 1, flexDirection: "row", backgroundColor: "#4a4a4a" }}>
+                    <DrawerItem
+                        style={{ backgroundColor: "#4a4a4a", width: "100%", }}
+                        icon={() => (<FontAwesome5 name={'arrow-left'} size={20} color={"white"} />)}
+                        label="Shop By Category"
+                        onPress={() => this.props.onPress(false)}
+                        inactiveTintColor={"white"} />
                 </View>}
                 <View style={{
                     flex: 1, flexDirection: "column",
