@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // backgroundColor:'#cafabb',
     fontSize:10,
-    color: "white"
+    color: "black"
     
   },
   addViewStyle: {
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   compareViewStyle: {
     width: "60%",
     height: 30,
-    backgroundColor: "#e95f62",
+    backgroundColor: "#ff918f",
     borderRadius: 5
   },
 });

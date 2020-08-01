@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRightColor: ThemeColor.DarkTextColor,
     borderRightWidth: 0,
+    
   },
   textViewStyle: {
     borderColor: ThemeColor.DarkColor,
