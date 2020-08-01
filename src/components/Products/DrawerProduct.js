@@ -1,13 +1,14 @@
 import React from 'react';
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {getItemTransformedItemDesc} from './utils';
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { getItemTransformedItemDesc } from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import ButtonComponent from '../Button/Button';
+import { Divider } from 'react-native-elements';
 
-class Product extends React.Component {
+class DrawerProduct extends React.Component {
   constructor(props) {
     super(props);
     let productList = props.productList;
@@ -50,7 +51,7 @@ class Product extends React.Component {
             <Image
               style={styles.productImage}
               resizeMode="cover"
-              source={{uri: item.images[0].src}}
+              source={{ uri: item.images[0].src }}
             />
           </View>
         );
@@ -68,13 +69,13 @@ class Product extends React.Component {
     }
   };
 
-  renderProductImage = ({src}) => {
+  renderProductImage = ({ src }) => {
     return (
       <View style={styles.productImageContainer}>
         <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{uri: src}}
+          source={{ uri: src }}
         />
       </View>
     );
@@ -160,4 +161,4 @@ class Product extends React.Component {
     );
   }
 }
-export default Product;
+export default DrawerProduct;

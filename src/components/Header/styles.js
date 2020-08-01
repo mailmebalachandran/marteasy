@@ -4,7 +4,7 @@ import * as ThemeColor from '../../themes/colors';
 const styles = StyleSheet.create({
   containerStyle: {
     flexDirection: 'row',
-    backgroundColor: ThemeColor.PrimaryColor,
+    backgroundColor: "#689f38",
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

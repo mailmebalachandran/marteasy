@@ -69,9 +69,16 @@ export default class Accordian extends Component {
                 {this.checkIsExpanded(this.props.parentId) &&
                 this.state.subMenu && this.state.subMenu.map(subCatList => {
                         return (
+                            <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DrawerProductScreen',{
+                                subId: subCatList.id,
+                                subName: subCatList.name
+                            })
+                            console.log("SubId",subCatList.id)}
+                            }>
                             <View style={styles.child}>
                                 <Text style={{ color: "#4a4a4a" }}>{unescape(subCatList.name)}</Text>
                             </View>
+                            </TouchableOpacity>
                         )
                     })
                 }

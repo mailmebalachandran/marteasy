@@ -63,16 +63,17 @@ class DrawerContainer extends Component {
 
                             categoryList={this.state.categoryList}
                             subCatList={this.state.subCatList}
+                            navigation={this.props.navigation}
                         />)
                         :
                         (<DrawerContentScrollView {...this.props}>
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'home'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'home'} size={25} color={"red"} />)}
                                 label="Home"
                                 onPress={() => { this.props.navigation.navigate("HomeScreen") }} />
 
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'account-circle'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'account-circle'} size={25} color={"red"} />)}
                                 label="Account"
                                 onPress={() => {
                                     this.setState({ viewSection: !this.state.viewSection })
@@ -89,7 +90,7 @@ class DrawerContainer extends Component {
                                 <View style={{ flex: 1, }}> */}
                                     <DrawerItem
                                         // labelStyle={{fontWeight: "bold"}}
-                                        icon={() => (<MaterialIcons name={'shopping-cart'} size={25} />)}
+                                        icon={() => (<MaterialIcons name={'shopping-cart'} size={25} color={"red"} />)}
                                         label="Shop By Category"
                                         onPress={this.handleShopByCategory} />
                                 {/* </View>
@@ -98,35 +99,35 @@ class DrawerContainer extends Component {
                                 </View>
                             </View> */}
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'card-membership'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'card-membership'} size={25} color={"red"} />)}
                                 label="MartEasy Membership"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<FontAwesome5 name={'briefcase'} size={24} />)}
+                                icon={() => (<FontAwesome5 name={'briefcase'} size={24} color={"red"} />)}
                                 label="Earn Rewards"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'question-answer'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'question-answer'} size={25} color={"red"} />)}
                                 label="FAQ's"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'security'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'security'} size={25} color={"red"} />)}
                                 label="Privacy Policy"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'format-list-numbered'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'format-list-numbered'} size={25} color={"red"} />)}
                                 label="Terms and Conditions"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<AntDesign name={'customerservice'} size={25} />)}
+                                icon={() => (<AntDesign name={'customerservice'} size={25} color={"red"} />)}
                                 label="Customer Support"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<MaterialIcons name={'stars'} size={25} />)}
+                                icon={() => (<MaterialIcons name={'stars'} size={25} color={"red"} />)}
                                 label="Rate Us"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<FontAwesome5 name={'heartbeat'} size={25} />)}
+                                icon={() => (<FontAwesome5 name={'heartbeat'} size={25} color={"red"} />)}
                                 label="Share Our Love"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                         </DrawerContentScrollView>)}

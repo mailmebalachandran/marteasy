@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ThemeColor from '../../themes/colors';
 
 class AddCart extends Component {
   constructor(props) {
@@ -17,13 +18,14 @@ class AddCart extends Component {
             onPress={() => {
               this.props.onAddHandler(this.props.productValue);
             }}>
-            <Text style={styles.addTextStyle}>Add</Text>
+            <Text style={styles.addTextStyle}>ADD</Text>
           </TouchableOpacity>
         </View>
       );
     } else {
       bindingValues = (
         <>
+        <View style={{flex: 1, flexDirection: "row"}}>
           <View>
             <TouchableOpacity
               onPress={() =>
@@ -49,6 +51,7 @@ class AddCart extends Component {
               </View>
             </TouchableOpacity>
           </View>
+        </View>
         </>
       );
     }

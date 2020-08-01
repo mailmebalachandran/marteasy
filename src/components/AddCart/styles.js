@@ -7,16 +7,19 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 5,
     paddingTop: 5,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     borderColor: 'green',
-    borderRadius: 1,
-    borderWidth: 1,
-    fontSize:10 
+    // borderRadius: 1,
+    // borderWidth: 1,
+    fontSize:10,
+    color: "white"
   },
   addViewStyle: {
-    width: 80,
+    width: "60%",
     height: 30,
-    alignItems:'center'
+    alignItems:'center',
+    backgroundColor: "#e95f62",
+    borderRadius: 5
   },
   minusViewStyle: {
     backgroundColor: '#ededed',
@@ -27,6 +30,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRightColor: ThemeColor.DarkTextColor,
     borderRightWidth: 0,
+    
   },
   textViewStyle: {
     borderColor: ThemeColor.DarkColor,

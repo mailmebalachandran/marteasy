@@ -32,7 +32,7 @@ class DrawerMenu extends Component {
         return (
             <DrawerContentScrollView {...this.props}>
                 <DrawerItem
-                    icon={() => (<MaterialIcons name={'home'} size={25} />)}
+                    icon={() => (<MaterialIcons name={'home'} size={25} color={"white"}/>)}
                     label="Home"
                     onPress={() => { this.props.navigation.navigate("HomeScreen") }} />
 
@@ -52,13 +52,12 @@ class DrawerMenu extends Component {
                     }} />
                 <View style={{flex: 0.5, flexDirection: "row"}}>
                 <DrawerItem
-                    icon={() => (<MaterialIcons name={'shopping-cart'} size={25} />)}
+                    icon={() => (<MaterialIcons name={'shopping-cart'} size={25} color={'red'} />)}
                     label="Shop By Category"
-                    onPress={()=>{this.props.onPress(true)}} />
+                    onPress={()=>{this.props.onPress(true)}} 
+                     />
                     <FontAwesome5 name={"caret-right"} size={"20"}/>
                 </View>
-                
-
                 <DrawerItem
                     icon={() => (<MaterialIcons name={'card-membership'} size={25} />)}
                     label="MartEasy Membership"

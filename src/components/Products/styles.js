@@ -3,13 +3,16 @@ import * as Theme from '../../themes/colors';
 
 const styles = StyleSheet.create({
   //Component Styles
+  productScreenContainer:{
+    flex: 1,
+  },
   productCompContainer: {
     height: '100%',
   },
   productContainer: {
-    height: 125,
-    margin: 10,
-    padding: 10,
+    flex: 1,
+    marginTop: "0.2%",
+    padding: 15,
     backgroundColor: 'white',
     borderRadius: 1,
     borderWidth: 1,
@@ -36,6 +39,9 @@ const styles = StyleSheet.create({
   //Products Details
   productName: {
     marginLeft: 10,
+    fontSize: 17,
+    textTransform: "capitalize",
+    color: "#1a1a1a",
   },
   productDesc: {
     marginLeft: 10,
@@ -43,21 +49,22 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: '100%',
   },
-  pricingContainer: {
-    width: '55%',
-  },
-  productNameContainer:{
-    width: '55%',
-  },
+  // pricingContainer: {
+  //   width: '55%',
+  // },
+  // productNameContainer:{
+  //   width: '55%',
+  // },
   regularPrice: {
     marginLeft: 10,
-    textDecorationLine: 'line-through',
-    fontSize: 12,
-    color: 'red',
+    marginRight: "5%",
+    textDecorationLine: 'none',
+    fontSize: 13,
+    color: '#8f8f8f',
   },
   salePrice: {
     marginLeft: 10,
-    color: 'green',
+    color: '#1a1a1a',
     fontSize: 15,
   },
   imageViewContainerStyle: {
@@ -70,31 +77,36 @@ const styles = StyleSheet.create({
   },
   productViewContainerStyle: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
+    justifyContent: "flex-start"
   },
-  addCartOuterViewContainerStyle: {
-    marginTop: 10,
-    width: '35%',
-  },
+  // addCartOuterViewContainerStyle: {
+  //   marginTop: 10,
+  //   width: '35%',
+  // },
   compareTextStyle: {
     paddingLeft: 10,
     paddingRight: 10,
     paddingBottom: 5,
     paddingTop: 5,
-    borderBottomWidth: 1,
-    borderColor: 'green',
-    borderRadius: 1,
-    borderWidth: 1,
-    backgroundColor:'#cafabb',
-    fontSize:10
+    // borderBottomWidth: 1,
+    // borderColor: 'green',
+    // borderRadius: 1,
+    // borderWidth: 1,
+    // backgroundColor:'#cafabb',
+    fontSize:10,
+    color: "black"
+    
   },
   addViewStyle: {
     width: 75,
     height: 35,
   },
   compareViewStyle: {
-    width: 75,
-    height: 35,
+    width: "60%",
+    height: 30,
+    backgroundColor: "#ff918f",
+    borderRadius: 5
   },
 });
 
