@@ -24,6 +24,7 @@ import CompareProducts from './src/screens/CompareProducts/CompareProduct';
 import CategoryProductScreen from './src/screens/Products/CategoryProductScreen';
 import { createDrawerNavigator, DrawerItem } from "@react-navigation/drawer";
 import DrawerContainer from "./src/navigations/drawerContainer";
+import DrawerProductScreen from "./src/screens/Products/drawerProductScreen";
 
 
 
@@ -130,6 +131,15 @@ class App extends Component {
         component={this.profileStack}
       />
       <RootStack.Screen
+        name="DrawerContainer"
+        component={DrawerContainer}
+      />
+      <RootStack.Screen
+        name="DrawerProductScreen"
+        component={DrawerProductScreen}
+      />
+      
+      <RootStack.Screen
         name="test"
         component={TestScreen}
       />
@@ -148,6 +158,7 @@ class App extends Component {
         >
           <Drawer.Screen name={"Home"} component={this.rootStack}/>
           <Drawer.Screen name={"Login"} component={LoginScreen} />
+          {/* <Drawer.Screen name={} */}
         </Drawer.Navigator>
       </NavigationContainer >
     );

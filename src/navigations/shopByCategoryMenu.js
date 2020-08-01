@@ -65,6 +65,7 @@ class ShopByCategory extends Component {
                     parentId={item.id}
                     isExpanded={this.state.isExpanded}
                     setCurrentExpandedMenu={(parentId) => this.setCurrentExpandedMenuId(parentId)}
+                    navigation={this.props.navigation}
                 />
             );
         }

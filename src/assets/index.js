@@ -50,3 +50,6 @@ export const HOME_SHOP_BY_CAT=require('../assets/images/Home/HOME_SHOP_BY_CAT.pn
 
 //Drawer screen 
 export const PROFILE_IMAGE=require('../assets/images/profile.png');
+
+//Product Screen Logo
+export const PRODUCT_LOGO=require('../assets/images/food.jpg');

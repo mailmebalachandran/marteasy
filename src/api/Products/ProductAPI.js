@@ -67,8 +67,16 @@ const getProductsDataBasedOnStoreSubcategory = async products => {
   }
 };
 
+const getProductsByCategory = async (SubId) => {
+  try {
+    const {data} = await Axios.get(Constants.getProductsByCategory+SubId);
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
 
 
 
 export default {GetProductBasedonStoreId, GetStoreBasedonStoreId, GetSubcategoryBasedOnStore,getProductsBasedOnStoreSubcategory,
-  getProductsDataBasedOnStoreSubcategory,};
+  getProductsDataBasedOnStoreSubcategory,getProductsByCategory};

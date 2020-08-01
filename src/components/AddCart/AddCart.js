@@ -17,7 +17,7 @@ class AddCart extends Component {
             onPress={() => {
               this.props.onAddHandler(this.props.productValue);
             }}>
-            <Text style={styles.addTextStyle}>Add</Text>
+            <Text style={styles.addTextStyle}>ADD</Text>
           </TouchableOpacity>
         </View>
       );
