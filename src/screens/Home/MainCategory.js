@@ -82,7 +82,7 @@ class MainCategory extends Component {
                 {/* Main Category 2 column */}
                 {this.props.categories.map(cat => {
                     return (
-                        <View 
+                        <View
                             style={[styles.categoryItemContainer2Col, styles.mainCategory]}
                             key={cat.id}
                         >
@@ -90,12 +90,15 @@ class MainCategory extends Component {
                                 onPress={() => {
                                     catName = unescape(cat.name);
                                     this.props.navigation.navigate('SubCategoryScreen', {
-                                    catId: cat.id,
-                                    catName: catName
-                                  });
+                                        catId: cat.id,
+                                        catName: catName
+                                    });
                                 }}>
                                 <View
                                     style={{
+                                        flex: 1,
+                                        justifyContent: "center",
+                                        alignItems: "center",
                                         backgroundColor: 'transparent',
                                         width: '100%',
                                         shadowColor: '#000',
@@ -104,15 +107,16 @@ class MainCategory extends Component {
                                         shadowRadius: 5,
                                         elevation: 25,
                                     }}>
-                                        
-                                    <Image
-                                        source={{ uri: cat.image.src }}
-                                        style={{
-                                            resizeMode: 'contain',
-                                            height: 100,
-                                            width: '100%',
-                                        }}
-                                    />
+                                    <View style={{backgroundColor: "#f9f9f9", width: "75%", height:"101%",border:35,borderColor:"#eeede6",borderWidth:2}}>
+                                        <Image
+                                            source={{ uri: cat.image.src }}
+                                            style={{
+                                                resizeMode: 'contain',
+                                                height: 100,
+                                                width: '95%',
+                                            }}
+                                        />
+                                    </View>
                                 </View>
                                 <Text
                                     style={styles.categoryName}>

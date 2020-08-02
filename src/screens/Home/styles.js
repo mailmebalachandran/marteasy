@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
         alignItems: "center",
         backgroundColor: "#dfdfdf",
-        marginTop: "5%",
+        marginTop: "1%",
     },
     otherCategoryContainer: {
         flex: 1,
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     categoryName: {
         textAlign: 'center',
         color: "#000000",
+        marginTop: "5%",
         fontWeight: 'normal',
     },
     //Promo
