@@ -23,7 +23,7 @@ export default class Accordian extends Component {
         this.props.setCurrentExpandedMenu(parentId);
 
         this.props.subCatList.map(subCat => {
-            if(subCat.parentId === parentId) {
+            if (subCat.parentId === parentId) {
                 this.setState({
                     subMenu: subCat.subCats
                 });
@@ -33,51 +33,48 @@ export default class Accordian extends Component {
     checkIsExpanded = (parentId) => {
         let status = undefined;
         this.props.isExpanded.map(exp => {
-            if(exp.id === parentId) {
-                if(exp.isExpand === true) {
-                    console.log("if isExp is true->obj, parentId",this.props.isExpanded,parentId);
+            if (exp.id === parentId) {
+                if (exp.isExpand === true) {
                     status = true;
                 } else {
                     status = false;
                 }
             }
         })
-        console.log("reds for check",status);
         return status;
     }
 
     render() {
         return (
             <View>
-                <TouchableOpacity 
-                    ref={this.accordian} 
-                    style={styles.row} 
+                <TouchableOpacity
+                    ref={this.accordian}
+                    style={styles.row}
                     onPress={() => this.toggleExpand(this.props.parentId)}
                 >
                     <View style={{ flex: 1 }}>
                         <Text style={[styles.title, styles.font]}>{unescape(this.props.title)}</Text>
                     </View>
-                    <AntDesign 
-                        name={this.checkIsExpanded(this.props.parentId) ? 'minus' : 'plus'} 
-                        size={20} color={"darkgray"} 
+                    <AntDesign
+                        name={this.checkIsExpanded(this.props.parentId) ? 'minus' : 'plus'}
+                        size={20} color={"darkgray"}
                     />
-                    {
-                        console.log("title,parentId",this.checkIsExpanded(this.props.parentId),this.props.parentId)
-                    }
                 </TouchableOpacity>
                 <View style={styles.parentHr} />
                 {this.checkIsExpanded(this.props.parentId) &&
-                this.state.subMenu && this.state.subMenu.map(subCatList => {
+                    this.state.subMenu && this.state.subMenu.map(subCatList => {
                         return (
-                            <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DrawerProductScreen',{
-                                subId: subCatList.id,
-                                subName: subCatList.name
-                            })
-                            console.log("SubId",subCatList.id)}
+                            <TouchableOpacity onPress={() => {
+                                this.props.navigation.navigate('DrawerProductScreen', {
+                                    subId: subCatList.id,
+                                    subName: subCatList.name
+                                })
+                                console.log("SubId", subCatList.id)
+                            }
                             }>
-                            <View style={styles.child}>
-                                <Text style={{ color: "#4a4a4a" }}>{unescape(subCatList.name)}</Text>
-                            </View>
+                                <View style={styles.child}>
+                                    <Text style={{ color: "#4a4a4a" }}>{unescape(subCatList.name)}</Text>
+                                </View>
                             </TouchableOpacity>
                         )
                     })

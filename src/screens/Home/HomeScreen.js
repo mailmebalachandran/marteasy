@@ -209,7 +209,7 @@ class HomeScreen extends Component {
                     <View>
                       <Image source={MOTOR_WASH_IMAGE8} />
                       <Text style={{
-                        textTransform: "capitalize", fontWeight: "bold",
+                        textTransform: "capitalize", fontWeight: "normal",
                         textAlign: 'center', margin: '5%',
                       }}>
                         {this.state.tagDetails.name}</Text>
