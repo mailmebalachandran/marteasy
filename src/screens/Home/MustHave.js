@@ -97,6 +97,9 @@ class MustHave extends Component {
                 <View
                   key={cat.id}
                   style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
                     backgroundColor: 'transparent',
                     width: '100%',
                     shadowColor: '#000',
@@ -105,11 +108,12 @@ class MustHave extends Component {
                     shadowRadius: 5,
                     elevation: 25,
                   }}>
-                  <View style={{ 
+                  <View style={{
                     backgroundColor: "rgba(175,175,175,0.1)",
-                    borderColor:"#99d066",borderWidth:0.4,
-                    margin:10,borderRadius: 5
-                    }}>
+                    borderColor: "#99d066", borderWidth: 0.4,
+                    borderRadius: 5,
+                    width: "80%"
+                  }}>
                     <Image
                       source={{ uri: cat.gravatar }}
                       style={{

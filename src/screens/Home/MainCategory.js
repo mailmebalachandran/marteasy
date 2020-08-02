@@ -107,7 +107,14 @@ class MainCategory extends Component {
                                         shadowRadius: 5,
                                         elevation: 25,
                                     }}>
-                                    <View style={{backgroundColor: "#f9f9f9", width: "75%", height:"101%",border:35,borderColor:"#eeede6",borderWidth:2}}>
+                                    <View style={{
+                                        backgroundColor: "rgba(175,175,175,0.1)",
+                                        borderColor:"#99d066",
+                                        borderWidth:0.4,
+                                        borderRadius: 5,
+                                        height: "100%",
+                                        width: "80%"
+                                    }}>
                                         <Image
                                             source={{ uri: cat.image.src }}
                                             style={{
