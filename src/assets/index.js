@@ -53,3 +53,8 @@ export const PROFILE_IMAGE=require('../assets/images/profile.png');
 
 //Product Screen Logo
 export const PRODUCT_LOGO=require('../assets/images/food.jpg');
+
+//Homescreen Header Logo
+export const SHOP_BY_CATEGORY=require('../assets/images/ShopByCategory.png');
+export const SEASONS_MUST_HAVE=require('../assets/images/Seasonmusthave.png');
+export const FEATURED_STORES=require('../assets/images/Featuredstores.png');

@@ -31,7 +31,10 @@ import {
   MOTOR_WASH_IMAGE2,
   MOTOR_WASH_IMAGE3,
   MOTOR_WASH_IMAGE8,
-  HOME_SHOP_BY_CAT
+  HOME_SHOP_BY_CAT,
+  SHOP_BY_CATEGORY,
+  SEASONS_MUST_HAVE,
+  FEATURED_STORES
 } from "../../assets/index";
 import styles from './styles';
 import MainCategory from "./MainCategory";
@@ -186,7 +189,7 @@ class HomeScreen extends Component {
                     <Anticons name="appstore-o" size={20} color="grey" />
                     {'  '}Shop By Category
                 </Text> */}
-                  <Image source={HOME_SHOP_BY_CAT} style={{ width: "100%" }} resizeMode={"contain"} />
+                  <Image source={SHOP_BY_CATEGORY} style={{ width: "100%"}} resizeMode={"contain"} />
 
                   <MainCategory
                     categories={getOrderedParentCategories(this.state.categoryList)}
@@ -221,11 +224,12 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
-                  <Text
+                  {/* <Text
                     style={styles.titleText}>
                     <Octicons name="checklist" size={20} color="grey" />
                     {'  '}Seasons Must Have
-                </Text>
+                </Text> */}
+                <Image source={SEASONS_MUST_HAVE} style={{ width: "100%"}} resizeMode={"contain"} />
                   <MustHave
                     dataValues={this.state.ShopList}
                     navigation={this.props.navigation}
@@ -238,11 +242,12 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
-                  <Text
+                  {/* <Text
                     style={styles.titleText}>
                     <Entypo name="new" size={20} color="grey" />
                     {'  '}Featured Stores
-                </Text>
+                </Text> */}
+                <Image source={FEATURED_STORES} style={{ width: "100%"}} resizeMode={"contain"} />
                   <StoreList
                     dataValues={this.state.ShopList}
                     navigation={this.props.navigation}
