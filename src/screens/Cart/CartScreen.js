@@ -545,7 +545,7 @@ class CartScreen extends Component {
                                   flexDirection: 'row',
                                   justifyContent: 'space-between',
                                 }}>
-                                <View>
+                                <View style={{flex: 1}}>
                                   <View
                                     style={{
                                       flex: 1,
