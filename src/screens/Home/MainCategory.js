@@ -119,7 +119,11 @@ class MainCategory extends Component {
                                     </View>
                                 </View>
                                 <Text
-                                    style={styles.categoryName}>
+                                    style={{ textAlign: 'center',
+                                    color: "#000000",
+                                    marginTop: "5%",
+                                    fontWeight: '100',
+                                    fontFamily:'Roboto-ThinItalic'}}>
                                     {unescape(cat.name)}
                                 </Text>
                             </TouchableOpacity>

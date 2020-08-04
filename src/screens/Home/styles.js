@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
         color: "#000000",
         marginTop: "5%",
         fontWeight: 'normal',
+        fontFamily:'Proxima Nova Light Italic'
     },
     //Promo
     promoContainer: {
