@@ -36,9 +36,7 @@ import {
 // Setting default styles for all Text components.
 const customTextProps = {
   style: {
-    fontSize: 16,
     fontFamily: Platform.OS === 'ios' ? 'ProximaNova-Regular' : 'ProximaNova-Regular',
-    color: 'black'
   }
 };
 setCustomText(customTextProps);
