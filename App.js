@@ -75,7 +75,7 @@ class App extends Component {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
-        <Tab.Screen name="Account" component={this.profileStack} />
+        <Tab.Screen name="Categories" component={SearchScreen} />
       </Tab.Navigator>
     );
   };

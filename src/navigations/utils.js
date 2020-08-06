@@ -12,9 +12,9 @@ export const getTabIcons = (route, focused, color, size) => {
     } else if (route.name === 'Search') {
         iconName = "ios-search";
         iconType = "ionicon";
-    } else if (route.name === 'Account') {
-        iconName = "account";
-        iconType = "material-community";
+    } else if (route.name === 'Categories') {
+        iconName = "appstore-o";
+        iconType = "antdesign";
     } else if (route.name === 'Cart') {
         iconName = "shoppingcart";
         iconType = "antdesign";
