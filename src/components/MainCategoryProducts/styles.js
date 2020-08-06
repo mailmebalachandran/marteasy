@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     categoryName: {
         textAlign: 'center',
         color: "#000000",
-        fontWeight: 'bold',
+        fontWeight: 'normal',
     },
     //Promo
     promoContainer: {
