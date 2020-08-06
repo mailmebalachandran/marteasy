@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Platform} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -25,6 +26,22 @@ import CategoryProductScreen from './src/screens/Products/CategoryProductScreen'
 import { createDrawerNavigator, DrawerItem } from "@react-navigation/drawer";
 import DrawerContainer from "./src/navigations/drawerContainer";
 import DrawerProductScreen from "./src/screens/Products/drawerProductScreen";
+//Setting Global Styles
+import {
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity,
+} from 'react-native-global-props';
+
+// Setting default styles for all Text components.
+const customTextProps = {
+  style: {
+    fontSize: 16,
+    fontFamily: Platform.OS === 'ios' ? 'ProximaNova-Regular' : 'ProximaNova-Regular',
+    color: 'black'
+  }
+};
+setCustomText(customTextProps);
 
 
 

@@ -81,11 +81,11 @@ class HomeScreen extends Component {
     this.getCategoriesOnLoad();
     this.getConstantsOnLoad();
 
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.setState({ isLoading: true });
-      this.getStoresOnLoad();
-      this.getCategoriesOnLoad();
-    });
+    // this._unsubscribe = this.props.navigation.addListener('focus', () => {
+    //   this.setState({ isLoading: true });
+    //   this.getStoresOnLoad();
+    //   this.getCategoriesOnLoad();
+    // });
 
   };
   handleConnectivityChange = (isConnected) => {
