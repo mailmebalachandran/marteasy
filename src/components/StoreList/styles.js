@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: ThemeColor.DarkColor,
     fontWeight: '600',
-    fontFamily: Platform.OS == "android" ? 'Open Sans': '',
   },
 });
 

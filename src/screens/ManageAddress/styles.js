@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
         marginTop: "2%",
         fontSize: 13,
         fontWeight: '100',
-        fontFamily: 'sans-serif',
     },
     flexRow: {
         flexDirection: 'row',
@@ -61,7 +60,6 @@ const styles = StyleSheet.create({
     numEmail: {
         fontSize: 13,
         fontWeight: '100',
-        fontFamily: 'sans-serif',
     },
     dot: {
         fontSize: 20,

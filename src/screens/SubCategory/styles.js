@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
 },
 titleText: {
   margin: 10,
-  fontFamily: 'notoserif',
   fontWeight: '400',
   fontSize: 20,
   textAlign: "center",

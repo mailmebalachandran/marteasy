@@ -74,18 +74,8 @@ class DrawerContainer extends Component {
 
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'account-circle'} size={25} color={"red"} />)}
-                                label="Account"
-                                onPress={() => {
-                                    this.setState({ viewSection: !this.state.viewSection })
-                                    {
-                                        this.state.viewSection === true ?
-                                            (<View style={{ height: 100, width: 100 }}>
-                                                <DrawerItem
-                                                    icon={() => (<MaterialIcons name={'account-circle'} size={25} />)}
-                                                    label="Add store" />
-                                            </View>) : {}
-                                    }
-                                }} />
+                                label="My Account"
+                                onPress={() => { this.props.navigation.navigate("Account") }} />
                             {/* <View style={{ flex: 1, flexDirection: "row" }}>
                                 <View style={{ flex: 1, }}> */}
                                     <DrawerItem
