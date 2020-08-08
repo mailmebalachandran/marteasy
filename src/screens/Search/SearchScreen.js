@@ -372,7 +372,7 @@ class SearchScreen extends Component {
                 flexDirection: 'column',
               }}>
               <SearchBar
-                placeholder="Search products"
+                placeholder="Search 10,000+ products"
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderTopColor: 'transparent',
