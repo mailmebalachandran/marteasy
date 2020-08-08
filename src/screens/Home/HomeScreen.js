@@ -13,10 +13,6 @@ import StoreList from '../../components/StoreList/StoreList';
 import HomeAPI from '../../api/Home/HomeAPI';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import MenuLoader from '../../components/Loader/MenuLoader';
-import Icon, { FA5Style } from 'react-native-vector-icons/FontAwesome5';
-import Octicons from "react-native-vector-icons/Octicons";
-import Anticons from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
 import {
@@ -50,7 +46,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       ShopList: [],
-      isLoading: true,
+      isLoading: false,
       refreshing: false,
       isShowError: false,
       isPressed: false,
@@ -66,7 +62,6 @@ class HomeScreen extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({ isLoading: true });
     NetInfo.addEventListener(this.handleConnectivityChange);
     NetInfo.fetch().done((isConnected) => {
       if (isConnected.isConnected == true) {
@@ -81,11 +76,10 @@ class HomeScreen extends Component {
     this.getCategoriesOnLoad();
     this.getConstantsOnLoad();
 
-    // this._unsubscribe = this.props.navigation.addListener('focus', () => {
-    //   this.setState({ isLoading: true });
-    //   this.getStoresOnLoad();
-    //   this.getCategoriesOnLoad();
-    // });
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getStoresOnLoad();
+      this.getCategoriesOnLoad();
+    });
 
   };
   handleConnectivityChange = (isConnected) => {
@@ -184,23 +178,12 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
-                  {/* <Text
-                    style={styles.titleText}>
-                    <Anticons name="appstore-o" size={20} color="grey" />
-                    {'  '}Shop By Category
-                </Text> */}
-                  <Image source={SHOP_BY_CATEGORY} style={{ width: "100%"}} resizeMode={"contain"} />
-
+                  <Image source={SHOP_BY_CATEGORY} style={{ width: "100%" }} resizeMode={"contain"} />
                   <MainCategory
                     categories={getOrderedParentCategories(this.state.categoryList)}
                     navigation={this.props.navigation}
                   />
-                  {/* <CategoryList
-                    categories={transformCategoryList(this.state.categoryList, false)}
-                    navigation={this.props.navigation}
-                  /> */}
                 </View>
-                {/* MotorScreen */}
                 <TouchableNativeFeedback onPress={() => {
                   this.props.navigation.navigate('MotorScreen',
                     { tagId: this.state.tagDetails.id });
@@ -208,11 +191,11 @@ class HomeScreen extends Component {
                   <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
                     <View>
                       <Image source={MOTOR_WASH_IMAGE8} />
-                      <Text style={{
-                        textTransform: "capitalize", fontWeight: "normal",
-                        textAlign: 'center', margin: '5%',
-                      }}>
-                        {this.state.tagDetails.name}</Text>
+                        <Text style={{
+                          textTransform: "capitalize", fontWeight: "normal",
+                          textAlign: 'center', margin: '5%',
+                        }}>
+                          {this.state.tagDetails.name}</Text>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -224,12 +207,7 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
-                  {/* <Text
-                    style={styles.titleText}>
-                    <Octicons name="checklist" size={20} color="grey" />
-                    {'  '}Seasons Must Have
-                </Text> */}
-                <Image source={SEASONS_MUST_HAVE} style={{ width: "100%"}} resizeMode={"contain"} />
+                  <Image source={SEASONS_MUST_HAVE} style={{ width: "100%" }} resizeMode={"contain"} />
                   <MustHave
                     dataValues={this.state.ShopList}
                     navigation={this.props.navigation}
@@ -242,12 +220,7 @@ class HomeScreen extends Component {
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
-                  {/* <Text
-                    style={styles.titleText}>
-                    <Entypo name="new" size={20} color="grey" />
-                    {'  '}Featured Stores
-                </Text> */}
-                <Image source={FEATURED_STORES} style={{ width: "100%"}} resizeMode={"contain"} />
+                  <Image source={FEATURED_STORES} style={{ width: "100%" }} resizeMode={"contain"} />
                   <StoreList
                     dataValues={this.state.ShopList}
                     navigation={this.props.navigation}
