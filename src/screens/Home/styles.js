@@ -67,6 +67,12 @@ const styles = StyleSheet.create({
         height: 200,
         width: "100%",
         resizeMode: 'contain',
+    },
+    //MotorWash
+    motorWashImage: {
+        height: 200,
+        width: "100%",
+        resizeMode: 'contain',
     }
 });
 
