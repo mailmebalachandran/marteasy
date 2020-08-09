@@ -11,14 +11,13 @@ const styles = StyleSheet.create({
     borderColor: 'green',
     // borderRadius: 1,
     // borderWidth: 1,
-    fontSize: 10,
+    fontSize: 11,
     color: "white"
   },
   addBtnIcon: {
     color: "#e95f62"
   },
   addViewStyle: {
-    width: "60%",
     height: 30,
     alignItems: 'center',
     backgroundColor: "#e95f62",

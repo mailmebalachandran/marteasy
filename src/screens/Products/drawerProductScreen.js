@@ -41,6 +41,11 @@ class DrawerProductScreen extends Component {
   componentDidMount = async () => {
     this.onPageLoad();
   };
+  componentDidUpdate = async prevProps => {
+    if (this.props.route.params.subId !== this.props.route.params.subId) {
+      this.onPageLoad();
+    }
+  };
 
   handleConnectivityChange = isConnected => {
     if (isConnected.isConnected == true) {
@@ -64,11 +69,7 @@ class DrawerProductScreen extends Component {
     let storeDetail = await ProductAPI.GetStoreBasedonStoreId(
       this.props.route.params.storeId,
     );
-    const productId=await ProductAPI.getProductsBasedOnStoreSubcategory(this.props.route.params.storeId, this.props.route.params.catId);
-    let tempString='';
-    productId.map(product=>{
-      tempString += product.product_id + ",";
-    })
+
     const productList=await ProductAPI.getProductsByCategory(this.props.route.params.subId);
     this.setState({productList});
     
@@ -166,24 +167,6 @@ class DrawerProductScreen extends Component {
       this.setState({isLoading: false});
       this.onAddressDetailsBind();
     });
-  };
-
-  componentDidUpdate = async prevProps => {
-    if (this.props.route.params.storeId !== prevProps.route.params.storeId) {
-      this.state = {
-        isLoading: false,
-        productList: [],
-        infoMessage: '',
-        storeDetail: {},
-        countDetail: [],
-        isViewCart: false,
-        productCount: 0,
-        productAmount: 0,
-      };
-      this.setState({isLoading: true, productCount: 0, productAmount: 0});
-      const storedId = this.props.route.params.storeId;
-      this.onPageLoad();
-    }
   };
 
   onAddHandler = item => {

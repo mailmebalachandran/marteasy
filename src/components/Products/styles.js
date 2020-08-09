@@ -94,16 +94,15 @@ const styles = StyleSheet.create({
     // borderRadius: 1,
     // borderWidth: 1,
     // backgroundColor:'#cafabb',
-    fontSize:10,
+    fontSize:11,
     color: "black"
     
   },
   addViewStyle: {
-    width: 75,
+   
     height: 35,
   },
   compareViewStyle: {
-    width: "60%",
     height: 30,
     backgroundColor: "#ff918f",
     borderRadius: 5

@@ -15,7 +15,6 @@ class HomeHeader extends Component {
                 <TouchableOpacity
                     onPress={
                         () => {
-                            console.log("pressed")
                             this.props.navigation.openDrawer()
                         }
                     }

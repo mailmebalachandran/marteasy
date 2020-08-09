@@ -102,12 +102,11 @@ class MotorScreen extends Component {
                             <StatusBarComponent styleType={0} />
                             <View style={{ flex: 1, }}>
                                
-                                <Text
+                                {/* <Text
                                     style={styles.titleText}>
                                          <MaterialIcons name='van-passenger' size={30}/>
-                                    {/* <MaterialIcons name="fruit-cherries" size={20} color="grey" /> */}
                                     {'  '}Shop By Motor Wash
-            </Text>
+                                </Text> */}
                                 <View style={{ backgroundColor: 'white' }}>
                                     <MotorMainCategory
                                         categories={this.state.motorList}
