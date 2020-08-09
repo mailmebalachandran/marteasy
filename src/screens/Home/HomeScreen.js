@@ -40,6 +40,7 @@ import MustHave from "./MustHave";
 import { transformCategoryList } from "./utils";
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import MotorScreen from '../../screens/MotorScreen/Motorscreen';
+import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
 import { getOrderedParentCategories } from "../../utils";
 class HomeScreen extends Component {
   constructor(props) {
@@ -57,7 +58,8 @@ class HomeScreen extends Component {
       promoImages: [
         HOME_PROMO_2,
         HOME_PROMO_3
-      ]
+      ],
+      isCatLoading: false,
     };
   }
 
@@ -76,10 +78,10 @@ class HomeScreen extends Component {
     this.getCategoriesOnLoad();
     this.getConstantsOnLoad();
 
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.getStoresOnLoad();
-      this.getCategoriesOnLoad();
-    });
+    // this._unsubscribe = this.props.navigation.addListener('focus', () => {
+    //   this.getStoresOnLoad();
+    //   this.getCategoriesOnLoad();
+    // });
 
   };
   handleConnectivityChange = (isConnected) => {
@@ -92,25 +94,27 @@ class HomeScreen extends Component {
   }
 
   getStoresOnLoad = async () => {
+    this.setState({ isStoreLoading: true });
     let result = await HomeAPI.GetStores();
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
 
-      this.setState({ isShowError: true, isLoading: false });
+      this.setState({ isShowError: true, isStoreLoading: false });
     }
     else if (result !== undefined) {
       this.setState({ ShopList: result }, () => {
-        this.setState({ isLoading: false, isShowError: false });
-      });
+        this.setState({ isStoreLoading: false, isShowError: false });
+      });isCatLoading
     }
   };
   getCategoriesOnLoad = async () => {
+    this.setState({ isCatLoading: true });
     let result = await HomeAPI.getParentCategories();
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
-      this.setState({ isShowError: true, isLoading: false });
+      this.setState({ isShowError: true, isCatLoading: false });
     }
     else if (result !== undefined) {
       this.setState({ categoryList: result }, () => {
-        this.setState({ isLoading: false, isShowError: false });
+        this.setState({ isCatLoading: false, isShowError: false });
       });
     }
   };
@@ -179,10 +183,12 @@ class HomeScreen extends Component {
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
                   <Image source={SHOP_BY_CATEGORY} style={{ width: "100%" }} resizeMode={"contain"} />
-                  <MainCategory
-                    categories={getOrderedParentCategories(this.state.categoryList)}
-                    navigation={this.props.navigation}
-                  />
+                  {this.state.isCatLoading ? <ActivityContainer /> :
+                    <MainCategory
+                      categories={getOrderedParentCategories(this.state.categoryList)}
+                      navigation={this.props.navigation}
+                    />
+                  }
                 </View>
                 <TouchableNativeFeedback onPress={() => {
                   this.props.navigation.navigate('MotorScreen',
@@ -195,7 +201,9 @@ class HomeScreen extends Component {
                           textTransform: "capitalize", fontWeight: "normal",
                           textAlign: 'center', margin: '5%',
                         }}>
-                          {this.state.tagDetails.name}</Text>
+                          {/*{this.state.tagDetails.name} */}
+                          Motor Wash
+                          </Text>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -221,10 +229,12 @@ class HomeScreen extends Component {
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
                   <Image source={FEATURED_STORES} style={{ width: "100%" }} resizeMode={"contain"} />
+                  {this.state.isStoreLoading ? <ActivityContainer /> :
                   <StoreList
                     dataValues={this.state.ShopList}
                     navigation={this.props.navigation}
                   />
+                }
                 </View>
                 <Toast
                   ref="toast"
