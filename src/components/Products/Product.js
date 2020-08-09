@@ -87,7 +87,7 @@ class Product extends React.Component {
           {this.state.productList.map(product => (
             <View style={styles.productContainer} key={product.id.toString()}>
               <View style={styles.imageViewContainerStyle}>
-                <View style={{ flex: 0.35 }}>{this.onAvatarImage(product)}</View>
+              <View><View style={{ flex: 0.4 }}>{this.onAvatarImage(product)}</View></View>
                 <View style={{ flex: 0.9, justifyContent: "flex-start" }}>
                   <View style={styles.productViewContainerStyle}>
                     {/* <View style={styles.productNameContainer}> */}
@@ -118,9 +118,9 @@ class Product extends React.Component {
                     </View>
 
                     {/* </View> */}
-                    <View style={{ flex: 1, marginLeft: "13%",justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ flex: 1,justifyContent: "flex-start", alignItems: "flex-start" }}>
                       {/* <View style={styles.addCartOuterViewContainerStyle}> */}
-                      <View style={{ flex: 1, width: "100%" }}>
+                      <View style={{ flex: 1}}>
                         {this.props.isCompareProduct === true &&
                           product.tags.length > 0 ? (
                             <View style={styles.compareViewStyle}>
@@ -136,7 +136,7 @@ class Product extends React.Component {
                             </View>
                           ) : null}
                       </View>
-                      <View style={{flex: 1, width: "100%"}}>
+                      <View style={{flex: 1}}>
                         <AddCart
                           productValue={product}
                           onAddHandler={product => {

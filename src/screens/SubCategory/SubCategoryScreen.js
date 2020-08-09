@@ -87,7 +87,7 @@ class SubCategoryScreen extends Component {
         <Header
           navigationScreenValue={this.props.route.params.catName}
           navigation={this.props.navigation}
-          navigateValue = "Home"
+          navigateValue = "HomeScreen"
         />
         <ScrollView>
           <View style={styles.promoContainer}>

@@ -484,14 +484,14 @@ class ProductsScreen extends Component {
                   </View> */}
                   </View>
                 </View>
-                <View style={{height: 20}}>
+                {/* <View style={{height: 20}}>
                   <Line />
-                </View>
-                <View style={{height: 50}}>
+                </View> */}
+                {/* <View style={{height: 50}}>
                   {this.state.storeDetail.store_open_close && (
                     <OpeningHour {...this.state} />
                   )}
-                </View>
+                </View> */}
                 <View style={{height: 20}}>
                   <Line />
                 </View>
