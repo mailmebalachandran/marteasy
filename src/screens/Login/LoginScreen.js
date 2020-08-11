@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, ActivityIndicator, Text, TouchableNativeFeedback } from 'react-native';
+import { View, Image, ActivityIndicator, Text, TouchableNativeFeedback, ScrollView } from 'react-native';
 import TextBox from '../../components/TextBox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
@@ -47,53 +47,61 @@ class LoginScreen extends Component {
           <ActivityIndicator size="large" color={ThemeColor.DarkColor} />
         )}
         <StatusBarComponent styleType={0} />
-        <View style={styles.logoStyle}>
-          <Image source={LOGO} />
-        </View>
-        <Label labelValue={Constants.LABEL_USERNAME} />
-        <TextBox
-          placeHolderValue={Constants.PLACEHOLDER_USERNAME}
-          textValue={this.state.UserName}
-          IsHavingIcon={true}
-          iconName="user"
-          iconSize={25}
-          iconColor={ThemeColor.DarkColor}
-          secureText={false}
-          textStyle={{ fontSize: 10 }}
-          autoCapitalize="none"
-          onChangedTextHandler={text => {
-            this.setState({ UserName: text });
-          }}
-        />
-        <Label labelValue={Constants.LABEL_PASSWORD} />
-        <TextBox
-          placeHolderValue={Constants.PLACEHOLDER_PASSWORD}
-          textValue={this.state.Password}
-          IsHavingIcon={true}
-          iconName="lock"
-          iconSize={25}
-          iconColor={ThemeColor.DarkColor}
-          secureText={true}
-          autoCapitalize="none"
-          onChangedTextHandler={text => {
-            this.setState({ Password: text });
-          }}
-        />
-        <View style={{ flex: 0.14, flexDirection: "row", marginTop: "5%" }}>
-          <View style={{ flex: 1 }}>
-            <ButtonComponent
-              titleValue={Constants.BUTTON_LOGIN}
-              onPressHandler={this.onSubmitHandler}
-            />
+        <ScrollView>
+          <View style={styles.logoStyle}>
+            <Image source={LOGO} />
           </View>
-          <View style={{ flex: 1 }}>
-            <ButtonComponent
-              titleValue={Constants.BUTTON_CANCEL}
-              onPressHandler={() => {
-                this.props.navigation.navigate('HomeScreen');
-              }}
-            />
+          <Label labelValue={Constants.LABEL_USERNAME} />
+          <TextBox
+            placeHolderValue={Constants.PLACEHOLDER_USERNAME}
+            textValue={this.state.UserName}
+            IsHavingIcon={true}
+            iconName="user"
+            iconSize={25}
+            iconColor={ThemeColor.DarkColor}
+            secureText={false}
+            textStyle={{ fontSize: 10 }}
+            autoCapitalize="none"
+            onChangedTextHandler={text => {
+              this.setState({ UserName: text });
+            }}
+          />
+          <Label labelValue={Constants.LABEL_PASSWORD} />
+          <TextBox
+            placeHolderValue={Constants.PLACEHOLDER_PASSWORD}
+            textValue={this.state.Password}
+            IsHavingIcon={true}
+            iconName="lock"
+            iconSize={25}
+            iconColor={ThemeColor.DarkColor}
+            secureText={true}
+            autoCapitalize="none"
+            onChangedTextHandler={text => {
+              this.setState({ Password: text });
+            }}
+          />
+
+          <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end", margin: 0.1 }}>
+            <TouchableNativeFeedback onPress={()=>{console.log("Pressed Forgot Password")}}>
+              <Text style={{ textDecorationLine: "underline" }}>Forgot Password?</Text>
+            </TouchableNativeFeedback>
           </View>
+
+          <View style={{ flex: 0.14, flexDirection: "row", marginTop: "5%" }}>
+            <View style={{ flex: 1 }}>
+              <ButtonComponent
+                titleValue={Constants.BUTTON_LOGIN}
+                onPressHandler={this.onSubmitHandler}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <ButtonComponent
+                titleValue={Constants.BUTTON_CANCEL}
+                onPressHandler={() => {
+                  this.props.navigation.navigate('HomeScreen');
+                }}
+              />
+            </View>
           </View>
 
 
@@ -113,7 +121,8 @@ class LoginScreen extends Component {
             opacity={0.8}
             textStyle={{ color: 'white' }}
           />
-        </View>
+        </ScrollView>
+      </View>
     );
   }
 }

@@ -22,7 +22,7 @@ import MainCategory from "../Home/MainCategory";
 import { transformCategoryList } from "../Home/utils";
 import SubcategoryAPI from '../../api/Home/SubcategoryAPI';
 import unescape from 'unescape';
-import { isShowStore, transformToStoreData } from "./utils";
+import { isShowStore, transformToStoreData, getOrderedRestaurantSubCats } from "./utils";
 import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
 
 class SubCategoryScreen extends Component {
@@ -56,6 +56,7 @@ class SubCategoryScreen extends Component {
   componentDidMount = async () => {
     this.setState({isLoading: true})
     this.getSubCategoriesOnLoad(this.props.route.params.catId);
+    console.log("name",this.props.route.params.catName)
   }
 
   getSubCategoriesOnLoad = async (catId) => {
@@ -78,6 +79,15 @@ class SubCategoryScreen extends Component {
       });
     }
   };
+  getTransformedList = (subCatList) => {
+    const restaruantPatt = new RegExp("RESTAURANT");
+    let name = catName.toUpperCase();
+    if (restaruantPatt.test(name)) {
+        return getOrderedRestaurantSubCats(subCatList);
+    } else {
+        return subCatList
+    }
+  }
 
   render() {
     return (
@@ -108,7 +118,7 @@ class SubCategoryScreen extends Component {
             {this.state.isLoading ? <ActivityContainer />
               : (
                 <CategoryList
-                  categories={this.state.SubCategoryList}
+                  categories={this.getTransformedList(this.state.SubCategoryList)}
                   navigation={this.props.navigation}
                   isShowStore={this.state.isShowStore}
                 />

@@ -14,7 +14,7 @@ const restaurantPatt = new RegExp("RESTAURANT");
 const electronicsPatt = new RegExp("ELECTRONICS");
 const pharmacyPatt = new RegExp("PHARMACY");
 const petsPatt = new RegExp("PETS");
-
+//Ordered Array To Display
 export const PARENT_CATS_REGEX = [
     groceriesPatt,
     fruitsPatt,
@@ -24,4 +24,21 @@ export const PARENT_CATS_REGEX = [
     electronicsPatt,
     pharmacyPatt,
     petsPatt
+]
+
+//Restaurant SubCategories ordering
+const indianPatt = new RegExp("INDIAN");
+const continentalPatt = new RegExp("CONTINENTAL");
+const chinesePatt = new RegExp("CHINESE");
+const tandoorPatt = new RegExp("TANDOOR");
+const pizzaPatt = new RegExp("PIZZA");
+const beveragePatt = new RegExp("BEVERAGE");
+    //Ordered Array To Display
+export const RESTAURANTS_SUB_CATS_REGEX = [
+    indianPatt,
+    continentalPatt,
+    chinesePatt,
+    tandoorPatt,
+    pizzaPatt,
+    beveragePatt,
 ]
