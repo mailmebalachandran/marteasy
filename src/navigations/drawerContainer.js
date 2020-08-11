@@ -16,6 +16,7 @@ import ShopByCategory from "../navigations/shopByCategoryMenu";
 import HomeAPI from '../api/Home/HomeAPI';
 import { getOrderedParentCategories } from "../utils";
 import { getMenuSubcategories } from "./utils";
+import { Linking } from "react-native";
 
 class DrawerContainer extends Component {
 
@@ -109,9 +110,11 @@ class DrawerContainer extends Component {
                                 label="Terms and Conditions"
                                 onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
                             <DrawerItem
-                                icon={() => (<AntDesign name={'customerservice'} size={25} color={"red"} />)}
+                                icon={() => (<FontAwesome5 name={'whatsapp'} size={25} color={"red"} />)}
                                 label="Customer Support"
-                                onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
+                                onPress={() => Linking.openURL(
+                                    'http://api.whatsapp.com/send?phone=+919474218508'
+                                    )} />
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'stars'} size={25} color={"red"} />)}
                                 label="Rate Us"

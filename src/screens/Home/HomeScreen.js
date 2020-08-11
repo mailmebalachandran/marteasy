@@ -103,7 +103,7 @@ class HomeScreen extends Component {
     else if (result !== undefined) {
       this.setState({ ShopList: result }, () => {
         this.setState({ isStoreLoading: false, isShowError: false });
-      });isCatLoading
+      });
     }
   };
   getCategoriesOnLoad = async () => {
