@@ -13,6 +13,7 @@ import { isUserLoggedIn } from "../../utils";
 import MenuLoader from "../../components/Loader/MenuLoader";
 import ErrorOverlay from "../../components/Errors/ErrorOverlay";
 import ActivityOverlay from "../ActivityOverlay/ActivityOverlay";
+import * as Constants from '../../api/Constants';
 
 class AddressOverlay extends React.Component {
     constructor(props) {
@@ -101,7 +102,7 @@ class AddressOverlay extends React.Component {
                 if (isEdit) {
                     this.setState({ isLoading: true });
                     axios.get(
-                        'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                        Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers',
                         {
                             params: {
                                 email: user.user_email,
@@ -188,7 +189,7 @@ class AddressOverlay extends React.Component {
             }
         }
         axios.put(
-            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers/' + userId,
+            Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers/' + userId,
             payload,
             {
                 params: {

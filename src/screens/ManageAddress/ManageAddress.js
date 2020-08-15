@@ -15,6 +15,7 @@ import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import MenuLoader from '../../components/Loader/MenuLoader';
 import { isUserLoggedIn } from "../../utils";
 import ErrorOverlay from "../../components/Errors/ErrorOverlay";
+import * as Constants from '../../api/Constants';
 
 class ManageAddress extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class ManageAddress extends Component {
             const user = JSON.parse(loginDetails);
             if (user) {
                 Axios.get(
-                    'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                    Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers',
                     {
                         params: {
                             email: user.user_email,

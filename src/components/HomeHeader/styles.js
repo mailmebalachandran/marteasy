@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 50,
         resizeMode: 'contain',
+        alignSelf: 'center',
     },
     titleStyle: {
         color: "#000000",
