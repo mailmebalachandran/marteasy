@@ -12,21 +12,28 @@ class HomeHeader extends Component {
         const { headerTitle } = this.props;
         return (
             <View style={styles.containerStyle}>
-                <View style={styles.logoContainer}>
+                <TouchableOpacity
+                    onPress={
+                        () => {
+                            this.props.navigation.openDrawer()
+                        }
+                    }
+                    style={styles.logoContainer}
+                >
+                    <Icon name="menu" style={[styles.navIcon]} />
+                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                    {/* <Text style={styles.titleStyle}>{this.props.headerTitle}</Text> */}
                     <Image style={styles.logo} source={LOGO} />
                 </View>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleStyle}>{this.props.headerTitle}</Text>
-                </View>
-                <View style={styles.rightIconContainer}>
-                    <TouchableOpacity
-                        onPress={
-                            () => this.props.navigation.navigate('Search')
-                        }
-                    >
-                        <Icon name="search" style={styles.searchIcon} />
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    onPress={
+                        () => this.props.navigation.navigate('Search')
+                    }
+                    style={styles.rightIconContainer}
+                >
+                    <Icon name="search" style={styles.searchIcon} />
+                </TouchableOpacity>
             </View>
         );
     }

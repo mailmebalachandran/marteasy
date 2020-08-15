@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as ThemeColor from '../../themes/colors';
 
 const styles = StyleSheet.create({
@@ -11,53 +11,35 @@ const styles = StyleSheet.create({
     borderColor: 'green',
     // borderRadius: 1,
     // borderWidth: 1,
-    fontSize:10,
+    fontSize: 11,
     color: "white"
   },
+  addBtnIcon: {
+    color: "#e95f62"
+  },
   addViewStyle: {
-    width: "60%",
     height: 30,
-    alignItems:'center',
+    alignItems: 'center',
     backgroundColor: "#e95f62",
     borderRadius: 5
   },
-  minusViewStyle: {
-    backgroundColor: '#ededed',
-    borderColor: ThemeColor.DarkColor,
-    borderStyle: 'solid',
+  minusPlusViewStyle: {
     borderWidth: 1,
-    padding: 5,
+    borderStyle: "solid",
+    borderColor: '#e95f62',
+    borderRadius: 5,
+    padding: 8,
     height: 30,
-    borderRightColor: ThemeColor.DarkTextColor,
-    borderRightWidth: 0,
-    
   },
   textViewStyle: {
-    borderColor: ThemeColor.DarkColor,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 5,
     height: 30,
-    borderLeftColor: ThemeColor.DarkTextColor,
-    borderRightColor: ThemeColor.DarkTextColor,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderRightWidth: 0
   },
   textTextStyle: {
     margin: 5,
     marginTop: 0,
-    fontSize:10
-  },
-  plusViewStyle: {
-    backgroundColor: '#e9fae8',
-    borderColor: ThemeColor.DarkColor,
-    borderLeftColor: ThemeColor.DarkTextColor,
-    borderLeftWidth: 0,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 5,
-    height: 30,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#e95f62",
   },
 });
 

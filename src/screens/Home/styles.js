@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     titleText: {
         marginLeft: 10,
         marginTop: 20,
-        fontFamily: 'notoserif',
         fontWeight: '400',
         fontSize: 20,
         textAlign: "center",
@@ -66,6 +65,12 @@ const styles = StyleSheet.create({
         marginTop: "1%",
     },
     promoImage: {
+        height: 200,
+        width: "100%",
+        resizeMode: 'contain',
+    },
+    //MotorWash
+    motorWashImage: {
         height: 200,
         width: "100%",
         resizeMode: 'contain',

@@ -20,6 +20,37 @@ function getDashboardOrdersSummary( $data ) {
   return $results;
 }
 //End Dashboard Screen APIs
+//Get Store Orders
+function getVendorProductDetails( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $query1= "CREATE TEMPORARY TABLE ProductDetails select t1.post_id,
+  (case when t1.meta_key = '_regular_price' then t1.meta_value end) regular_price,
+  (case when t1.`meta_key` = 'total_sales' then t1.meta_value end) total_sales,
+  (case when t1.`meta_key` = '_tax_status' then t1.meta_value end) tax_status,
+    (case when t1.`meta_key` = '_tax_class' then t1.meta_value end) tax_class,
+	(case when t1.`meta_key` = '_manage_stock' then t1.meta_value end) manage_stock,
+	(case when t1.`meta_key` = '_backorders' then t1.meta_value end) backorders,
+	(case when t1.`meta_key` = '_sold_individually' then t1.meta_value end) sold_individually,
+    (case when t1.`meta_key` = '_virtual' then t1.meta_value end) virt,
+    (case when t1.`meta_key` = '_downloadable' then t1.meta_value end) downloadable,
+    (case when t1.`meta_key` = '_download_limit' then t1.meta_value end) download_limit,
+    (case when t1.`meta_key` = '_download_expiry' then t1.meta_value end) download_expiry,
+    (case when t1.`meta_key` = '_stock' then t1.meta_value end) stock,
+     (case when t1.`meta_key` = '_wc_average_rating' then t1.meta_value end) wc_average_rating,
+      (case when t1.`meta_key` = '_stock_status' then t1.meta_value end) stock_status,
+       (case when t1.`meta_key` = '_wc_review_count' then t1.meta_value end) wc_review_count,
+        (case when t1.`meta_key` = '_product_version' then t1.meta_value end) product_version,
+       
+        max(case when t1.`meta_key` = '_price' then t1.meta_value end) price
+  from wp_postmeta t1 
+group by t1.post_id";
+  $query2="select * from wp_posts inner join ProductDetails on wp_posts.id = ProductDetails.post_id where post_author='19' and post_type='product'";
+  $wpdb->query( $query1 );
+  $results = $wpdb->get_results($query2);
+  return $results;
+}
+
 function getConstants(){
     chdir('wp-content/plugins/custom-api/');
     $string = file_get_contents("constants.json");
@@ -53,6 +84,24 @@ function getSingleProductRevenue( $data ) {
   $id=$data['id'];
   $results = $wpdb->get_results( "SELECT SUM(product_net_revenue) as revenue FROM wp_wc_order_product_lookup WHERE product_id = '$id'");
   return $results;
+}
+
+//Get Store Based On Category
+function getStoreBasedOnCategory( $data ) {
+  global $wpdb;
+  $id=$data['id'];
+  $results = $wpdb->get_results( "
+  select * from wp_users ws inner join wp_usermeta wsMeta on 
+  ws.ID = wsMeta.user_id where 
+  wsMeta.meta_key='simple_local_avatar' and ws.ID in 
+  ( SELECT wp.post_author FROM wp_term_relationships wtr inner join wp_posts wp on wtr.object_id = wp.ID inner join wp_term_taxonomy wtt on wtt.term_taxonomy_id = wtr.term_taxonomy_id inner join wp_terms wt on wt.term_id = wtt.term_id where wtt.term_id = '$id' and wp.post_type ='product' and wtt.taxonomy='product_cat' and wtt.parent in (select term_id from wp_term_taxonomy where parent=0) group by wp.post_author)");
+  
+  $res = array_map(function ($post) {
+        $src = preg_split('/\"/', $post->meta_value)[5];
+        $post->image->src = $src;
+        return $post;
+    }, $results);
+  return $res;
 }
 
 //Get Store Products Report
@@ -107,9 +156,39 @@ and wtt.taxonomy='product_cat' group by wtr.object_Id");
   return $results;
 }
 
+//Get Logged In User Type
+function getLoggedInUser( $request ) {
+  global $wpdb;
+  $param = $request->get_params();
+  
+  $email=$param['email'];
+
+  $results = $wpdb->get_results("SELECT ID,meta_value FROM wp_users INNER JOIN wp_usermeta ON wp_users.ID=wp_usermeta.user_id WHERE user_email='$email' AND meta_key='wp_capabilities'");
+  $res = array_map(function ($post) {
+        $src = preg_split('/\"/', $post->meta_value)[1];
+        if($src == "seller") {
+            $post->meta_value = true;
+        } else {
+            $post->meta_value = false;
+        }
+        return $post;
+    }, $results);
+    
+  return $results;
+}
+
+
+
 //Custom Routes
 
 add_action( 'rest_api_init', function () {
+
+     //Get Store Dashboard Summary
+  register_rest_route( 'custom-api/v1', '/store/user', array(
+    'methods' => 'GET',
+    'callback' => 'getLoggedInUser',
+  ) );
+    //Get Store Dashboard Summary
   register_rest_route( 'custom-api/v1', '/dashboard/(?P<id>\d+)', array(
     'methods' => 'GET',
     'callback' => 'getDashboardOrdersSummary',
@@ -134,6 +213,11 @@ add_action( 'rest_api_init', function () {
     'methods' => 'GET',
     'callback' => 'getSingleProductRevenue',
   ) );
+  //Get Store Based On Category getStoreBasedOnCategory
+  register_rest_route( 'custom-api/v1', '/storeByCategory/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getStoreBasedOnCategory',
+  ) );
   //Get Store Products Report
   register_rest_route( 'custom-api/v1', '/store/products/report/(?P<id>\d+)', array(
     'methods' => 'GET',
@@ -151,5 +235,9 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'custom-api/v1', '/store/productsbycatagory', array(
     'methods' => 'GET',
     'callback' => 'getProductsFromCatagory',
+  ) );
+  register_rest_route( 'custom-api/v1', '/store/productslist/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'getVendorProductDetails',
   ) );
 } );

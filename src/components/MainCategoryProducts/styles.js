@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     titleText: {
         marginLeft: 10,
         marginTop: 20,
-        fontFamily: 'notoserif',
         fontWeight: '400',
         fontSize: 20,
         textAlign: "center",
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
     categoryName: {
         textAlign: 'center',
         color: "#000000",
-        fontWeight: 'bold',
+        fontWeight: 'normal',
     },
     //Promo
     promoContainer: {

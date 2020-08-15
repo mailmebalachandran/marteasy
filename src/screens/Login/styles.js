@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   logoStyle: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: "30%"
   },
 });
 

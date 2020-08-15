@@ -28,6 +28,11 @@ const styles = StyleSheet.create({
     rightIconContainer: {
         width: "33%",
     },
+    navIcon: {
+        fontSize: 30,
+        fontWeight: "bold",
+        marginLeft: "5%",
+    },
     logo: {
         height: 50,
         resizeMode: 'contain',
@@ -44,7 +49,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "flex-end",
         padding: "10%",
-        marginTop: "-15%",
     }
 });
 

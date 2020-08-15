@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, ActivityIndicator, Text } from 'react-native';
+import { View, Image, ActivityIndicator, Text, ScrollView } from 'react-native';
 import TextBox from '../../components/TextBox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
@@ -47,11 +47,13 @@ class SignUpScreen extends Component {
 
   render() {
     return (
+      
       <View style={styles.containerStyle}>
         {this.state.IsLoaded && (
           <ActivityIndicator size="large" color={ThemeColor.DarkColor} />
         )}
         <StatusBarComponent styleType={0} />
+        <ScrollView>
         <View style={styles.logoStyle}>
           <Image source={LOGO} />
         </View>
@@ -115,7 +117,7 @@ class SignUpScreen extends Component {
             />
           </View>
         </View>
-          <View style={{flex: 0.01, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+          <View style={{flex: 0.01, flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: "10%"}}>
             <Text style={{fontSize: 17, color:"gray"}}>Already Registered</Text>
             <TouchableNativeFeedback  style={{marginLeft: "10%"}}onPress={()=>this.props.navigation.navigate('LoginScreen')}>
             <Text style={{fontSize: 18, color: "green",textDecorationLine:"underline" }}>Login</Text>
@@ -133,7 +135,9 @@ class SignUpScreen extends Component {
           opacity={0.8}
           textStyle={{ color: 'white' }}
         />
+         </ScrollView>
       </View>
+     
     );
   }
 }
