@@ -3,6 +3,7 @@ import styles from './styles';
 import { View, TouchableOpacity, Text, Image } from 'react-native';
 import { LOGO } from "../../assets/index";
 import Icon from 'react-native-vector-icons/Feather';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 class HomeHeader extends Component {
     constructor(props) {
@@ -28,11 +29,11 @@ class HomeHeader extends Component {
                 </View>
                 <TouchableOpacity
                     onPress={
-                        () => this.props.navigation.navigate('Search')
+                        () => this.props.navigation.navigate('Account')
                     }
                     style={styles.rightIconContainer}
                 >
-                    <Icon name="search" style={styles.searchIcon} />
+                    <FontAwesome5 name="user-circle" style={styles.searchIcon} />
                 </TouchableOpacity>
             </View>
         );
