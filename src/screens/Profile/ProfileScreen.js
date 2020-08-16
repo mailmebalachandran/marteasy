@@ -17,6 +17,7 @@ import ConnectionError from "../../components/Errors/ConnectionError";
 import { USER_LOGIN_ERROR } from "../../assets/index";
 import ButtonComponent from "../../components/Button/Button";
 import { isUserLoggedIn, logout } from "../../utils";
+import * as Constants from '../../api/Constants';
 
 class ProfileScreen extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class ProfileScreen extends Component {
             this.setState({ isLoginOverlay: false });
             if (user) {
                 Axios.get(
-                    'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
+                    Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers',
                     {
                         params: {
                             email: user.user_email,
@@ -59,7 +60,7 @@ class ProfileScreen extends Component {
                     .then(res => {
                         this.setState({ isLoading: false });
                         Axios.get(
-                            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v2/orders',
+                            Constants.GLOBAL_VALUE+'/wp-json/wc/v2/orders',
                             {
                                 params: {
                                     customer: res.data[0].id.toString(),

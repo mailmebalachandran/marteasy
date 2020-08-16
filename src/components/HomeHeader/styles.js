@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 50,
         resizeMode: 'contain',
+        alignSelf: 'center',
     },
     titleStyle: {
         color: "#000000",
@@ -45,8 +46,8 @@ const styles = StyleSheet.create({
         fontWeight: "500"
     },
     searchIcon: {
-        fontSize: 25,
-        fontWeight: "bold",
+        fontSize: 30,
+        fontWeight: "normal",
         alignSelf: "flex-end",
         padding: "10%",
     }

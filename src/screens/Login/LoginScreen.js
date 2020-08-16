@@ -11,6 +11,8 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import { LOGO } from '../../assets/index';
 import * as ThemeColor from '../../themes/colors';
 import * as Constants from './constants';
+import * as APIConstants from "../../api/Constants";
+import { Linking } from "react-native";
 
 class LoginScreen extends Component {
   state = {
@@ -82,7 +84,11 @@ class LoginScreen extends Component {
           />
 
           <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end", margin: 0.1 }}>
-            <TouchableNativeFeedback onPress={()=>{console.log("Pressed Forgot Password")}}>
+            <TouchableNativeFeedback 
+              onPress={() => Linking.openURL(
+                APIConstants.GLOBAL_VALUE + '/my-account/lost-password'
+                                    )}
+              >
               <Text style={{ textDecorationLine: "underline" }}>Forgot Password?</Text>
             </TouchableNativeFeedback>
           </View>

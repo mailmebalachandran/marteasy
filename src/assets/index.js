@@ -1,6 +1,6 @@
 import { BASE_URL } from "../constants";
 
-export const LOGO = require('./images/logo.png');
+export const LOGO = require('./images/logo1.png');
 export const IMAGE_LOADER = require('./images/imagerLoader.gif');
 export const ADDTOCART = require('./images/addtocart.png');
 export const EMPTYCART = require('./images/emptycart.png');
