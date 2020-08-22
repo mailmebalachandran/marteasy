@@ -100,15 +100,15 @@ class DrawerContainer extends Component {
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'question-answer'} size={25} color={"red"} />)}
                                 label="FAQ's"
-                                onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
+                                onPress={() => { this.props.navigation.navigate("FAQScreen") }} />
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'security'} size={25} color={"red"} />)}
                                 label="Privacy Policy"
-                                onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
+                                onPress={() => { this.props.navigation.navigate("PrivacyPolicyScreen") }} />
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'format-list-numbered'} size={25} color={"red"} />)}
                                 label="Terms and Conditions"
-                                onPress={() => { this.props.navigation.navigate("LoginScreen") }} />
+                                onPress={() => { this.props.navigation.navigate("TermsAndConditionsScreen") }} />
                             <DrawerItem
                                 icon={() => (<FontAwesome5 name={'whatsapp'} size={25} color={"red"} />)}
                                 label="Customer Support"
