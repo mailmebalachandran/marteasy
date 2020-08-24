@@ -203,7 +203,7 @@ class HomeScreen extends Component {
                         }}>
                           {/*{this.state.tagDetails.name} */}
                           Motor Wash
-                          </Text>
+                        </Text>
                     </View>
                   </View>
                 </TouchableNativeFeedback>

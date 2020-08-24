@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 5,
     paddingTop: 5,
+    textAlign:"center",
     // borderBottomWidth: 1,
     // borderColor: 'green',
     // borderRadius: 1,
@@ -104,9 +105,14 @@ const styles = StyleSheet.create({
   },
   compareViewStyle: {
     height: 30,
-    backgroundColor: "#ff918f",
+    backgroundColor: Theme.COMPARE_BTN_COLOR,
     borderRadius: 5
   },
+  buttonContainer:{
+    flex: 1, 
+    width:"90%",
+    marginLeft: "10%"
+  }
 });
 
 export default styles;

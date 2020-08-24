@@ -91,9 +91,10 @@ class App extends Component {
           inactiveTintColor: 'gray',
         }}>
         <Tab.Screen name="Home" component={this.rootStack} />
+        <Tab.Screen name="Categories" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
-        <Tab.Screen name="Categories" component={HomeScreen} />
+        
       </Tab.Navigator>
     );
   };
@@ -194,7 +195,7 @@ class App extends Component {
           <Drawer.Screen name={"Login"} component={LoginScreen} />
           {/* <Drawer.Screen name={} */}
         </Drawer.Navigator>
-      </NavigationContainer >
+      </NavigationContainer>
     );
   }
 }

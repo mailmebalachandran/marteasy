@@ -55,6 +55,6 @@ export const PROFILE_IMAGE=require('../assets/images/profile.png');
 export const PRODUCT_LOGO=require('../assets/images/food.jpg');
 
 //Homescreen Header Logo
-export const SHOP_BY_CATEGORY=require('../assets/images/ShopByCategory.png');
-export const SEASONS_MUST_HAVE=require('../assets/images/Seasonmusthave.png');
-export const FEATURED_STORES=require('../assets/images/Featuredstores.png');
+export const SHOP_BY_CATEGORY=require('../assets/images/Home/ShopByCategory.png');
+export const SEASONS_MUST_HAVE=require('../assets/images/Home/Seasonmusthave.png');
+export const FEATURED_STORES=require('../assets/images/Home/Featuredstores.png');

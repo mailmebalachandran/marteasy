@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "bold",
         marginLeft: "5%",
+        color: "#FA971F",
     },
     logo: {
         height: 50,
