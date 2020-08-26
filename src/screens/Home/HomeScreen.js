@@ -42,6 +42,7 @@ import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import MotorScreen from '../../screens/MotorScreen/Motorscreen';
 import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
 import { getOrderedParentCategories } from "../../utils";
+import mainCatData from "./catData"
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -52,13 +53,20 @@ class HomeScreen extends Component {
       isShowError: false,
       isPressed: false,
       IsInternetConnected: true,
-      categoryList: [],
-      constantsId: [],
+      categoryList: mainCatData,
+      constants: {},
       tagDetails: [],
-      promoImages: [
+      homeBanner1: [
+        HOME_BANNER_IMAGE1,
+        HOME_BANNER_IMAGE2,
+        HOME_BANNER_IMAGE3,
+        HOME_BANNER_IMAGE4,
+      ],
+      homeBanner2: [
         HOME_PROMO_2,
         HOME_PROMO_3
       ],
+      homePromo: HOME_PROMO_1,
       isCatLoading: false,
     };
   }
@@ -126,8 +134,14 @@ class HomeScreen extends Component {
     }
     else if (result !== undefined) {
       this.getTagDetailsOnLoad(result.motor_wash_tag_id);
-      this.setState({ constantsId: result }, () => {
-        this.setState({ isLoading: false, isShowError: false });
+      this.setState({ constants: result }, () => {
+        this.setState({
+          isLoading: false,
+          isShowError: false,
+          homeBanner1: result.home.homeBanner1,
+          homeBanner2: result.home.homeBanner2,
+          homePromo: { uri: result.home.homePromo }
+        });
       });
     }
   };
@@ -152,12 +166,6 @@ class HomeScreen extends Component {
   }
 
   render() {
-    const bannerImages = [
-      HOME_BANNER_IMAGE1,
-      HOME_BANNER_IMAGE2,
-      HOME_BANNER_IMAGE3,
-      HOME_BANNER_IMAGE4,
-    ];
     return (
       <SafeAreaView style={{ flex: 1, }}>
         {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> : this.state.isLoading ? (
@@ -176,19 +184,17 @@ class HomeScreen extends Component {
               <View style={{ flex: 1 }}>
                 <View style={styles.bannerContainer}>
                   <Slider
-                    images={bannerImages}
+                    images={this.state.homeBanner1}
                     autoplay={true}
                     isLoop={true}
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
                   <Image source={SHOP_BY_CATEGORY} style={{ width: "100%" }} resizeMode={"contain"} />
-                  {this.state.isCatLoading ? <ActivityContainer /> :
-                    <MainCategory
-                      categories={getOrderedParentCategories(this.state.categoryList)}
-                      navigation={this.props.navigation}
-                    />
-                  }
+                  <MainCategory
+                    categories={getOrderedParentCategories(this.state.categoryList)}
+                    navigation={this.props.navigation}
+                  />
                 </View>
                 <TouchableNativeFeedback onPress={() => {
                   this.props.navigation.navigate('MotorScreen',
@@ -197,11 +203,11 @@ class HomeScreen extends Component {
                   <View style={{ flex: 1, marginTop: "2%", marginBottom: "2%", justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
                     <View>
                       <Image source={MOTOR_WASH_IMAGE8} />
-                        <Text style={{
-                          textTransform: "capitalize", fontWeight: "normal",
-                          textAlign: 'center', margin: '5%',
-                        }}>
-                          {/*{this.state.tagDetails.name} */}
+                      <Text style={{
+                        textTransform: "capitalize", fontWeight: "normal",
+                        textAlign: 'center', margin: '5%',
+                      }}>
+                        {/*{this.state.tagDetails.name} */}
                           Motor Wash
                         </Text>
                     </View>
@@ -209,7 +215,7 @@ class HomeScreen extends Component {
                 </TouchableNativeFeedback>
                 <View style={styles.promoContainer}>
                   <Slider
-                    images={this.state.promoImages}
+                    images={this.state.homeBanner2}
                     autoplay={true}
                     isLoop={true}
                   />
@@ -224,17 +230,17 @@ class HomeScreen extends Component {
                 <View style={styles.promoContainer}>
                   <Image
                     style={styles.promoImage}
-                    source={HOME_PROMO_1}
+                    source={this.state.homePromo}
                   />
                 </View>
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
                   <Image source={FEATURED_STORES} style={{ width: "100%" }} resizeMode={"contain"} />
                   {this.state.isStoreLoading ? <ActivityContainer /> :
-                  <StoreList
-                    dataValues={this.state.ShopList}
-                    navigation={this.props.navigation}
-                  />
-                }
+                    <StoreList
+                      dataValues={this.state.ShopList}
+                      navigation={this.props.navigation}
+                    />
+                  }
                 </View>
                 <Toast
                   ref="toast"

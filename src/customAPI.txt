@@ -177,7 +177,13 @@ function getLoggedInUser( $request ) {
   return $results;
 }
 
-
+function testApi( $request ) {
+  global $wpdb;
+  $param = $request->get_params();
+  $user_id=$param['user_id'];
+  $data = get_user_meta ( $user_id );
+  return $data;
+}
 
 //Custom Routes
 
@@ -187,6 +193,10 @@ add_action( 'rest_api_init', function () {
   register_rest_route( 'custom-api/v1', '/store/user', array(
     'methods' => 'GET',
     'callback' => 'getLoggedInUser',
+  ) );
+  register_rest_route( 'custom-api/v1', '/test', array(
+    'methods' => 'GET',
+    'callback' => 'testApi',
   ) );
     //Get Store Dashboard Summary
   register_rest_route( 'custom-api/v1', '/dashboard/(?P<id>\d+)', array(
