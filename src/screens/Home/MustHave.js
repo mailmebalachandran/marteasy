@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   View,
   Image,
@@ -11,7 +11,7 @@ import * as ThemeColor from '../../themes/colors';
 import * as CommonConstants from '../../constants';
 import * as Images from '../../assets/index';
 
-class MustHave extends Component {
+class MustHave extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -108,13 +108,16 @@ class MustHave extends Component {
                     shadowRadius: 5,
                     elevation: 25,
                   }}>
-                  <View style={{
-                    backgroundColor: "rgba(175,175,175,0.1)",
-                    borderColor: "#99d066", borderWidth: 0.4,
-                    borderRadius: 5,
-                    width: "80%"
-                  }}>
+                  <View
+                    key={cat.id}
+                    style={{
+                      backgroundColor: "rgba(175,175,175,0.1)",
+                      borderColor: "#99d066", borderWidth: 0.4,
+                      borderRadius: 5,
+                      width: "80%"
+                    }}>
                     <Image
+                      key={"catImage" + cat.id}
                       source={{ uri: cat.gravatar }}
                       style={{
                         resizeMode: 'contain',
@@ -125,6 +128,7 @@ class MustHave extends Component {
                   </View>
                 </View>
                 <Text
+                  key={"catName" + cat.id}
                   style={styles.categoryName}>
                   {' '}
                   {cat.category_name}{' '}

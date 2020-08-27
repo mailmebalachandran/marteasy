@@ -1,4 +1,5 @@
-export const GLOBAL_VALUE = 'https://marteasy.in';
+export const GLOBAL_VALUE = 'https://15.206.72.149';
+//export const GLOBAL_VALUE = 'https://marteasy.in';
 //export const GLOBAL_VALUE = 'https://marteasy.vasanthamveliyeetagam.com/';
 export const LoginAPI = GLOBAL_VALUE + '/wp-json/jwt-auth/v1/token';
 export const SignUpAPI = GLOBAL_VALUE + '/wp-json/wp/v2/users'
