@@ -91,8 +91,9 @@ class MustHave extends PureComponent {
         {/* Main Category 2 column */}
         {this.state.data.map(cat => {
           return (
-            <View style={styles.categoryItemContainer2Col}>
+            <View key={cat.id} style={styles.categoryItemContainer2Col}>
               <TouchableOpacity
+                key={cat.id}
                 onPress={() => { }}>
                 <View
                   key={cat.id}
