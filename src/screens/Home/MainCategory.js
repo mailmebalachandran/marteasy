@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
     View,
     Image,
@@ -14,7 +14,7 @@ import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
 import unescape from "unescape";
-class MainCategory extends Component {
+class MainCategory extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

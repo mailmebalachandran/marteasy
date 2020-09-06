@@ -56,14 +56,11 @@ class SubCategoryScreen extends Component {
   componentDidMount = async () => {
     this.setState({isLoading: true})
     this.getSubCategoriesOnLoad(this.props.route.params.catId);
-    console.log("name",this.props.route.params.catName)
   }
 
   getSubCategoriesOnLoad = async (catId) => {
     const showStore = isShowStore(this.props.route.params.catName);
-
     this.setState({ isShowStore: showStore });
-
     let result = showStore ?
       await SubcategoryAPI.getCatgeoryProducts(catId) :
       await SubcategoryAPI.getparentSubCategories(catId);
@@ -80,12 +77,13 @@ class SubCategoryScreen extends Component {
     }
   };
   getTransformedList = (subCatList) => {
+    console.log("catlist", subCatList);
     const restaruantPatt = new RegExp("RESTAURANT");
     let name = catName.toUpperCase();
     if (restaruantPatt.test(name)) {
         return getOrderedRestaurantSubCats(subCatList);
     } else {
-        return subCatList
+        return subCatList;
     }
   }
 

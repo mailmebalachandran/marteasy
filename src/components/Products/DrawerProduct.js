@@ -121,7 +121,7 @@ class DrawerProduct extends React.Component {
                     {/* </View> */}
                     <View style={{ flex: 1,justifyContent: "flex-end", alignItems: "flex-end" }}>
                       {/* <View style={styles.addCartOuterViewContainerStyle}> */}
-                      <View style={{ flex: 1,}}>
+                      <View style={styles.buttonContainer}>
                         {this.props.isCompareProduct === true &&
                           product.tags.length > 0 ? (
                             <View style={styles.compareViewStyle}>
@@ -137,7 +137,7 @@ class DrawerProduct extends React.Component {
                             </View>
                           ) : null}
                       </View>
-                      <View style={{flex: 1}}>
+                      <View style={styles.buttonContainer}>
                         <AddCart
                           productValue={product}
                           onAddHandler={product => {

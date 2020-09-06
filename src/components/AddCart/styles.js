@@ -15,18 +15,19 @@ const styles = StyleSheet.create({
     color: "white"
   },
   addBtnIcon: {
-    color: "#e95f62"
+    color: ThemeColor.ADD_BTN_COLOR
   },
+  //Not Being used for now
   addViewStyle: {
     height: 30,
     alignItems: 'center',
-    backgroundColor: "#e95f62",
+    backgroundColor: ThemeColor.ADD_BTN_COLOR,
     borderRadius: 5
   },
   minusPlusViewStyle: {
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: '#e95f62',
+    borderColor: ThemeColor.ADD_BTN_COLOR,
     borderRadius: 5,
     padding: 8,
     height: 30,
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#e95f62",
+    color: ThemeColor.ADD_BTN_COLOR,
   },
 });
 
