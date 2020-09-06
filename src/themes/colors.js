@@ -14,3 +14,4 @@ export const LIGHT_BG = "#FCFEE9";
 export const ProductButtonColor="#e95f62"
 export const COMPARE_BTN_COLOR = "#FA971F";
 export const ADD_BTN_COLOR = "#0E4154";
+export const BRAND_SECONDARY = "#134253";

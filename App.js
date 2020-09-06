@@ -29,6 +29,7 @@ import DrawerProductScreen from "./src/screens/Products/drawerProductScreen";
 import PrivacyPolicyScreen from "./src/screens/PrivacyPolicyScreen/PrivacyPolicyScreen";
 import TermsAndConditionsScreen from "./src/screens/TermsAndConditions/TermsAndConditionsScreen";
 import FAQScreen from "./src/screens/FAQScreen/FAQScreen";
+import OtpScreen from "./src/screens/SignUp/OtpScreen";
 //Setting Global Styles
 import {
   setCustomText,
@@ -94,7 +95,7 @@ class App extends Component {
         <Tab.Screen name="Categories" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
-        
+
       </Tab.Navigator>
     );
   };
@@ -174,6 +175,11 @@ class App extends Component {
         />
 
         <RootStack.Screen
+          name="OtpScreen"
+          component={OtpScreen}
+        />
+
+        <RootStack.Screen
           name="test"
           component={TestScreen}
         />
@@ -190,9 +196,10 @@ class App extends Component {
           drawerStyle={{ width: "85%" }}
           {...this.props}
         >
-          <Drawer.Screen name={"Home"} component={this.homeScreenNavigator} />
+          <Drawer.Screen name={"Home"} component={SignUpScreen} />
           <Drawer.Screen name={"Home1"} component={this.rootStack} />
           <Drawer.Screen name={"Login"} component={LoginScreen} />
+          <Drawer.Screen name={"OtpScreen"} component={OtpScreen} />
           {/* <Drawer.Screen name={} */}
         </Drawer.Navigator>
       </NavigationContainer>

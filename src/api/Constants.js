@@ -1,8 +1,11 @@
-export const GLOBAL_VALUE = 'https://test.marteasytest.tk';
-//export const GLOBAL_VALUE = 'https://marteasy.in';
+//export const GLOBAL_VALUE = 'https://test.marteasytest.tk';
+export const GLOBAL_VALUE = 'https://marteasy.in';
 //export const GLOBAL_VALUE = 'https://marteasy.vasanthamveliyeetagam.com/';
+export const OTP_GATEWAY_URL = 'http://www.smsalert.co.in';
+export const OTP_GATEWAY_API_KEY = '5f448b7ee821d';
+export const OTP_SENDER = 'MARTEA';
 export const LoginAPI = GLOBAL_VALUE + '/wp-json/jwt-auth/v1/token';
-export const SignUpAPI = GLOBAL_VALUE + '/wp-json/wp/v2/users'
+export const SignUpAPI = GLOBAL_VALUE + '/wp-json/wp/v2/users';
 export const GetProductsAPI = GLOBAL_VALUE + '/wp-json/dokan/v1/stores/';
 export const GetShopsAPI = GLOBAL_VALUE + '/wp-json/dokan/v1/stores/';
 export const SearchProductsAPI =
