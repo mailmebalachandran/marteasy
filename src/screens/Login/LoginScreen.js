@@ -40,6 +40,14 @@ class LoginScreen extends Component {
     }
   };
 
+  onChangeHandlerUsername = (text) =>{
+    this.setState({UserName: text});
+  }
+
+  onChangeHandlerPassword = (text) => {
+    this.setState({Password: text});
+  }
+
   render() {
     return (
       <View style={styles.containerStyle}>
@@ -63,8 +71,9 @@ class LoginScreen extends Component {
             textStyle={{ fontSize: 10 }}
             autoCapitalize="none"
             onChangedTextHandler={text => {
-              this.setState({ UserName: text });
+              onChangeHandlerUsername(text);
             }}
+            testId={'username'}
           />
           <Label labelValue={Constants.LABEL_PASSWORD} />
           <TextBox
@@ -77,8 +86,9 @@ class LoginScreen extends Component {
             secureText={true}
             autoCapitalize="none"
             onChangedTextHandler={text => {
-              this.setState({ Password: text });
+              onChangeHandlerPassword(text);
             }}
+            testId={'password'}
           />
 
           <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end", margin: 0.1 }}>

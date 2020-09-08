@@ -31,6 +31,7 @@ class TextBox extends Component {
           placeholderTextColor={ThemeColor.PlaceHolderColor}
           inputStyle={{fontSize:14}}
           autoCapitalize={this.props.autoCapitalize}
+          testID={this.props.testId}
         />
       );
     } else {

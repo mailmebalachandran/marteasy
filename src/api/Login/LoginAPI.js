@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import AsyncStorage from "@react-native-community/async-storage";
+import { AsyncStorage } from 'react-native';
 import * as Constants from '../Constants';
 
 const LoginValidation = async userDetails => {

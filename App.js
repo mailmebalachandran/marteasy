@@ -100,7 +100,7 @@ class App extends Component {
     return (
     <RootStack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="HomeScreen">
+      initialRouteName="LoginScreen">
       <RootStack.Screen
         name="LoginScreen"
         component={LoginScreen} 

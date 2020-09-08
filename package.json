@@ -30,12 +30,14 @@
     "react-native-safe-area-context": "^3.0.4",
     "react-native-screens": "^2.8.0",
     "react-native-vector-icons": "^6.6.0",
+    "react-paypal-button-v2": "^2.6.2",
     "unescape": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@testing-library/react-native": "^7.0.2",
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
     "jest": "^24.9.0",
@@ -43,6 +45,10 @@
     "react-test-renderer": "16.11.0"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFiles":["./setup.js"],
+    "moduleNameMapper": {
+      "my-module.js": "<rootDir>/path/to/my-module.js"
+    }
   }
 }
