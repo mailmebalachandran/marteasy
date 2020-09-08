@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import { Platform } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, {Component} from 'react';
+import {Platform} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from './src/screens/Login/LoginScreen';
 import SignUpScreen from './src/screens/SignUp/SignUpScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
-import { getTabIcons } from './src/navigations/utils';
+import {getTabIcons} from './src/navigations/utils';
 import * as ThemeColor from './src/themes/colors';
 import ProductsScreen from './src/screens/Products/ProductsScreen';
 import CartScreen from './src/screens/Cart/CartScreen';
 import SearchScreen from './src/screens/Search/SearchScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 import ManageAddress from './src/screens/ManageAddress/ManageAddress';
-import AddressOverlay from "./src/components/AddressOverlay/AddressOverlay";
-import SubCategoryScreen from "./src/screens/SubCategory/SubCategoryScreen";
-import { CONSUMER_KEY, CONSUMER_SECRET } from "./src/api/Constants";
-import axios from "axios";
-import TestScreen from "./src/api/Home/TestScreen";
+import AddressOverlay from './src/components/AddressOverlay/AddressOverlay';
+import SubCategoryScreen from './src/screens/SubCategory/SubCategoryScreen';
+import {CONSUMER_KEY, CONSUMER_SECRET} from './src/api/Constants';
+import axios from 'axios';
+import TestScreen from './src/api/Home/TestScreen';
 import SubCategoryProducts from './src/screens/SubCategoryProduct/SubCategoryProductScreen';
 import MotorScreen from './src/screens/MotorScreen/Motorscreen';
 import MotorProductScreen from './src/screens/MotorProductScreen/MotorProductScreen';
@@ -40,26 +40,70 @@ import {
 // Setting default styles for all Text components.
 const customTextProps = {
   style: {
-    fontFamily: Platform.OS === 'ios' ? 'ProximaNova-Regular' : 'ProximaNova-Regular',
-  }
+    fontFamily:
+      Platform.OS === 'ios' ? 'ProximaNova-Regular' : 'ProximaNova-Regular',
+  },
 };
 setCustomText(customTextProps);
 
-
-
-axios.interceptors.request.use((config) => {
+axios.interceptors.request.use(config => {
   config.params = config.params || {};
   config.params['consumer_key'] = CONSUMER_KEY;
   config.params['consumer_secret'] = CONSUMER_SECRET;
   return config;
 });
 class App extends Component {
+  constructor(props) {
+    super(props);
+    //Remove this method to stop OneSignal Debugging
+    OneSignal.setLogLevel(6, 0);
+
+    // Replace 'YOUR_ONESIGNAL_APP_ID' with your OneSignal App ID.
+    OneSignal.init('YOUR_ONESIGNAL_APP_ID', {
+      kOSSettingsKeyAutoPrompt: false,
+      kOSSettingsKeyInAppLaunchURL: false,
+      kOSSettingsKeyInFocusDisplayOption: 2,
+    });
+    OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
+
+    // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
+    OneSignal.promptForPushNotificationsWithUserResponse(myiOSPromptCallback);
+
+    OneSignal.addEventListener('received', this.onReceived);
+    OneSignal.addEventListener('opened', this.onOpened);
+    OneSignal.addEventListener('ids', this.onIds);
+  }
+
+  componentWillUnmount() {
+    OneSignal.removeEventListener('received', this.onReceived);
+    OneSignal.removeEventListener('opened', this.onOpened);
+    OneSignal.removeEventListener('ids', this.onIds);
+  }
+  onReceived(notification) {
+    console.log("Notification received: ", notification);
+  }
+
+  onOpened(openResult) {
+    console.log('Message: ', openResult.notification.payload.body);
+    console.log('Data: ', openResult.notification.payload.additionalData);
+    console.log('isActive: ', openResult.notification.isAppInFocus);
+    console.log('openResult: ', openResult);
+  }
+
+  onIds(device) {
+    console.log('Device info: ', device);
+  }
+}
+function myiOSPromptCallback(permission){
+    // do something with permission value
+}
+
   loginScreenNavigator = () => {
     let Stack = createStackNavigator();
     return (
       <Stack.Navigator
         initialRouteName="Login"
-        screenOptions={{ headerShown: false }}>
+        screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     );
@@ -69,7 +113,7 @@ class App extends Component {
     return (
       <Stack.Navigator
         initialRouteName="Profile"
-        screenOptions={{ headerShown: false }}>
+        screenOptions={{headerShown: false}}>
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ManageAddr" component={ManageAddress} />
         <Stack.Screen name="AddressEdit" component={AddressOverlay} />
@@ -82,9 +126,9 @@ class App extends Component {
     return (
       <Tab.Navigator
         initialRouteName="Home"
-        header={{ visible: true }}
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) =>
+        header={{visible: true}}
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) =>
             getTabIcons(route, focused, color, size),
         })}
         tabBarOptions={{
@@ -95,7 +139,6 @@ class App extends Component {
         <Tab.Screen name="Categories" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
-
       </Tab.Navigator>
     );
   };
@@ -104,24 +147,12 @@ class App extends Component {
     const RootStack = createStackNavigator();
     return (
       <RootStack.Navigator
-        screenOptions={{ headerShown: false }}
+        screenOptions={{headerShown: false}}
         initialRouteName="HomeScreen">
-        <RootStack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-        />
-        <RootStack.Screen
-          name="SignUpScreen"
-          component={SignUpScreen}
-        />
-        <RootStack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-        />
-        <RootStack.Screen
-          name="ProductScreen"
-          component={ProductsScreen}
-        />
+        <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+        <RootStack.Screen name="SignUpScreen" component={SignUpScreen} />
+        <RootStack.Screen name="HomeScreen" component={HomeScreen} />
+        <RootStack.Screen name="ProductScreen" component={ProductsScreen} />
         <RootStack.Screen
           name="SubCategoryScreen"
           component={SubCategoryScreen}
@@ -130,14 +161,8 @@ class App extends Component {
           name="SubCategoryProducts"
           component={SubCategoryProducts}
         />
-        <RootStack.Screen
-          name="CompareProducts"
-          component={CompareProducts}
-        />
-        <RootStack.Screen
-          name="MotorScreen"
-          component={MotorScreen}
-        />
+        <RootStack.Screen name="CompareProducts" component={CompareProducts} />
+        <RootStack.Screen name="MotorScreen" component={MotorScreen} />
         <RootStack.Screen
           name="MotorProductScreen"
           component={MotorProductScreen}
@@ -146,14 +171,8 @@ class App extends Component {
           name="CategoryProductScreen"
           component={CategoryProductScreen}
         />
-        <RootStack.Screen
-          name="Account"
-          component={this.profileStack}
-        />
-        <RootStack.Screen
-          name="DrawerContainer"
-          component={DrawerContainer}
-        />
+        <RootStack.Screen name="Account" component={this.profileStack} />
+        <RootStack.Screen name="DrawerContainer" component={DrawerContainer} />
         <RootStack.Screen
           name="DrawerProductScreen"
           component={DrawerProductScreen}
@@ -169,10 +188,7 @@ class App extends Component {
           component={TermsAndConditionsScreen}
         />
 
-        <RootStack.Screen
-          name="FAQScreen"
-          component={FAQScreen}
-        />
+        <RootStack.Screen name="FAQScreen" component={FAQScreen} />
 
         <RootStack.Screen
           name="OtpScreen"
