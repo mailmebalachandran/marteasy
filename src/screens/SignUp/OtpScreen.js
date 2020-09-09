@@ -44,6 +44,7 @@ class OtpScreen extends Component {
     }
   };
   registerUser = async () => {
+    console.log("in register user");
     const routeParams = this.props.route.params;
     const userDetails = {
       username: routeParams.username,
