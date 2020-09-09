@@ -28,3 +28,4 @@ export const getProductsBasedOnStoreSubcategoryAPI=GLOBAL_VALUE+'/wp-json/custom
 export const getProductsByCategory=GLOBAL_VALUE+'/wp-json/wc/v3/products?category=';
 export const CONSUMER_KEY = 'ck_e50cc73036d4a2023cede3a734b41f742f7f29dd';
 export const CONSUMER_SECRET = 'cs_99f96f2ee5a1bb3df0dc3df27aec6726e1095402';
+export const ADMIN_TOKEN = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbWFydGVhc3kuaW4iLCJpYXQiOjE1OTk2MjA0MzEsIm5iZiI6MTU5OTYyMDQzMSwiZXhwIjoxNjAwMjI1MjMxLCJkYXRhIjp7InVzZXIiOnsiaWQiOiIxIn19fQ.BEWBnNDEmx3xJujqcYcQbqH7DjCDZAO2juMT9ESmfSM';

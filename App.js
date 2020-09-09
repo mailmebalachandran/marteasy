@@ -196,7 +196,7 @@ class App extends Component {
           drawerStyle={{ width: "85%" }}
           {...this.props}
         >
-          <Drawer.Screen name={"Home"} component={SignUpScreen} />
+          <Drawer.Screen name={"Home"} component={this.homeScreenNavigator} />
           <Drawer.Screen name={"Home1"} component={this.rootStack} />
           <Drawer.Screen name={"Login"} component={LoginScreen} />
           <Drawer.Screen name={"OtpScreen"} component={OtpScreen} />

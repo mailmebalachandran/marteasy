@@ -6,9 +6,9 @@ const registerUser = async userDetails => {
   let res;
   var config = {
     method: 'post',
-    url: Constants.GLOBAL_VALUE+'/wp-json/wp/v2/users',
+    url: Constants.GLOBAL_VALUE+'/wp-json/wp/v2/users/register',
     headers: {
-      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbWFydGVhc3kudmFzYW50aGFtdmVsaXllZXRhZ2FtLmNvbSIsImlhdCI6MTU5OTMyMjYyMiwibmJmIjoxNTk5MzIyNjIyLCJleHAiOjE1OTk5Mjc0MjIsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.-F4d1NVdY2wEZNQgdgStrQ3iS-_LN71zlYMCcFJ7_sg',
+      'Authorization': Constants.ADMIN_TOKEN,
       'Content-Type': 'application/json'
     },
     data: userDetails
