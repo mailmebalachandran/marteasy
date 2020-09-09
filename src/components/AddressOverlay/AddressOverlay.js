@@ -46,6 +46,7 @@ class AddressOverlay extends React.Component {
             isLoading: false,
             commonErr: "Please Enter All Required Fields",
             IsInternetConnected: true,
+            isFromPaymentScreen:false
         }
     }
     setEditDetails = (data) => {
@@ -86,6 +87,7 @@ class AddressOverlay extends React.Component {
                 this.setState({ IsInternetConnected: false })
             }
         });
+        this.setState({isFromPaymentScreen: this.props.route.params.isFromPaymentScreen});
         this.setState({ isLoading: true });
         this.setFormData();
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
@@ -140,18 +142,24 @@ class AddressOverlay extends React.Component {
         return heading;
     }
     navigateToManageAddr = () => {
+        if(!this.state.isFromPaymentScreen)
+        {
         this.props.navigation.navigate("Account", {
             screen: "ManageAddr",
             params: {
                 isAddrUpdated: this.state.isAddrUpdated,
             }
         })
+        }
+        else{
+             this.props.navigation.navigate("Payment");
+        }
     }
     updateAddr = () => {
         this.setState({ isLoading: true });
         const { isShipping, userId } = this.props.route.params;
         let payload = {}
-        const { isError } = addrValidation(this.state, isShipping)
+        const isError  = false;//addrValidation(this.state, isShipping)
         if (isError) {
             this.setState({ isLoading: false });
             this.setState({ state: addrValidation });

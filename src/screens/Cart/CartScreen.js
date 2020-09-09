@@ -168,16 +168,18 @@ class CartScreen extends Component {
   };
 
   onSubmitHandler = async () => {
-    let userDetails = await AsyncStorage.getItem('userAuth');
-    if (userDetails !== null) {
-      let userDetailsTemp = JSON.parse(userDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function(k) {
-        return userDetailsTemp[k];
-      });
-      this.setState({overlayVisible: false});
-    } else {
-      this.setState({overlayVisible: true});
-    }
+    this.props.navigation.navigate('Payment');
+    //let userDetails = await AsyncStorage.getItem('userAuth');
+    // if (userDetails !== null) {
+    //   let userDetailsTemp = JSON.parse(userDetails);
+    //   let result = Object.keys(asyncDetailsTemp).map(function(k) {
+    //     return userDetailsTemp[k];
+    //   });
+    //   this.setState({overlayVisible: false});
+    // } else {
+    //   this.setState({overlayVisible: true});
+    // }
+    
   };
 
   onAvatarImage = item => {

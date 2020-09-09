@@ -30,6 +30,7 @@ import PrivacyPolicyScreen from "./src/screens/PrivacyPolicyScreen/PrivacyPolicy
 import TermsAndConditionsScreen from "./src/screens/TermsAndConditions/TermsAndConditionsScreen";
 import FAQScreen from "./src/screens/FAQScreen/FAQScreen";
 import OtpScreen from "./src/screens/SignUp/OtpScreen";
+import PaymentScreen from './src/screens/Payment/PaymentScreen';
 //Setting Global Styles
 import {
   setCustomText,
@@ -182,6 +183,10 @@ class App extends Component {
         <RootStack.Screen
           name="test"
           component={TestScreen}
+        />
+        <RootStack.Screen
+          name="Payment"
+          component={PaymentScreen}
         />
       </RootStack.Navigator>);
   }
