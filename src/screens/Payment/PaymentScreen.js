@@ -55,7 +55,6 @@ class PaymentScreen extends Component {
     const loginDetails = await isUserLoggedIn();
     const user = JSON.parse(loginDetails);
     let addressBasedUser = await UserAPI.CheckUserAddressAvailable(user);
-    console.log(addressBasedUser.data[0].billing);
     if (addressBasedUser != undefined) {
       this.setState({userDetails: addressBasedUser.data[0]});
       if (
@@ -121,7 +120,6 @@ class PaymentScreen extends Component {
         }
       }
     }
-    console.log(productDetails);
     let orderDetails = {
       payment_method: 'COD',
       payment_method_title: 'Cash On Delivery',
@@ -164,7 +162,7 @@ class PaymentScreen extends Component {
         'Order Placed Redirecting to Home page.',
         DURATION.LENGTH_LONG,
       );
-
+      await AsyncStorage.removeItem('Cart');
       this.props.navigation.navigate('HomeScreen');
     } else {
       this.setState({isLoading: false});
