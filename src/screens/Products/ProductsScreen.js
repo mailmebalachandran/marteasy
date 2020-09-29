@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Text, Avatar} from 'react-native-elements';
-import {View} from 'react-native';
+import React, { Component } from 'react';
+import { Text, Avatar } from 'react-native-elements';
+import { View } from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
 import Line from '../../components/Line/Line';
 import ProductAPI from '../../api/Products/ProductAPI';
@@ -15,6 +15,7 @@ import * as CommonConstants from '../../constants';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
+import CartAPI from '../../api/Cart/CartAPI';
 
 class ProductsScreen extends Component {
   constructor(props) {
@@ -37,57 +38,66 @@ class ProductsScreen extends Component {
 
   componentDidMount = async () => {
     this.onPageLoad();
+
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.onPageLoad();
+    });
   };
 
   handleConnectivityChange = isConnected => {
     if (isConnected.isConnected == true) {
-      this.setState({IsInternetConnected: true});
+      this.setState({ IsInternetConnected: true });
     } else {
-      this.setState({IsInternetConnected: false});
+      this.setState({ IsInternetConnected: false });
     }
   };
 
   onPageLoad = async () => {
-    this.setState({isLoading: true, storeId: this.props.route.params.storeId});
+    this.setState({ isLoading: true, storeId: this.props.route.params.storeId });
     NetInfo.addEventListener(this.handleConnectivityChange);
     NetInfo.fetch().done(isConnected => {
       if (isConnected.isConnected == true) {
-        this.setState({IsInternetConnected: true});
+        this.setState({ IsInternetConnected: true });
       } else {
-        this.setState({IsInternetConnected: false});
+        this.setState({ IsInternetConnected: false });
       }
     });
     const storedId = this.props.route.params.storeId;
     let storeDetail = await ProductAPI.GetStoreBasedonStoreId(
       this.props.route.params.storeId,
     );
-    let productList = await ProductAPI.GetProductBasedonStoreId(
-      this.props.route.params.storeId,
-    );
+    const productId = await ProductAPI.getProductsBasedOnStoreSubcategory(this.props.route.params.storeId, this.props.route.params.catId);
+    let tempString = '';
+    productId.map(product => {
+      tempString += product.product_id + ",";
+    })
+    const productList = await ProductAPI.getProductsDataBasedOnStoreSubcategory(tempString);
+    this.setState({ productList })
+
+
     if (
       storeDetail !== undefined &&
       storeDetail.isError !== undefined &&
       storeDetail.isError === true
     ) {
-      this.setState({isShowError: true, isLoading: false});
+      this.setState({ isShowError: true, isLoading: false });
     }
     if (
       productList !== undefined &&
       productList.isError !== undefined &&
       productList.isError === true
     ) {
-      this.setState({isShowError: true, isLoading: false});
+      this.setState({ isShowError: true, isLoading: false });
     }
-
     let list = [];
     this.state.list = [];
     let asyncDetails = await AsyncStorage.getItem('Cart');
     if (asyncDetails != null) {
       let asyncDetailsTemp = JSON.parse(asyncDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function(k) {
+      let result = Object.keys(asyncDetailsTemp).map(function (k) {
         return asyncDetailsTemp[k];
       });
-      let currentStoreProduct = result.filter(function(item) {
+      let currentStoreProduct = result.filter(function (item) {
         return item.storeId == storedId;
       });
 
@@ -113,7 +123,7 @@ class ProductsScreen extends Component {
           list.push(product);
         });
       }
-      let otherStoreProduct = result.filter(function(item) {
+      let otherStoreProduct = result.filter(function (item) {
         return item.storeId !== storedId;
       });
 
@@ -130,7 +140,7 @@ class ProductsScreen extends Component {
           }
         }
       }
-      this.setState({productList: productList});
+      this.setState({ productList: productList });
       if (countForPageLoad.length > 0) {
         let amount = 0;
         let count = 0;
@@ -146,16 +156,16 @@ class ProductsScreen extends Component {
             count += countForPageLoad[item].count;
           }
         }
-        this.setState({productCount: count, productAmount: amount});
+        this.setState({ productCount: count, productAmount: amount });
         if (count !== 0) {
-          this.setState({isViewCart: true});
+          this.setState({ isViewCart: true });
         } else {
-          this.setState({isViewCart: false});
+          this.setState({ isViewCart: false });
         }
       }
     }
-    this.setState({productList: productList, storeDetail: storeDetail}, () => {
-      this.setState({isLoading: false});
+    this.setState({ productList: productList, storeDetail: storeDetail }, () => {
+      this.setState({ isLoading: false });
       this.onAddressDetailsBind();
     });
   };
@@ -172,7 +182,7 @@ class ProductsScreen extends Component {
         productCount: 0,
         productAmount: 0,
       };
-      this.setState({isLoading: true, productCount: 0, productAmount: 0});
+      this.setState({ isLoading: true, productCount: 0, productAmount: 0 });
       const storedId = this.props.route.params.storeId;
       this.onPageLoad();
     }
@@ -187,7 +197,7 @@ class ProductsScreen extends Component {
       }
       list.push(product);
     });
-    this.setState({productList: list});
+    this.setState({ productList: list });
     this.checkCountDetails(
       this.state.storeDetail.id,
       item.id,
@@ -198,7 +208,7 @@ class ProductsScreen extends Component {
   handleQuantityChange = (item, type) => {
     if (this.state.isRunning) return;
     // this.state.isRunning = true;
-    this.setState({isRunning: true}, () => {});
+    this.setState({ isRunning: true }, () => { });
 
     let list = [];
     this.state.productList.map(product => {
@@ -212,14 +222,14 @@ class ProductsScreen extends Component {
       }
       list.push(product);
     });
-    this.setState({productList: list});
+    this.setState({ productList: list });
     this.checkCountDetails(
       this.state.storeDetail.id,
       item.id,
       item.count,
       item.sale_price,
     );
-    this.setState({isRunning: false});
+    this.setState({ isRunning: false });
     this.state.isRunning = false;
   };
 
@@ -230,7 +240,7 @@ class ProductsScreen extends Component {
     let asyncDetails = await AsyncStorage.getItem('Cart');
     if (asyncDetails != null) {
       let asyncDetailsTemp = JSON.parse(asyncDetails);
-      let result = Object.keys(asyncDetailsTemp).map(function(k) {
+      let result = Object.keys(asyncDetailsTemp).map(function (k) {
         return asyncDetailsTemp[k];
       });
       this.state.countDetail = result.slice();
@@ -280,7 +290,7 @@ class ProductsScreen extends Component {
         storeObj.products.push(productObj);
         storeCount.push(storeObj);
       }
-      this.setState({countDetail: storeCount});
+      this.setState({ countDetail: storeCount });
       if (storeCount.length > 0) {
         let amount = 0;
         let count = 0;
@@ -300,11 +310,11 @@ class ProductsScreen extends Component {
           }
         }
         if (count !== 0) {
-          this.setState({isViewCart: true});
+          this.setState({ isViewCart: true });
         } else {
-          this.setState({isViewCart: false});
+          this.setState({ isViewCart: false });
         }
-        this.setState({productCount: count, productAmount: amount}, () => {
+        this.setState({ productCount: count, productAmount: amount }, () => {
           this.storeDataToStorage(storeCount);
         });
       }
@@ -318,7 +328,7 @@ class ProductsScreen extends Component {
       productDetail.amount = amount;
       storeObj.products.push(productDetail);
       countDetail.push(storeObj);
-      this.setState({countDetail: countDetail});
+      this.setState({ countDetail: countDetail });
       if (countDetail.length > 0) {
         let amount = 0;
         let count = 0;
@@ -335,11 +345,11 @@ class ProductsScreen extends Component {
           }
         }
         if (count !== 0) {
-          this.setState({isViewCart: true});
+          this.setState({ isViewCart: true });
         } else {
-          this.setState({isViewCart: false});
+          this.setState({ isViewCart: false });
         }
-        this.setState({productCount: count, productAmount: amount}, () => {
+        this.setState({ productCount: count, productAmount: amount }, () => {
           this.storeDataToStorage(countDetail);
         });
       }
@@ -375,7 +385,7 @@ class ProductsScreen extends Component {
           <Avatar
             rounded
             size="large"
-            containerStyle={{margin: 5}}
+            containerStyle={{ margin: 5 }}
             source={Images.NOSTORE}
           />
         );
@@ -384,8 +394,8 @@ class ProductsScreen extends Component {
           <Avatar
             rounded
             size="large"
-            containerStyle={{margin: 5}}
-            source={{uri: item.gravatar}}
+            containerStyle={{ margin: 5 }}
+            source={{ uri: item.gravatar }}
           />
         );
       }
@@ -394,7 +404,7 @@ class ProductsScreen extends Component {
         <Avatar
           rounded
           size="large"
-          containerStyle={{margin: 5}}
+          containerStyle={{ margin: 5 }}
           source={Images.NOSTORE}
         />
       );
@@ -403,7 +413,7 @@ class ProductsScreen extends Component {
 
   onAddressDetailsBind = () => {
     return (
-      <Text style={{fontSize: 10}}>
+      <Text style={{ fontSize: 10 }}>
         {this.state.storeDetail !== undefined && this.state.storeDetail !== null
           ? this.state.storeDetail.address !== undefined
             ? this.state.storeDetail.address.street_1
@@ -436,85 +446,87 @@ class ProductsScreen extends Component {
         ) : this.state.isShowError ? (
           <ErrorOverlay errorType={'API'} reload={this.componentDidMount} />
         ) : (
-          <>
-            <View style={{flex: 1}}>
-              <StatusBarComponent styleType={0} />
-              <Header
-                navigationScreenValue="Products"
-                navigation={this.props.navigation}
-                navigateValue = "HomeScreen"
-              />
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                }}>
-                <View style={{height: 70}}>
-                  <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{flex: 0.2}}>
-                      {this.onAvatarImage(this.state.storeDetail)}
-                    </View>
-                    <View style={{flex: 0.8, marginLeft: 20}}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          marginTop: 10,
-                        }}>
-                        {this.state.storeDetail.store_name}
+                <>
+                  <View style={{ flex: 1 }}>
+                    <StatusBarComponent styleType={0} />
+                    <Header
+                      navigationScreenValue="Products"
+                      navigation={this.props.navigation}
+                      navigateValue="CategoryProductScreen"
+                    />
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                      }}>
+                      <View style={{ height: 70 }}>
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                          <View style={{ flex: 0.2 }}>
+                            {this.onAvatarImage(this.state.storeDetail)}
+                          </View>
+                          <View style={{ flex: 0.8, marginLeft: 20 }}>
+                            <Text
+                              style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                marginTop: 10,
+                              }}>
+                              {this.state.storeDetail.store_name}
+                            </Text>
+                            {this.onAddressDetailsBind()}
+                            <Text style={{ fontSize: 10, marginTop: 5 }}>
+                              <Icon name="star" size={10} color="grey" /> 0 reviews
                       </Text>
-                      {this.onAddressDetailsBind()}
-                      <Text style={{fontSize: 10, marginTop: 5}}>
-                        <Icon name="star" size={10} color="grey" /> 0 reviews
-                      </Text>
-                    </View>
-                    {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
+                          </View>
+                          {/* <View style={{flex: 0.2, marginTop: 30, marginRight: 20}}>
                     <Rating
                       style={{width: 20, backgroundColor: 'transparent'}}
                       imageSize={20}
                     />
                     <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
                   </View> */}
-                  </View>
-                </View>
-                <View style={{height: 20}}>
+                        </View>
+                      </View>
+                      {/* <View style={{height: 20}}>
                   <Line />
-                </View>
-                <View style={{height: 50}}>
+                </View> */}
+                      {/* <View style={{height: 50}}>
                   {this.state.storeDetail.store_open_close && (
                     <OpeningHour {...this.state} />
                   )}
-                </View>
-                <View style={{height: 20}}>
-                  <Line />
-                </View>
-                {this.state.productList.length > 0 && (
-                  <Product
-                    {...this.state}
-                    onAddHandler={product => this.onAddHandler(product)}
-                    storeId={this.props.route.params.storeId}
-                    handleQuantityChange={(item, type) => {
-                      this.handleQuantityChange(item, type);
-                    }}
-                  />
-                )}
-                {this.state.productList.length == 0 && (
-                  <View style={{flex: 1, margin: 20}}>
-                    <Text>No Products in store</Text>
+                </View> */}
+                      <View style={{ height: 20 }}>
+                        <Line />
+                      </View>
+                      {this.state.productList.length > 0 && (
+                        <Product
+                          {...this.state}
+                          onAddHandler={product => this.onAddHandler(product)}
+                          storeId={this.props.route.params.storeId}
+                          handleQuantityChange={(item, type) => {
+                            this.handleQuantityChange(item, type);
+                          }}
+                          isCompareProduct={true}
+                          navigation={this.props.navigation}
+                        />
+                      )}
+                      {this.state.productList.length == 0 && (
+                        <View style={{ flex: 1, margin: 20 }}>
+                          <Text>No Products in store</Text>
+                        </View>
+                      )}
+                    </View>
+                    {this.state.isViewCart && (
+                      <ViewCart
+                        productCount={this.state.productCount}
+                        productAmount={this.state.productAmount}
+                        navigation={this.props.navigation}
+                      />
+                    )}
                   </View>
-                )}
-              </View>
-              {this.state.isViewCart && (
-                <ViewCart
-                  productCount={this.state.productCount}
-                  productAmount={this.state.productAmount}
-                  navigation={this.props.navigation}
-                />
+                </>
               )}
-            </View>
-          </>
-        )}
       </>
     );
   }

@@ -11,6 +11,19 @@ const GetStores = async storeId => {
   }
 };
 
+//Get Store Based On category
+const getStoreBasedOnCategory = async catId => {
+  console.log("catid",catId);
+  let res;
+  try {
+    res = await Axios.get(Constants.GLOBAL_VALUE + '/wp-json/custom-api/v1/storeByCategory/' + catId);
+    console.log("data",res.data);
+    return res.data;
+  } catch (err) {
+    return JSON.parse('{"isError" : true}');
+  }
+};
+
 const getCatgeoryProducts = async catId => {
   let res;
   try {
@@ -67,5 +80,6 @@ module.exports = {
   getCatgeoryProducts,
   getSingleStore,
   getSubCategoryProducts,
-  getSingleCategoryDetails
+  getSingleCategoryDetails,
+  getStoreBasedOnCategory
 };

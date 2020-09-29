@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import {
   View,
   Image,
@@ -11,33 +11,37 @@ import * as ThemeColor from '../../themes/colors';
 import * as CommonConstants from '../../constants';
 import * as Images from '../../assets/index';
 
-class MustHave extends Component {
+class MustHave extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-        data: [
-          {
-            category_name: "Tea, Coffee etc.",
-            gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_12_v_3_500_1580062743.jpg"
-          },
-          {
-            category_name: "Dairy Products",
-            gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_14_v_3_500_1580063018.jpg"
-          },
-          {
-            category_name: "Home Needs",
-            gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_1379_v_3_500_1580064374.jpg"
-          },
-          {
-            category_name: "Baby Care",
-            gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_7_v_3_500_1580062720.jpg"
-          }
-        ]
-      }
+      data: [
+        {
+          id: "1",
+          category_name: "Tea, Coffee etc.",
+          gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_12_v_3_500_1580062743.jpg"
+        },
+        {
+          id: "2",
+          category_name: "Dairy Products",
+          gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_14_v_3_500_1580063018.jpg"
+        },
+        {
+          id: "3",
+          category_name: "Home Needs",
+          gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_1379_v_3_500_1580064374.jpg"
+        },
+        {
+          id: "4",
+          category_name: "Baby Care",
+          gravatar: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=50,w=435,h=420/app/images/category/cms_images/icon/icon_cat_7_v_3_500_1580062720.jpg"
+        }
+      ]
+    }
   }
 
   onAvatarImage = item => {
-    if (item.gravatar !== undefined) {   
+    if (item.gravatar !== undefined) {
       if (item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)) {
         return (
           <Image
@@ -47,7 +51,7 @@ class MustHave extends Component {
               height: 100,
               width: '100%',
               shadowColor: 'black',
-              shadowOffset: {height: 2},
+              shadowOffset: { height: 2 },
               shadowOpacity: 0.3,
             }}
           />
@@ -55,7 +59,7 @@ class MustHave extends Component {
       } else {
         return (
           <Image
-            source={{uri: item.gravatar}}
+            source={{ uri: item.gravatar }}
             style={{
               resizeMode: 'contain',
               height: 100,
@@ -73,7 +77,7 @@ class MustHave extends Component {
             height: 100,
             width: '80%',
             shadowColor: 'black',
-            shadowOffset: {height: 2},
+            shadowOffset: { height: 2 },
             shadowOpacity: 0.3,
           }}
         />
@@ -85,13 +89,18 @@ class MustHave extends Component {
     return (
       <View style={styles.mainCategoryContainer}>
         {/* Main Category 2 column */}
-        {this.state.data.map( cat => {
+        {this.state.data.map(cat => {
           return (
-            <View style={styles.categoryItemContainer2Col}>
+            <View key={cat.id} style={styles.categoryItemContainer2Col}>
               <TouchableOpacity
+                key={cat.id}
                 onPress={() => { }}>
                 <View
+                  key={cat.id}
                   style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
                     backgroundColor: 'transparent',
                     width: '100%',
                     shadowColor: '#000',
@@ -100,16 +109,27 @@ class MustHave extends Component {
                     shadowRadius: 5,
                     elevation: 25,
                   }}>
-                  <Image
-                    source={{ uri: cat.gravatar }}
+                  <View
+                    key={cat.id}
                     style={{
-                      resizeMode: 'contain',
-                      height: 100,
-                      width: '100%',
-                    }}
-                  />
+                      backgroundColor: "rgba(175,175,175,0.1)",
+                      borderColor: "#99d066", borderWidth: 0.4,
+                      borderRadius: 5,
+                      width: "80%"
+                    }}>
+                    <Image
+                      key={"catImage" + cat.id}
+                      source={{ uri: cat.gravatar }}
+                      style={{
+                        resizeMode: 'contain',
+                        height: 100,
+                        width: '100%',
+                      }}
+                    />
+                  </View>
                 </View>
                 <Text
+                  key={"catName" + cat.id}
                   style={styles.categoryName}>
                   {' '}
                   {cat.category_name}{' '}

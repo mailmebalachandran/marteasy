@@ -116,10 +116,10 @@ class CategoryList extends Component {
         {/* Main Category 2 column */}
         {this.props.categories.map(cat => {
           return (
-            <View style={styles.categoryItemContainer}>
+            <View style={styles.categoryItemContainer} key={cat.id}>
               <TouchableNativeFeedback
                 onPress={() => {
-                  this.props.navigation.navigate((!this.props.isShowStore ? 'SubCategoryProducts' : 'ProductScreen'), {
+                  this.props.navigation.navigate((!this.props.isShowStore ? 'SubCategoryProducts' : 'CategoryProductScreen'), {
                     storeId: cat.id,
                     storeName: cat.name
                   })

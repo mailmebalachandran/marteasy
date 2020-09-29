@@ -279,14 +279,14 @@ class SearchScreen extends Component {
   onAvatarImage = item => {
     if (item.images.length > 0) {
       return (
-        <View style={{width: '20%'}}>
-          <Avatar size="large" source={{uri: item.images[0].src}} />
+        <View key={"imgCont"+item.id} style={{width: '20%'}}>
+          <Avatar key={"img"+item.id} size="large" source={{uri: item.images[0].src}} />
         </View>
       );
     } else {
       return (
-        <View style={{width: '20%'}}>
-          <Avatar size="large" source={Images.NODISH} />
+        <View key={"imgCont"+item.id} style={{width: '20%'}}>
+          <Avatar key={"img"+item.id}  size="large" source={Images.NODISH} />
         </View>
       );
     }
@@ -372,7 +372,7 @@ class SearchScreen extends Component {
                 flexDirection: 'column',
               }}>
               <SearchBar
-                placeholder="Search products"
+                placeholder="Search 10,000+ products"
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderTopColor: 'transparent',
@@ -409,6 +409,7 @@ class SearchScreen extends Component {
                   showsHorizontalScrollIndicator={false}
                   renderItem={({item}) => (
                     <View
+                      key={"cont"+item.id}
                       style={{
                         flex: 1,
                         flexDirection: 'row',
@@ -424,23 +425,25 @@ class SearchScreen extends Component {
                       }}>
                       {this.onAvatarImage(item)}
                       <View
+                        key={"text"+item.id}
                         style={{
                           marginLeft: 10,
                           flex: 1,
                           flexDirection: 'column',
                         }}>
-                        <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                        <Text key={"name"+item.id} key={item.id} style={{fontSize: 15, fontWeight: 'bold'}}>
                           {item.name}
                         </Text>
-                        <Text style={{color: 'grey', fontSize: 12}}>
+                        <Text key={"shop"+item.id} style={{color: 'grey', fontSize: 12}}>
                           {item.store.shop_name}
                         </Text>
                         <Text />
-                        <Text style={{fontSize: 12, marginTop: -15}}>
+                        <Text key={"price"+item.id} style={{fontSize: 12, marginTop: -15}}>
                           Rs. {item.sale_price}
                         </Text>
                       </View>
                       <View
+                        key={"btn"+item.id}
                         style={{
                           width: 80,
                           flex: 1,
@@ -448,6 +451,7 @@ class SearchScreen extends Component {
                           justifyContent: 'flex-end',
                         }}>
                         <AddCart
+                          id={item.id}
                           productValue={item}
                           onAddHandler={item => {
                             this.onAddHandler(item);

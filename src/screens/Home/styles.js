@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     titleText: {
         marginLeft: 10,
         marginTop: 20,
-        fontFamily: 'notoserif',
         fontWeight: '400',
         fontSize: 20,
         textAlign: "center",
@@ -25,7 +24,7 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
         alignItems: "center",
         backgroundColor: "#dfdfdf",
-        marginTop: "5%",
+        marginTop: "1%",
     },
     otherCategoryContainer: {
         flex: 1,
@@ -56,7 +55,8 @@ const styles = StyleSheet.create({
     categoryName: {
         textAlign: 'center',
         color: "#000000",
-        fontWeight: 'bold',
+        marginTop: "5%",
+        fontWeight: 'normal',
     },
     //Promo
     promoContainer: {
@@ -64,6 +64,12 @@ const styles = StyleSheet.create({
         marginTop: "1%",
     },
     promoImage: {
+        height: 200,
+        width: "100%",
+        resizeMode: 'contain',
+    },
+    //MotorWash
+    motorWashImage: {
         height: 200,
         width: "100%",
         resizeMode: 'contain',

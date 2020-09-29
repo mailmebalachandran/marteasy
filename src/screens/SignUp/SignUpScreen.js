@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, ActivityIndicator, Text } from 'react-native';
+import { View, Image, ActivityIndicator, Text, ScrollView } from 'react-native';
 import TextBox from '../../components/TextBox/TextBox';
 import Label from '../../components/Label/Label';
 import styles from './styles';
@@ -18,6 +18,7 @@ class SignUpScreen extends Component {
     UserName: '',
     EmailAddress: '',
     Password: '',
+    mobileNum: '',
     IsLoaded: false,
     Roles: 'customer'
   };
@@ -28,17 +29,16 @@ class SignUpScreen extends Component {
       username: this.state.UserName,
       email: this.state.EmailAddress,
       password: this.state.Password,
+      mobileNum: this.state.mobileNum,
       roles: this.state.Roles
     };
-    console.log(userDetails);
     let validationResult = Validation.SignUpValidation(userDetails);
     if (validationResult.isValidated) {
-      let result = await SignUpAPI.SignUpValidation(userDetails);
-      console.log(result)
+      let result = await SignUpAPI.generateOTP(userDetails.mobileNum, userDetails.username);
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
       } else {
-        this.props.navigation.navigate('HomeScreen');
+        this.props.navigation.navigate('OtpScreen', userDetails);
       }
       this.setState({ IsLoaded: false });
     } else {
@@ -47,13 +47,17 @@ class SignUpScreen extends Component {
     }
   };
 
+  
+
   render() {
     return (
+      
       <View style={styles.containerStyle}>
         {this.state.IsLoaded && (
           <ActivityIndicator size="large" color={ThemeColor.DarkColor} />
         )}
         <StatusBarComponent styleType={0} />
+        <ScrollView>
         <View style={styles.logoStyle}>
           <Image source={LOGO} />
         </View>
@@ -87,6 +91,20 @@ class SignUpScreen extends Component {
             this.setState({ EmailAddress: text });
           }}
         />
+        <Label labelValue={"Mobile Number"} />
+        <TextBox
+          placeHolderValue={"Mobile Number"}
+          textValue={this.state.mobileNum}
+          IsHavingIcon={true}
+          iconName="mobile"
+          iconSize={25}
+          iconColor={ThemeColor.DarkColor}
+          secureText={false}
+          autoCapitalize="none"
+          onChangedTextHandler={text => {
+            this.setState({ mobileNum: text });
+          }}
+        />
         <Label labelValue={Constants.LABEL_PASSWORD} />
         <TextBox
           placeHolderValue={Constants.PLACEHOLDER_PASSWORD}
@@ -117,7 +135,7 @@ class SignUpScreen extends Component {
             />
           </View>
         </View>
-          <View style={{flex: 0.01, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+          <View style={{flex: 0.01, flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: "10%"}}>
             <Text style={{fontSize: 17, color:"gray"}}>Already Registered</Text>
             <TouchableNativeFeedback  style={{marginLeft: "10%"}}onPress={()=>this.props.navigation.navigate('LoginScreen')}>
             <Text style={{fontSize: 18, color: "green",textDecorationLine:"underline" }}>Login</Text>
@@ -135,7 +153,9 @@ class SignUpScreen extends Component {
           opacity={0.8}
           textStyle={{ color: 'white' }}
         />
+         </ScrollView>
       </View>
+     
     );
   }
 }

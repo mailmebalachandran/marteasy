@@ -22,7 +22,7 @@ import MainCategory from "../Home/MainCategory";
 import { transformCategoryList } from "../Home/utils";
 import SubcategoryAPI from '../../api/Home/SubcategoryAPI';
 import unescape from 'unescape';
-import { isShowStore, transformToStoreData } from "./utils";
+import { isShowStore, transformToStoreData, getOrderedRestaurantSubCats } from "./utils";
 import ActivityContainer from "../../components/ActivityIndicator/ActivityContainer";
 
 class SubCategoryScreen extends Component {
@@ -60,9 +60,7 @@ class SubCategoryScreen extends Component {
 
   getSubCategoriesOnLoad = async (catId) => {
     const showStore = isShowStore(this.props.route.params.catName);
-
     this.setState({ isShowStore: showStore });
-
     let result = showStore ?
       await SubcategoryAPI.getCatgeoryProducts(catId) :
       await SubcategoryAPI.getparentSubCategories(catId);
@@ -78,6 +76,16 @@ class SubCategoryScreen extends Component {
       });
     }
   };
+  getTransformedList = (subCatList) => {
+    console.log("catlist", subCatList);
+    const restaruantPatt = new RegExp("RESTAURANT");
+    let name = catName.toUpperCase();
+    if (restaruantPatt.test(name)) {
+        return getOrderedRestaurantSubCats(subCatList);
+    } else {
+        return subCatList;
+    }
+  }
 
   render() {
     return (
@@ -87,7 +95,7 @@ class SubCategoryScreen extends Component {
         <Header
           navigationScreenValue={this.props.route.params.catName}
           navigation={this.props.navigation}
-          navigateValue = "Home"
+          navigateValue = "HomeScreen"
         />
         <ScrollView>
           <View style={styles.promoContainer}>
@@ -108,7 +116,7 @@ class SubCategoryScreen extends Component {
             {this.state.isLoading ? <ActivityContainer />
               : (
                 <CategoryList
-                  categories={this.state.SubCategoryList}
+                  categories={this.getTransformedList(this.state.SubCategoryList)}
                   navigation={this.props.navigation}
                   isShowStore={this.state.isShowStore}
                 />

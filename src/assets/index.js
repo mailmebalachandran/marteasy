@@ -1,6 +1,6 @@
 import { BASE_URL } from "../constants";
 
-export const LOGO = require('./images/logo.png');
+export const LOGO = require('./images/logo1.png');
 export const IMAGE_LOADER = require('./images/imagerLoader.gif');
 export const ADDTOCART = require('./images/addtocart.png');
 export const EMPTYCART = require('./images/emptycart.png');
@@ -38,3 +38,23 @@ export const FRUIT_BANNER_IMAGE1=require('./images/Categories/CatFruits/CAT_FRUI
 export const FRUIT_BANNER_IMAGE2=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE2.jpg');
 export const FRUIT_BANNER_IMAGE3=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE3.jpg');
 export const FRUIT_BANNER_IMAGE4=require('./images/Categories/CatFruits/CAT_FRUITS_IMAGE4.jpg');
+
+//Motor Wash 
+export const MOTOR_WASH_IMAGE1=require('../assets/images/motorwash.png');
+export const MOTOR_WASH_IMAGE2=require('../assets/images/motor.png')
+export const MOTOR_WASH_IMAGE3=require('../assets/images/car.jpg');
+export const MOTOR_WASH_IMAGE8=require('../assets/images/carwashimage.jpg');
+
+//Home Screen
+export const HOME_SHOP_BY_CAT=require('../assets/images/Home/HOME_SHOP_BY_CAT.png');
+
+//Drawer screen 
+export const PROFILE_IMAGE=require('../assets/images/profile.png');
+
+//Product Screen Logo
+export const PRODUCT_LOGO=require('../assets/images/food.jpg');
+
+//Homescreen Header Logo
+export const SHOP_BY_CATEGORY=require('../assets/images/Home/ShopByCategory.png');
+export const SEASONS_MUST_HAVE=require('../assets/images/Home/Seasonmusthave.png');
+export const FEATURED_STORES=require('../assets/images/Home/Featuredstores.png');

@@ -17,6 +17,7 @@ import ConnectionError from "../../components/Errors/ConnectionError";
 import { USER_LOGIN_ERROR } from "../../assets/index";
 import ButtonComponent from "../../components/Button/Button";
 import { isUserLoggedIn, logout } from "../../utils";
+import * as Constants from '../../api/Constants';
 
 class ProfileScreen extends Component {
     constructor(props) {
@@ -36,69 +37,77 @@ class ProfileScreen extends Component {
         this.setState({ isConnected });
     }
     componentDidMount() {
+        this.setState({ isLoading: true });
+        this.getProfileData();
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
             this.setState({ isLoading: true });
-            isUserLoggedIn().then((loginDetails) => {
-                const user = JSON.parse(loginDetails);
-                this.setState({ isLoginOverlay: false });
-                if (user) {
-                    Axios.get(
-                        'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-                        {
-                            params: {
-                                email: user.user_email,
-                                consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                                consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
-                            },
-                        },
-                    )
-                        .then(res => {
-                            Axios.get(
-                                'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v2/orders',
-                                {
-                                    params: {
-                                        customer: res.data[0].id.toString(),
-                                        consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                                        consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
-                                    },
-                                },
-                            ).then((res) => {
-                                this.setState({
-                                    orders: res.data
-                                })
-                                this.setState({ isLoading: false })
-                            }).catch(err => {
-                                console.log(err);
-                            });
-                            this.setState({
-                                userDetails: res.data[0]
-                            })
-
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                } else {
-                    this.setState({ isLoading: false });
-                    this.setState({ isLoginOverlay: true });
-                }
-            })
-            // const unsubscribe = NetInfo.addEventListener(state => {
-            //     this.setState({isConnected : state.isConnected});
-            // });
+            this.getProfileData();
         })
     };
-
+    getProfileData = () => {
+        isUserLoggedIn().then((loginDetails) => {
+            const user = JSON.parse(loginDetails);
+            this.setState({ isLoginOverlay: false });
+            if (user) {
+                Axios.get(
+                    Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers',
+                    {
+                        params: {
+                            email: user.user_email,
+                        },
+                    },
+                )
+                    .then(res => {
+                        this.setState({ isLoading: false });
+                        Axios.get(
+                            Constants.GLOBAL_VALUE+'/wp-json/wc/v2/orders',
+                            {
+                                params: {
+                                    customer: res.data[0].id.toString(),
+                                },
+                            },
+                        ).then((res) => {
+                            this.setState({
+                                orders: res.data
+                            })
+                            this.setState({ isLoading: false })
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                        this.setState({
+                            userDetails: res.data[0]
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            } else {
+                this.setState({ isLoading: false });
+                this.setState({ isLoginOverlay: true });
+            }
+        })
+    }
+    renderName = ({first_name, last_name}) => {
+        if ((first_name !== "" && first_name !== undefined) || (last_name !== "" && last_name !== undefined)) {
+            return (`${first_name} ${last_name}`).toUpperCase();
+        } else {
+            return "Anonymous";
+        }
+    }
     renderPhoneNum = (billingAddr) => {
         if (billingAddr) {
-            return billingAddr.phone !== undefined ? billingAddr.phone : "No Phone";
+            if (billingAddr.phone !== undefined && billingAddr.phone !== "") {
+                return billingAddr.phone
+            } else {
+                return "No Phone";
+            }
         } else {
             return "No Phone";
         }
     }
     navigateToManageAddr = () => {
-        this.props.navigation.navigate('Account', 
-        { screen: 'ManageAddr' });
+        this.props.navigation.navigate('Account',
+            { screen: 'ManageAddr' });
     }
     renderLoginError = () => {
         return (
@@ -149,7 +158,7 @@ class ProfileScreen extends Component {
                                             <Text
                                                 style={styles.name}>
                                                 {/* <Icon name="user" size={20} color="grey" /> */}
-                                                {(`${first_name} ${last_name}`).toUpperCase()}
+                                                {this.renderName(this.state.userDetails)}
                                             </Text>
                                             <Text style={styles.numEmail}>
                                                 {this.renderPhoneNum(billing)}
@@ -203,15 +212,21 @@ class ProfileScreen extends Component {
                                                             key={order.store.id}
                                                             style={styles.orderDetailsContainer}
                                                         >
-                                                            <Text style={styles.storeName}>
+                                                            <Text
+                                                                key={`storName${order.store.id}`} 
+                                                                style={styles.storeName}>
                                                                 {order.store.name}
                                                             </Text>
-                                                            <Text style={styles.storeCity}>
+                                                            <Text
+                                                                key={`storeAddr${order.store.id}`} 
+                                                                style={styles.storeCity}>
                                                                 {order.store.address.street_2
                                                                     && order.store.address.street_2}
                                                             </Text>
                                                             <View style={styles.orderPriceContainer}>
-                                                                <Text style={styles.orderPrice}>
+                                                                <Text
+                                                                    key={`storePrice${order.store.id}`} 
+                                                                    style={styles.orderPrice}>
                                                                     {order.line_items.map((item) => {
                                                                         total += item.total
                                                                         return (
@@ -219,7 +234,9 @@ class ProfileScreen extends Component {
                                                                         )
                                                                     })}
                                                                 </Text>
-                                                                <Text style={styles.orderPrice}>
+                                                                <Text
+                                                                    key={`totalAmt${order.store.id}`} 
+                                                                    style={styles.orderPrice}>
                                                                     {`Total = ${total}`},
                                                     {` ${order.date_created_gmt}`}
                                                                 </Text>

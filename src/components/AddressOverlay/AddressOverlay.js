@@ -12,6 +12,8 @@ import { addrValidation } from "./validation";
 import { isUserLoggedIn } from "../../utils";
 import MenuLoader from "../../components/Loader/MenuLoader";
 import ErrorOverlay from "../../components/Errors/ErrorOverlay";
+import ActivityOverlay from "../ActivityOverlay/ActivityOverlay";
+import * as Constants from '../../api/Constants';
 
 class AddressOverlay extends React.Component {
     constructor(props) {
@@ -85,41 +87,46 @@ class AddressOverlay extends React.Component {
             }
         });
         this.setState({ isLoading: true });
+        this.setFormData();
         this._unsubscribe = this.props.navigation.addListener('focus', () => {
-            isUserLoggedIn().then((loginDetails) => {
-                const user = JSON.parse(loginDetails);
-                this.setState({ userEmail: user.user_rmail })
-                if (user) {
-                    const { isEdit, isShipping } = this.props.route.params;
-                    if (isEdit) {
-                        this.setState({ isLoading: true })
-                        axios.get(
-                            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers',
-                            {
-                                params: {
-                                    email: user.user_email,
-                                    consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                                    consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
-                                },
-                            },
-                        )
-                            .then(res => {
-                                const { data } = res;
-                                isShipping ?
-                                    this.setEditDetails(data[0].shipping) : 
-                                    this.setEditDetails(data[0].billing)
-                                this.setState({ userId: data[0].id });
-                                this.setState({ isLoading: false })
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
-                } else {
-                    this.props.navigation.navigate("Account");
-                }
-            })
+            this.setState({ isLoading: true });
+            this.setFormData();
         });
+    }
+    setFormData = () => {
+        isUserLoggedIn().then((loginDetails) => {
+            const user = JSON.parse(loginDetails);
+            this.setState({ userEmail: user.user_rmail })
+            if (user) {
+                const { isEdit, isShipping } = this.props.route.params;
+                if (isEdit) {
+                    this.setState({ isLoading: true });
+                    axios.get(
+                        Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers',
+                        {
+                            params: {
+                                email: user.user_email,
+                            },
+                        },
+                    )
+                        .then(res => {
+                            const { data } = res;
+                            isShipping ?
+                                this.setEditDetails(data[0].shipping) :
+                                this.setEditDetails(data[0].billing)
+                            this.setState({ userId: data[0].id });
+                            this.setState({ isLoading: false })
+                        })
+                        .catch(err => {
+                        });
+                } else {
+                    this.setState({ isLoading: false });
+                }
+            } else {
+                this.props.navigation.navigate("Account");
+                this.setState({ isLoading: false });
+            }
+        })
     }
     hideOverlay = () => {
         this.setState({ isVisible: false })
@@ -182,13 +189,11 @@ class AddressOverlay extends React.Component {
             }
         }
         axios.put(
-            'https://marteasy.vasanthamveliyeetagam.com/wp-json/wc/v3/customers/' + userId,
+            Constants.GLOBAL_VALUE+'/wp-json/wc/v3/customers/' + userId,
             payload,
             {
                 params: {
                     email: this.state.user_email,
-                    consumer_key: 'ck_6dcda63598acde7f3c8f52a07095629132ca84ed',
-                    consumer_secret: 'cs_8757c7474b8093821cec8468c09a2cacb9ccb65c',
                 },
             },
         ).then((res) => {
@@ -197,6 +202,7 @@ class AddressOverlay extends React.Component {
         })
             .catch((err) => {
                 this.setState({ isLoading: false });
+                this.setState({isError: true});
                 if (err.response.data.data.params.billing) {
                     this.setState({ commonErr: err.response.data.data.params.billing });
                 } else {
@@ -209,192 +215,190 @@ class AddressOverlay extends React.Component {
         return (
             <SafeAreaView>
                 {!this.state.IsInternetConnected ? <ErrorOverlay errorType={"NetWork"} /> :
-                this.state.isLoading ?
-                    <MenuLoader />
-                    :
-                    (
-                        <>
-                            <View style={styles.orderSectionTitleContainer}>
-                                <TouchableOpacity
-                                    onPress={this.navigateToManageAddr}
-                                >
-                                    <Icon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
-                                </TouchableOpacity>
-                                <Text style={styles.orderSectionTitle}>{this.renderOverlayHeading()}</Text>
-                            </View>
-                            <ScrollView>
-                                <View style={styles.continerStyles}>
-                                    <View style={styles.innerContainer}>
-                                        <Input
-                                            placeholder='FirstName'
-                                            label="First Name"
-                                            value={this.state.firstName}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    firstName: text,
-                                                    firstNameVal: "",
-                                                })
-                                            }}
-                                            errorMessage={this.state.firstNameVal}
-                                        />
-                                        <Input
-                                            placeholder="LastName"
-                                            label="Last Name"
-                                            value={this.state.lastName}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    lastName: text,
-                                                    lastNameVal: "",
-                                                });
-                                            }}
-                                            errorMessage={this.state.lastNameVal}
-                                        />
-                                        <Input
-                                            placeholder="Company Name"
-                                            label="Company Name"
-                                            value={this.state.company}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    company: text,
-                                                    companyVal: "",
-                                                });
-                                            }}
-                                            errorMessage={this.state.companyVal}
-                                        />
-                                        <Input
-                                            placeholder="Address Line 1"
-                                            label="Address Line 1"
-                                            value={this.state.address1}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    address1: text,
-                                                    address1Val: "",
-                                                });
-                                            }}
-                                            errorMessage={this.state.address1Val}
-                                        />
-                                        <Input
-                                            placeholder="Address Line 2"
-                                            label="Address Line 2"
-                                            value={this.state.address2}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    address2: text,
-                                                    address2Val: "",
-                                                });
-                                            }}
-                                            errorMessage={this.state.address2Val}
-                                        />
-                                        <Input
-                                            placeholder="Town/City"
-                                            label="Town/City"
-                                            value={this.state.city}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    city: text,
-                                                    cityVal: "",
-                                                });
-                                            }}
-                                            errorMessage={this.state.cityVal}
-                                        />
-                                        <Input
-                                            placeholder="State"
-                                            label="State"
-                                            value={this.state.stateName}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    stateName: text,
-                                                    stateNameVal: ""
-                                                });
-                                            }}
-                                            errorMessage={this.state.stateNameVal}
-                                        />
-                                        <Input
-                                            placeholder="Postal Code"
-                                            label="Post Code"
-                                            value={this.state.postalCode}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    postalCode: text,
-                                                    postalCodeVal: "",
-                                                });
-                                            }}
-                                            errorMessage={this.state.postalCodeVal}
-                                        />
-                                        {!isShipping &&
-                                            (<>
-                                                <Input
-                                                    placeholder="PhoneNumber"
-                                                    label="Phone Number"
-                                                    value={this.state.phone}
-                                                    onChangeText={text => {
-                                                        this.setState({
-                                                            phone: text,
-                                                            phoneVal: "",
-                                                        });
-                                                    }}
-                                                    errorMessage={this.state.phoneVal}
-                                                />
-                                                <Input
-                                                    placeholder="Email"
-                                                    label="Email"
-                                                    value={this.state.email}
-                                                    onChangeText={text => {
-                                                        this.setState({
-                                                            email: text,
-                                                            emailVal: "",
-                                                        });
-                                                    }}
-                                                    errorMessage={this.state.emailVal}
-                                                />
-                                            </>
-                                            )
-                                        }
-                                        {this.state.isError &&
-                                            <Text style={styles.errorMsg}>
-                                                {this.state.commonErr}
-                                            </Text>
-                                        }
-                                        <View style={styles.btnContainer}>
-                                            <Button
-                                                icon={
-                                                    <Icon
-                                                        name="save"
-                                                        size={15}
-                                                        color="white"
-                                                    />
-                                                }
-                                                type="solid"
-                                                title="Save"
-                                                titleStyle={styles.btnTitle}
-                                                buttonStyle={styles.savebtn}
-                                                onPress={
-                                                    this.updateAddr
-                                                }
-                                                raised={false}
+                        (
+                            <>
+                            {this.state.isLoading && <ActivityOverlay /> }
+                                <View style={styles.orderSectionTitleContainer}>
+                                    <TouchableOpacity
+                                        onPress={this.navigateToManageAddr}
+                                    >
+                                        <Icon iconStyle={styles.navIcon} name="arrow-left" size={20} color='black' />
+                                    </TouchableOpacity>
+                                    <Text style={styles.orderSectionTitle}>{this.renderOverlayHeading()}</Text>
+                                </View>
+                                <ScrollView>
+                                    <View style={styles.continerStyles}>
+                                        <View style={styles.innerContainer}>
+                                            <Input
+                                                placeholder='FirstName'
+                                                label="First Name"
+                                                value={this.state.firstName}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        firstName: text,
+                                                        firstNameVal: "",
+                                                    })
+                                                }}
+                                                errorMessage={this.state.firstNameVal}
                                             />
-                                            <Button
-                                                icon={
-                                                    <MaterialIcon
-                                                        name="clear"
-                                                        size={15}
-                                                        color="white"
-                                                    />
-                                                }
-                                                title="Cancel"
-                                                titleStyle={styles.btnTitle}
-                                                buttonStyle={styles.cancelBtn}
-                                                onPress={
-                                                    this.navigateToManageAddr
-                                                }
-                                                raised={false}
+                                            <Input
+                                                placeholder="LastName"
+                                                label="Last Name"
+                                                value={this.state.lastName}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        lastName: text,
+                                                        lastNameVal: "",
+                                                    });
+                                                }}
+                                                errorMessage={this.state.lastNameVal}
                                             />
+                                            <Input
+                                                placeholder="Company Name"
+                                                label="Company Name"
+                                                value={this.state.company}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        company: text,
+                                                        companyVal: "",
+                                                    });
+                                                }}
+                                                errorMessage={this.state.companyVal}
+                                            />
+                                            <Input
+                                                placeholder="Address Line 1"
+                                                label="Address Line 1"
+                                                value={this.state.address1}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        address1: text,
+                                                        address1Val: "",
+                                                    });
+                                                }}
+                                                errorMessage={this.state.address1Val}
+                                            />
+                                            <Input
+                                                placeholder="Address Line 2"
+                                                label="Address Line 2"
+                                                value={this.state.address2}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        address2: text,
+                                                        address2Val: "",
+                                                    });
+                                                }}
+                                                errorMessage={this.state.address2Val}
+                                            />
+                                            <Input
+                                                placeholder="Town/City"
+                                                label="Town/City"
+                                                value={this.state.city}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        city: text,
+                                                        cityVal: "",
+                                                    });
+                                                }}
+                                                errorMessage={this.state.cityVal}
+                                            />
+                                            <Input
+                                                placeholder="State"
+                                                label="State"
+                                                value={this.state.stateName}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        stateName: text,
+                                                        stateNameVal: ""
+                                                    });
+                                                }}
+                                                errorMessage={this.state.stateNameVal}
+                                            />
+                                            <Input
+                                                placeholder="Postal Code"
+                                                label="Post Code"
+                                                value={this.state.postalCode}
+                                                onChangeText={text => {
+                                                    this.setState({
+                                                        postalCode: text,
+                                                        postalCodeVal: "",
+                                                    });
+                                                }}
+                                                errorMessage={this.state.postalCodeVal}
+                                            />
+                                            {!isShipping &&
+                                                (<>
+                                                    <Input
+                                                        placeholder="PhoneNumber"
+                                                        label="Phone Number"
+                                                        value={this.state.phone}
+                                                        onChangeText={text => {
+                                                            this.setState({
+                                                                phone: text,
+                                                                phoneVal: "",
+                                                            });
+                                                        }}
+                                                        errorMessage={this.state.phoneVal}
+                                                    />
+                                                    <Input
+                                                        placeholder="Email"
+                                                        label="Email"
+                                                        value={this.state.email}
+                                                        onChangeText={text => {
+                                                            this.setState({
+                                                                email: text,
+                                                                emailVal: "",
+                                                            });
+                                                        }}
+                                                        errorMessage={this.state.emailVal}
+                                                    />
+                                                </>
+                                                )
+                                            }
+                                            {this.state.isError &&
+                                                <Text style={styles.errorMsg}>
+                                                    {this.state.commonErr}
+                                                </Text>
+                                            }
+                                            <View style={styles.btnContainer}>
+                                                <Button
+                                                    icon={
+                                                        <Icon
+                                                            name="save"
+                                                            size={15}
+                                                            color="white"
+                                                        />
+                                                    }
+                                                    type="solid"
+                                                    title="Save"
+                                                    titleStyle={styles.btnTitle}
+                                                    buttonStyle={styles.savebtn}
+                                                    onPress={
+                                                        this.updateAddr
+                                                    }
+                                                    raised={false}
+                                                />
+                                                <Button
+                                                    icon={
+                                                        <MaterialIcon
+                                                            name="clear"
+                                                            size={15}
+                                                            color="white"
+                                                        />
+                                                    }
+                                                    title="Cancel"
+                                                    titleStyle={styles.btnTitle}
+                                                    buttonStyle={styles.cancelBtn}
+                                                    onPress={
+                                                        this.navigateToManageAddr
+                                                    }
+                                                    raised={false}
+                                                />
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                            </ScrollView>
-                        </>
-                    )}
+                                </ScrollView>
+                            </>
+                        )}
             </SafeAreaView>
         );
     }

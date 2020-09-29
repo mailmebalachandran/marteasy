@@ -1,4 +1,4 @@
-export const PrimaryColor = "#4caf50";
+export const PrimaryColor = "#537e2c";
 export const LightColor = "#80e27e";
 export const DarkColor = "#087f23";
 export const PrimaryTextColor = "#FFFFFF";
@@ -11,3 +11,7 @@ export const BackgroundColorLight = "#FFFFFF";
 export const PlaceHolderColor = "#e0e0e0";
 export const LightDrawerColor = "#F5F5F6";
 export const LIGHT_BG = "#FCFEE9";
+export const ProductButtonColor="#e95f62"
+export const COMPARE_BTN_COLOR = "#FA971F";
+export const ADD_BTN_COLOR = "#0E4154";
+export const BRAND_SECONDARY = "#134253";

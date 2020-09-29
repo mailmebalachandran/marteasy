@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
     View,
     Image,
@@ -14,7 +14,7 @@ import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 import * as catImages from "../../assets/index";
 import unescape from "unescape";
-class MainCategory extends Component {
+class MainCategory extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -82,17 +82,23 @@ class MainCategory extends Component {
                 {/* Main Category 2 column */}
                 {this.props.categories.map(cat => {
                     return (
-                        <View style={[styles.categoryItemContainer2Col, styles.mainCategory]}>
+                        <View
+                            style={[styles.categoryItemContainer2Col, styles.mainCategory]}
+                            key={cat.id}
+                        >
                             <TouchableOpacity
                                 onPress={() => {
                                     catName = unescape(cat.name);
                                     this.props.navigation.navigate('SubCategoryScreen', {
-                                    catId: cat.id,
-                                    catName: catName
-                                  });
+                                        catId: cat.id,
+                                        catName: catName
+                                    });
                                 }}>
                                 <View
                                     style={{
+                                        flex: 1,
+                                        justifyContent: "center",
+                                        alignItems: "center",
                                         backgroundColor: 'transparent',
                                         width: '100%',
                                         shadowColor: '#000',
@@ -101,14 +107,23 @@ class MainCategory extends Component {
                                         shadowRadius: 5,
                                         elevation: 25,
                                     }}>
-                                    <Image
-                                        source={{ uri: cat.image.src }}
-                                        style={{
-                                            resizeMode: 'contain',
-                                            height: 100,
-                                            width: '100%',
-                                        }}
-                                    />
+                                    <View style={{
+                                        backgroundColor: "rgba(175,175,175,0.1)",
+                                        borderColor:"#99d066",
+                                        borderWidth:0.4,
+                                        borderRadius: 5,
+                                        height: "100%",
+                                        width: "80%"
+                                    }}>
+                                        <Image
+                                            source={{ uri: cat.image.src }}
+                                            style={{
+                                                resizeMode: 'contain',
+                                                height: 100,
+                                                width: '95%',
+                                            }}
+                                        />
+                                    </View>
                                 </View>
                                 <Text
                                     style={styles.categoryName}>

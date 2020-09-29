@@ -456,7 +456,7 @@ class SubCategoryProductScreen extends Component {
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                       }}>
-                      <View style={{ height: 80 }}>
+                      {/* <View style={{ height: 80 }}>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                           <View style={{ flex: 0.2 }}>
                             {this.onAvatarImage(this.state.storeDetail)}
@@ -482,9 +482,9 @@ class SubCategoryProductScreen extends Component {
                       imageSize={20}
                     />
                     <Text style={{fontSize: 10, marginTop: 10}}>0 reviews</Text>
-                  </View> */}
+                  </View>
                         </View>
-                      </View>
+                      </View> */}
                       {this.state.productList.length > 0 && (
                         <Product
                           {...this.state}
@@ -493,6 +493,8 @@ class SubCategoryProductScreen extends Component {
                           handleQuantityChange={(item, type) => {
                             this.handleQuantityChange(item, type);
                           }}
+                          isCompareProduct={true}
+                          navigation={this.props.navigation}
                         />
                       )}
                       {this.state.productList.length == 0 && (

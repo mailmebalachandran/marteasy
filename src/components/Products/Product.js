@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text, Image, ScrollView} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {getItemTransformedItemDesc} from './utils';
 import styles from './styles';
 import AddCart from '../AddCart/AddCart';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
+import ButtonComponent from '../Button/Button';
 
 class Product extends React.Component {
   constructor(props) {
@@ -23,7 +24,6 @@ class Product extends React.Component {
     });
     this.state = {
       productList: productListWithAdd,
-      storeId: props.storeDetail.id,
       countList: [],
     };
   }
@@ -87,27 +87,56 @@ class Product extends React.Component {
           {this.state.productList.map(product => (
             <View style={styles.productContainer} key={product.id.toString()}>
               <View style={styles.imageViewContainerStyle}>
-                {this.onAvatarImage(product)}
-                <View>
-                  <Text style={styles.productName}>{product.name}</Text>
-                  <Text style={styles.productDesc}>
+              <View><View style={{ flex: 0.4 }}>{this.onAvatarImage(product)}</View></View>
+                <View style={{ flex: 0.9, justifyContent: "flex-start" }}>
+                  <View style={styles.productViewContainerStyle}>
+                    {/* <View style={styles.productNameContainer}> */}
+                    <Text style={styles.productName}>{product.name}</Text>
+                    {/* </View> */}
+                  </View>
+                  {/* <Text style={styles.productDesc}>
                     {getItemTransformedItemDesc(product.short_description)}
-                  </Text>
+                  </Text> */}
                   <View style={styles.priceViewContainerStyle}>
-                    <View style={styles.pricingContainer}>
-                      {product.regular_price !== '' &&
-                        product.regular_price !== null &&
-                        product.regular_price !== undefined && (
-                          <Text style={styles.regularPrice}>
-                            Rs.{product.regular_price}
-                          </Text>
-                        )}
-                      <Text style={styles.salePrice}>
-                        Rs.{product.sale_price}
+                    {/* <View style={styles.pricingContainer}> */}
+                    <View style={{ flex: 1 }}>
+                      <View style={{ flex: 1 }}>
+                        {product.regular_price !== '' &&
+                          product.regular_price !== null &&
+                          product.regular_price !== undefined && (
+                            <Text style={styles.regularPrice}>
+                              MRP:
+                              <Text style={{ marginLeft: 5, textDecorationLine: "line-through" }}> Rs.{product.regular_price}</Text>
+                            </Text>
+                          )}
+                      </View>
+                      <View style={{ flex: 1 }}><Text style={styles.salePrice}>
+                        Rs.
+                        <Text style={{ fontSize: 30, fontWeight: "bold" }}>{product.sale_price}</Text>
                       </Text>
+                      </View>
                     </View>
-                    <View style={styles.addCartOuterViewContainerStyle}>
-                      <View style={styles.imageViewContainerStyle}>
+
+                    {/* </View> */}
+                    <View style={{ flex: 1,justifyContent: "flex-end", alignItems: "flex-end", }}>
+                      {/* <View style={styles.addCartOuterViewContainerStyle}> */}
+                      <View style={styles.buttonContainer}>
+                        {this.props.isCompareProduct === true &&
+                          product.tags.length > 0 ? (
+                            <View style={styles.compareViewStyle}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  this.props.navigation.navigate('CompareProducts', {
+                                    tagId: product.tags[0].id,
+                                    productId: product.id,
+                                  });
+                                }}>
+                                <Text style={styles.compareTextStyle}>COMPARE</Text>
+                              </TouchableOpacity>
+                            </View>
+                          ) : null}
+                      </View>
+                      <View style={styles.buttonContainer}>
                         <AddCart
                           productValue={product}
                           onAddHandler={product => {
@@ -118,7 +147,9 @@ class Product extends React.Component {
                           }}
                         />
                       </View>
+                      {/* </View> */}
                     </View>
+
                   </View>
                 </View>
               </View>

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styles from './styles';
 import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as ThemeColor from '../../themes/colors';
 
 class AddCart extends Component {
   constructor(props) {
@@ -12,43 +13,48 @@ class AddCart extends Component {
     let bindingValues;
     if (this.props.productValue.isAdd) {
       bindingValues = (
-        <View style={styles.addViewStyle}>
+        <View key={"btnCont"+this.props.id} style={styles.addViewStyle}>
           <TouchableOpacity
+            key={"bnt"+this.props.id}
             onPress={() => {
               this.props.onAddHandler(this.props.productValue);
             }}>
-            <Text style={styles.addTextStyle}>Add</Text>
+            <Text key={"btnTex"+this.props.id} style={styles.addTextStyle}>ADD</Text>
           </TouchableOpacity>
         </View>
       );
     } else {
       bindingValues = (
         <>
-          <View>
+        <View key={"btnCont"+this.props.id} style={{flex: 1, flexDirection: "row"}}>
+          <View key={"minusCont"+this.props.id}>
             <TouchableOpacity
+              key={"minusBtn"+this.props.id}
               onPress={() =>
                 this.props.handleQuantityChange(this.props.productValue, 'DEC')
               }>
-              <View style={styles.minusViewStyle}>
-                <Icon name="minus" size={15} style={{marginTop: 5}} />
+              <View key={"minusBtnCont"+this.props.id} style={styles.minusPlusViewStyle}>
+                <Icon key={"minusBtnIcon"+this.props.id} name="minus" size={13} style={styles.addBtnIcon} />
               </View>
             </TouchableOpacity>
           </View>
-          <View style={styles.textViewStyle}>
-            <Text style={styles.textTextStyle}>
+          <View key={"prodValueCont"+this.props.id} style={styles.textViewStyle}>
+            <Text key={"prodValueText"+this.props.id} style={styles.textTextStyle}>
               {this.props.productValue.count}
             </Text>
           </View>
-          <View>
+          <View key={"plusBtnCont"+this.props.id} >
             <TouchableOpacity
+              key={"plusBtnCont"+this.props.id}
               onPress={() =>
                 this.props.handleQuantityChange(this.props.productValue, 'INC')
               }>
-              <View style={styles.plusViewStyle}>
-                <Icon name="plus" size={15} style={{marginTop: 5}} />
+              <View key={"plusIconCont"+this.props.id}style={styles.minusPlusViewStyle}>
+                <Icon key={"plusBtnIcon"+this.props.id} name="plus" size={13} style={styles.addBtnIcon} />
               </View>
             </TouchableOpacity>
           </View>
+        </View>
         </>
       );
     }

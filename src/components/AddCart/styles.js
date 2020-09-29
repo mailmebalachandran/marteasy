@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as ThemeColor from '../../themes/colors';
 
 const styles = StyleSheet.create({
@@ -7,50 +7,40 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 5,
     paddingTop: 5,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     borderColor: 'green',
-    borderRadius: 1,
-    borderWidth: 1,
+    // borderRadius: 1,
+    // borderWidth: 1,
+    fontSize: 11,
+    color: "white"
   },
+  addBtnIcon: {
+    color: ThemeColor.ADD_BTN_COLOR
+  },
+  //Not Being used for now
   addViewStyle: {
-    width: 75,
-    height: 35,
+    height: 30,
+    alignItems: 'center',
+    backgroundColor: ThemeColor.ADD_BTN_COLOR,
+    borderRadius: 5
   },
-  minusViewStyle: {
-    backgroundColor: '#ededed',
-    borderColor: ThemeColor.DarkColor,
-    borderStyle: 'solid',
+  minusPlusViewStyle: {
     borderWidth: 1,
-    padding: 5,
-    height: 35,
-    borderRightColor: ThemeColor.DarkTextColor,
-    borderRightWidth: 0,
+    borderStyle: "solid",
+    borderColor: ThemeColor.ADD_BTN_COLOR,
+    borderRadius: 5,
+    padding: 8,
+    height: 30,
   },
   textViewStyle: {
-    borderColor: ThemeColor.DarkColor,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 5,
-    height: 35,
-    borderLeftColor: ThemeColor.DarkTextColor,
-    borderRightColor: ThemeColor.DarkTextColor,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderRightWidth: 0,
+    height: 30,
   },
   textTextStyle: {
     margin: 5,
     marginTop: 0,
-  },
-  plusViewStyle: {
-    backgroundColor: '#e9fae8',
-    borderColor: ThemeColor.DarkColor,
-    borderLeftColor: ThemeColor.DarkTextColor,
-    borderLeftWidth: 0,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 5,
-    height: 35,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: ThemeColor.ADD_BTN_COLOR,
   },
 });
 

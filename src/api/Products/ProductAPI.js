@@ -27,4 +27,56 @@ const GetStoreBasedonStoreId = async storeId => {
   }
 };
 
-export default {GetProductBasedonStoreId, GetStoreBasedonStoreId};
+const GetSubcategoryBasedOnStore = async storeId => {
+  try {
+    const {data} = await Axios.get(Constants.getSubCategoryBasedOnStoreAPI + storeId);
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
+const getProductsBasedOnStoreSubcategory = async (storeId, catId) => {
+  try {
+    const {data} = await Axios.get(Constants.getProductsBasedOnStoreSubcategoryAPI+'store_id='+storeId+'&catagory_id=' + catId);
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
+const getProductsDataBasedOnStoreSubcategory = async products => {
+  try {
+    const url =
+      Constants.CartGetProductsAPI +
+      Constants.CONSUMER_KEY +
+      '&consumer_secret=' +
+      Constants.CONSUMER_SECRET +
+      '&include=' +
+      products;
+    const {data} = await Axios.get(url);
+    for(var item in data){
+      if(data[item].sale_price === '' || data[item].sale_price === undefined || data[item].sale_price === null){
+        data[item].sale_price = data[item].regular_price;
+        data[item].regular_price = '';
+      } 
+    }
+    return data;
+  } catch (err) {
+    return JSON.parse('{"isError" : true}');
+  }
+};
+
+const getProductsByCategory = async (SubId) => {
+  try {
+    const {data} = await Axios.get(Constants.getProductsByCategory+SubId);
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
+
+
+export default {GetProductBasedonStoreId, GetStoreBasedonStoreId, GetSubcategoryBasedOnStore,getProductsBasedOnStoreSubcategory,
+  getProductsDataBasedOnStoreSubcategory,getProductsByCategory};

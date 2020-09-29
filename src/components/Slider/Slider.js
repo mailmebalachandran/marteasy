@@ -14,10 +14,9 @@ export default class Slider extends Component {
           currentImageEmitter={index => {}}
           autoplay={this.props.autoplay}
           circleLoop={this.props.isLoop}
-          dotColor={this.props.dotColor}
-          dotStyle={this.props.dotStyle}
-          imageLoadingColor={ThemeColors.DarkColor}
-          sliderBoxHeight={this.props.sliderBoxHeight}
+          dotColor={ThemeColors.DarkColor}
+          inactiveDotColor={ThemeColors.DarkColor}
+          imageLoadingColor={ThemeColors.LightColor}
         />
       </View>
     );

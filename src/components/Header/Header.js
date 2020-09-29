@@ -4,6 +4,7 @@ import {View, TouchableOpacity, Text, Image} from 'react-native';
 import {Avatar, Badge, SearchBar} from 'react-native-elements';
 import IconFeather from 'react-native-vector-icons/Feather';
 import * as ThemeColor from '../../themes/colors';
+import unescape from "unescape";
 
 class Header extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class Header extends Component {
         </View>
         <View style={styles.centerViewStyle} />
         <View style={styles.rightViewStyle}>
-          <Text style={styles.text}>{this.props.navigationScreenValue}</Text>
+          <Text style={styles.text}>{unescape(this.props.navigationScreenValue)}</Text>
         </View>
       </View>
     );

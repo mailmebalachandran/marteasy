@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {View, Image, FlatList, Text, TouchableOpacity} from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, Image, FlatList, Text, TouchableOpacity } from 'react-native';
 import styles from './styles';
-import {Card} from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import * as Images from '../../assets/index';
 import * as CommonConstants from '../../constants';
 
-class StoreList extends Component {
+class StoreList extends PureComponent {
   constructor(props) {
     super(props);
   }
@@ -21,7 +21,7 @@ class StoreList extends Component {
       } else {
         return (
           <Image
-            source={{uri: item.gravatar}}
+            source={{ uri: item.gravatar }}
             style={styles.gravatarImageDefaultStyle}
           />
         );
@@ -41,14 +41,14 @@ class StoreList extends Component {
     return (
       <View style={styles.containerStyle}>
         <FlatList
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           data={this.props.dataValues}
           horizontal={true}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <Card containerStyle={styles.cardContainerStyle}>
               <TouchableOpacity
                 onPress={() => {
-                    this.props.navigation.navigate('ProductScreen', {
+                  this.props.navigation.navigate('CategoryProductScreen', {
                     storeId: item.id,
                     storeName: item.store_name,
                     storeOpen: item.store_open_close,

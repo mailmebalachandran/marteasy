@@ -123,10 +123,7 @@ const styles = StyleSheet.create({
     marginTop: "1%",
 },
 titleText: {
-  marginLeft: 10,
-  marginRight: 10,
-  marginTop: 20,
-  fontFamily: 'notoserif',
+  margin: 10,
   fontWeight: '400',
   fontSize: 20,
   textAlign: "center",
