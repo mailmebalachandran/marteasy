@@ -53,6 +53,8 @@ class OtpScreen extends Component {
       roles: routeParams.roles,
     };
     let result = await SignUpAPI.registerUser(userDetails);
+    console.log("userDetails", userDetails);
+    console.log("result from register",result);
     if (!result.isValidated) {
       this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
     } else {
