@@ -15,7 +15,8 @@ export const isUserLoggedIn = async () => {
 
 export const logout = async (navigation) => {
     await AsyncStorage.removeItem('userAuth');
-    navigation.navigate("Home1");
+    await AsyncStorage.removeItem('Cart');
+    navigation.navigate("HomeScreen");
 }
 
 export const getOrderedParentCategories = (cats) => {

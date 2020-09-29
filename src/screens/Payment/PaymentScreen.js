@@ -29,7 +29,10 @@ class PaymentScreen extends Component {
 
   componentDidMount = async () => {
     this.onPageLoad();
-    this.focusListener = navigation.addListener('didFocus', () => {
+    // this.focusListener = navigation.addListener('didFocus', () => {
+    //   this.onPageLoad();
+    // });
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.onPageLoad();
     });
   };
