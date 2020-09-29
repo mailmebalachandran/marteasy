@@ -77,7 +77,6 @@ class SubCategoryScreen extends Component {
     }
   };
   getTransformedList = (subCatList) => {
-    console.log("catlist", subCatList);
     const restaruantPatt = new RegExp("RESTAURANT");
     let name = catName.toUpperCase();
     if (restaruantPatt.test(name)) {

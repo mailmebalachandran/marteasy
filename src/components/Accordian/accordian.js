@@ -69,7 +69,6 @@ export default class Accordian extends Component {
                                     subId: subCatList.id,
                                     subName: subCatList.name
                                 })
-                                console.log("SubId", subCatList.id)
                             }
                             }>
                                 <View style={styles.child}>
