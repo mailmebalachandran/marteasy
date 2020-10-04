@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import * as Constants from '../Constants';
 
 const LoginValidation = async userDetails => {
+  console.log("Userdetails",userDetails);
   let res;
   try {
     res = await Axios.post(Constants.LoginAPI, userDetails);
