@@ -16,8 +16,8 @@ import { Linking } from "react-native";
 
 class LoginScreen extends Component {
   state = {
-    UserName: '',
-    Password: '',
+    UserName: "stest01",
+    Password: 'stest01',
     IsLoaded: false,
   };
 
@@ -33,7 +33,11 @@ class LoginScreen extends Component {
       if (!result.isValidated) {
         this.refs.toast.show(result.message, DURATION.LENGTH_LONG);
       } else {
-        this.props.navigation.navigate('HomeScreen');
+        if(result.isStoreUser) {
+          Linking.openURL(APIConstants.GLOBAL_VALUE + '/my-account')
+        } else {
+          this.props.navigation.navigate('HomeScreen');
+        }
       }
       this.setState({ IsLoaded: false });
     } else {

@@ -156,8 +156,8 @@ class OtpScreen extends Component {
             style={{ backgroundColor: ThemeColor.BRAND_SECONDARY }}
             position="top"
             positionValue={30}
-            fadeInDuration={200}
-            fadeOutDuration={2000}
+            fadeInDuration={750}
+            fadeOutDuration={5000}
             opacity={0.8}
             textStyle={{ color: 'white' }}
           />

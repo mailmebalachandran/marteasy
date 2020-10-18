@@ -1,0 +1,12 @@
+//Add this to opt/bitnami/apps/wordpress/conf/httpd-app.conf
+RewriteEngine on
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+
+//Add this to wp-config.php file
+define('JWT_AUTH_SECRET_KEY', 'your-top-secret-key');
+
+define('JWT_AUTH_CORS_ENABLE', true);

@@ -179,11 +179,6 @@ class App extends Component {
           name="OtpScreen"
           component={OtpScreen}
         />
-
-        <RootStack.Screen
-          name="test"
-          component={TestScreen}
-        />
         <RootStack.Screen
           name="Payment"
           component={PaymentScreen}
