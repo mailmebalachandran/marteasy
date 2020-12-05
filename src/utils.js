@@ -13,9 +13,19 @@ export const isUserLoggedIn = async () => {
     }
 }
 
+export const testIsUserLoggedIn = async () => {
+    const userDetails = await AsyncStorage.getItem('userAuth');
+    if (userDetails !== null) {
+        return JSON.parse(userDetails);
+    } else {
+        return false;
+    }
+}
+
 export const logout = async (navigation) => {
     await AsyncStorage.removeItem('userAuth');
-    navigation.navigate("Home");
+    await AsyncStorage.removeItem('Cart');
+    navigation.navigate("HomeScreen");
 }
 
 export const getOrderedParentCategories = (cats) => {

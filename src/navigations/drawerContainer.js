@@ -14,29 +14,56 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import ShopByCategory from "../navigations/shopByCategoryMenu";
 import HomeAPI from '../api/Home/HomeAPI';
-import { getOrderedParentCategories } from "../utils";
+import { getOrderedParentCategories, testIsUserLoggedIn } from "../utils";
 import { getMenuSubcategories } from "./utils";
 import { Linking } from "react-native";
 
 class DrawerContainer extends Component {
-
-    state = {
-        viewSection: false,
-        viewShop: false,
-        categoryList: [],
-        subCatList: [],
+    constructor(props) {
+        super(props);
+        this.state = {
+            viewSection: false,
+            viewShop: false,
+            categoryList: [],
+            subCatList: [],
+            username: ""
+        }
     }
-
     componentDidMount = async () => {
         const result = await HomeAPI.getParentCategories();
         const orderedParentCats = getOrderedParentCategories(result);
         this.setState({ categoryList: orderedParentCats });
         const subCatList = await getMenuSubcategories(orderedParentCats);
         this.setState({ subCatList: subCatList });
+        this.focusListener = this.props.navigation.addListener("focus", async () => {
+            console.log("in focus")
+            const userDetails = await testIsUserLoggedIn();
+            this.setState({ username: userDetails.user_nicename })
+          });
+    }
+    // componentWillUnmount() {
+    //     // Remove the event listener
+    //     this.focusListener.remove();
+    //   }
+    componentDidUpdate = async () => {
+        const userDetails = await testIsUserLoggedIn();
+        if (userDetails !== false && userDetails.user_nicename !== this.state.username) {
+            this.setState({ username: userDetails.user_nicename })
+        }
     }
 
     handleShopByCategory = () => {
         this.setState({ viewShop: true })
+    }
+
+    handleCheckUserLogged = () => {
+        testIsUserLoggedIn().then((res) => {
+            console.log("in then", res);
+            if (res !== false) {
+                this.setState({ username: res.user_email });
+                console.log("state", this.state.username);
+            }
+        })
     }
 
     render() {
@@ -51,13 +78,16 @@ class DrawerContainer extends Component {
                     </View>
                     <View style={styles.userDetail}>
                         <Text style={styles.name}>Welcome</Text>
-                        <Text style={styles.email}>Ananth Prasad</Text>
+                        {console.log("in render", this.state.username)}
+                        {this.state.username !== "" && this.state.username !== undefined ?
+                            <Text style={styles.email}>{this.state.username}</Text> :
+                            <Text style={styles.email}>Guest User</Text>}
                     </View>
                 </View>
                 <Divider />
                 <View style={styles.drawerSection}>
                     {this.state.viewShop === true ?
-                        (<ShopByCategory 
+                        (<ShopByCategory
                             onPress={(data) => {
                                 this.setState({ viewShop: data })
                             }}
@@ -79,12 +109,12 @@ class DrawerContainer extends Component {
                                 onPress={() => { this.props.navigation.navigate("Account") }} />
                             {/* <View style={{ flex: 1, flexDirection: "row" }}>
                                 <View style={{ flex: 1, }}> */}
-                                    <DrawerItem
-                                        // labelStyle={{fontWeight: "bold"}}
-                                        icon={() => (<MaterialIcons name={'shopping-cart'} size={25} color={"red"} />)}
-                                        label="Shop By Category"
-                                        onPress={this.handleShopByCategory} />
-                                {/* </View>
+                            <DrawerItem
+                                // labelStyle={{fontWeight: "bold"}}
+                                icon={() => (<MaterialIcons name={'shopping-cart'} size={25} color={"red"} />)}
+                                label="Shop By Category"
+                                onPress={this.handleShopByCategory} />
+                            {/* </View>
                                 <View style={{ flex: 0.1, justifyContent: "flex-end", marginBottom: "5.1%",alignItems: "center", marginRight: "5%" }}>
                                     <FontAwesome5 name={'caret-right'} size={20} />
                                 </View>
@@ -114,7 +144,7 @@ class DrawerContainer extends Component {
                                 label="Customer Support"
                                 onPress={() => Linking.openURL(
                                     'http://api.whatsapp.com/send?phone=+919474218508'
-                                    )} />
+                                )} />
                             <DrawerItem
                                 icon={() => (<MaterialIcons name={'stars'} size={25} color={"red"} />)}
                                 label="Rate Us"
