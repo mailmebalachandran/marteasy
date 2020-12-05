@@ -1,19 +1,19 @@
 {
     "base_url": "http://marteasy.vasanthamveliyeetagam.com",
     "motor_wash_tag_id": "191",
+    "seasons_must_have_id": "219",
     "motor_wash_image_url": "http://marteasy.vasanthamveliyeetagam.com/wp-content/uploads/HOME_BANNER_4.jpg",
     "home": {
         "homeBanner1": [
-            "https://marteasy.in/wp-content/uploads/HOME_BANNER_1-1.jpg",
-            "https://marteasy.in/wp-content/uploads/HOME_BANNER_2-1.jpg",
-            "https://marteasy.in/wp-content/uploads/HOME_BANNER_3-1.jpg",
-            "https://marteasy.in/wp-content/uploads/HOME_BANNER_4-1.jpg",
-            "https://marteasy.in/wp-content/uploads/HOME_BANNER_5.jpg"
+            "https://marteasy.in/wp-content/uploads/HOME_BANNER_1.jpg",
+            "https://marteasy.in/wp-content/uploads/HOME_BANNER_2.jpg",
+            "https://marteasy.in/wp-content/uploads/HOME_BANNER_3.jpg",
+            "https://marteasy.in/wp-content/uploads/HOME_BANNER_4.jpg"
         ],
         "homeBanner2": [
             "https://marteasy.in/wp-content/uploads/HOME_BANNER_1.jpg",
             "https://marteasy.in/wp-content/uploads/HOME_BANNER_2.jpg"
         ],
-        "homePromo": "https://marteasy.in/wp-content/uploads/HOME_PROMO_1-1.jpg"
+        "homePromo": "https://marteasy.in/wp-content/uploads/HOME_PROMO_1.jpg"
     }
 }
