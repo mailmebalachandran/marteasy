@@ -8,10 +8,6 @@ const registerUser = async userDetails => {
   var config = {
     method: 'post',
     url: Constants.GLOBAL_VALUE+'/wp-json/wp/v2/users/register',
-    headers: {
-      'Authorization': Constants.ADMIN_TOKEN,
-      'Content-Type': 'application/json'
-    },
     data: userDetails
   };
   try {

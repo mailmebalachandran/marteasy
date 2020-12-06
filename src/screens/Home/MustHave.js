@@ -41,8 +41,8 @@ class MustHave extends PureComponent {
   }
 
   onAvatarImage = item => {
-    if (item.gravatar !== undefined) {
-      if (item.gravatar.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)) {
+    if (item.src !== undefined) {
+      if (item.src.includes(CommonConstants.NOSTOREDEFAULT_TEXT_TO_SEARCH)) {
         return (
           <Image
             source={Images.NOSTORE}
@@ -59,7 +59,7 @@ class MustHave extends PureComponent {
       } else {
         return (
           <Image
-            source={{ uri: item.gravatar }}
+            source={{ uri: item.src }}
             style={{
               resizeMode: 'contain',
               height: 100,
@@ -89,12 +89,16 @@ class MustHave extends PureComponent {
     return (
       <View style={styles.mainCategoryContainer}>
         {/* Main Category 2 column */}
-        {this.state.data.map(cat => {
+        {this.props.dataValues.map(cat => {
           return (
             <View key={cat.id} style={styles.categoryItemContainer2Col}>
               <TouchableOpacity
                 key={cat.id}
-                onPress={() => { }}>
+                onPress={() => { this.props.navigation.navigate('SubCategoryProducts', {
+                  storeId: cat.id,
+                  storeName: cat.name,
+                  isFromSeasonMustHave: true
+                })}}>
                 <View
                   key={cat.id}
                   style={{
@@ -119,7 +123,7 @@ class MustHave extends PureComponent {
                     }}>
                     <Image
                       key={"catImage" + cat.id}
-                      source={{ uri: cat.gravatar }}
+                      source={{ uri: cat.image.src }}
                       style={{
                         resizeMode: 'contain',
                         height: 100,
@@ -132,7 +136,7 @@ class MustHave extends PureComponent {
                   key={"catName" + cat.id}
                   style={styles.categoryName}>
                   {' '}
-                  {cat.category_name}{' '}
+                  {cat.name}{' '}
                 </Text>
               </TouchableOpacity>
             </View>

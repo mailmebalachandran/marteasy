@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Text, Avatar, Divider } from 'react-native-elements';
-import { View, Image, Dimensions, Picker } from 'react-native';
+import { Text, Avatar, Divider, Overlay } from 'react-native-elements';
+import { View, Picker } from 'react-native';
 import StatusBarComponent from '../../components/StatusBar/StatusBarComponent';
-import MenuLoader from '../../components/Loader/MenuLoader';
 import Header from '../../components/Header/Header';
 import * as Images from '../../assets/index';
-import * as CommonConstants from '../../constants';
 import ErrorOverlay from '../../components/Errors/ErrorOverlay';
 import NetInfo from '@react-native-community/netinfo';
 import MotorAPI from '../../api/Motor/MotorAPI';
@@ -14,6 +12,7 @@ import ButtonComponent from '../../components/Button/Button';
 import ActivityOverlay from "../../components/ActivityOverlay/ActivityOverlay";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import AsyncStorage from '@react-native-community/async-storage';
 
 class MotorProductScreen extends Component {
   constructor(props) {
@@ -31,6 +30,7 @@ class MotorProductScreen extends Component {
       selectedValue: "Select a Variant",
       price: params.isVariant ? 0 : params.product.regular_price,
       deliverFee: 50,
+      overlayVisible: false
     };
   }
 
@@ -114,6 +114,20 @@ class MotorProductScreen extends Component {
   renderTotal = () => {
     let total = parseFloat(this.state.price) + parseFloat(this.state.deliverFee);
     return total;
+  }
+
+  onSubmitHandler = async () => {
+    let userDetails = await AsyncStorage.getItem('userAuth');
+    if (userDetails !== null) {
+      let userDetailsTemp = JSON.parse(userDetails);
+      let result = Object.keys(userDetailsTemp).map(function(k) {
+        return userDetailsTemp[k];
+      });
+      this.setState({overlayVisible: false});
+      this.props.navigation.navigate('Payment');
+    } else {
+      this.setState({overlayVisible: true});
+    }
   }
 
   render() {
@@ -230,6 +244,29 @@ class MotorProductScreen extends Component {
                         onPressHandler={() => this.onSubmitHandler()}
                       />
                     </View>
+                    <Overlay
+                      isVisible={this.state.overlayVisible}
+                      onBackdropPress={() => {
+                        this.setState({overlayVisible: false});
+                      }}>
+                      <View
+                        style={{
+                          height: 400,
+                          width: 250,
+                          justifyContent: 'center',
+                        }}>
+                        <Text style={{marginLeft: 40, color: 'grey'}}>
+                          User not logged in.
+                        </Text>
+                        <ButtonComponent
+                          titleValue="Login"
+                          onPressHandler={() => {
+                            this.setState({overlayVisible: false});
+                            this.props.navigation.navigate('LoginScreen');
+                          }}
+                        />
+                      </View>
+                    </Overlay>
                   </View>
                 </View>
               </>

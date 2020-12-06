@@ -12,8 +12,9 @@ const eggPatt = new RegExp("EGG");
 const bakeryPatt = new RegExp("BAKERY");
 const restaurantPatt = new RegExp("RESTAURANT");
 const electronicsPatt = new RegExp("ELECTRONICS");
-const pharmacyPatt = new RegExp("PHARMACY");
+// const pharmacyPatt = new RegExp("PHARMACY");
 const petsPatt = new RegExp("PETS");
+const BeautyPatt = new RegExp("BEAUTY");
 //Ordered Array To Display
 export const PARENT_CATS_REGEX = [
     groceriesPatt,
@@ -22,7 +23,7 @@ export const PARENT_CATS_REGEX = [
     bakeryPatt,
     restaurantPatt,
     electronicsPatt,
-    pharmacyPatt,
+    BeautyPatt,
     petsPatt
 ]
 

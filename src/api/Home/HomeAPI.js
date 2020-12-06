@@ -14,7 +14,7 @@ const GetStores = async storeId => {
 const getParentCategories = async () => {
   let res;
   try {
-    res = await Axios.get(Constants.GLOBAL_VALUE+'/wp-json/wc/v3/products/categories?parent=0');
+    res = await Axios.get(Constants.GLOBAL_VALUE+'/wp-json/wc/v3/products/categories?parent=0&per_page=99');
     return res.data;
   } catch (err) {
     return JSON.parse('{"isError" : true}');
@@ -43,9 +43,21 @@ const getTagDetails= async (id) =>{
   }
 } 
 
+const getSeasonMustHaveDetails= async (id) =>{
+  let res;
+  try{
+    res=await Axios.get(Constants.GLOBAL_VALUE+'/wp-json/wc/v3/products/categories?parent='+id);
+    return res.data;
+  }
+  catch(err){
+    return {isError: "true"}
+  }
+} 
+
 module.exports = {
   GetStores,
   getParentCategories,
   getConstants,
-  getTagDetails
+  getTagDetails,
+  getSeasonMustHaveDetails
 };

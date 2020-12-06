@@ -37,10 +37,16 @@ class SubCategoryProductScreen extends Component {
       isRunning: false,
       isShowError: false,
       IsInternetConnected: true,
+      isFromSeasonMustHave : false
     };
   }
 
   componentDidMount = async () => {
+    console.log("Hitted By Product");
+    if(this.props.route.params.isFromSeasonMustHave !== undefined && this.props.route.params.isFromSeasonMustHave !== null){
+      this.setState({isFromSeasonMustHave : this.props.route.params.isFromSeasonMustHave});
+      console.log("HItted" + this.props.route.params.isFromSeasonMustHave);
+    }
     this.onPageLoad();
   };
 
@@ -448,7 +454,7 @@ class SubCategoryProductScreen extends Component {
                     <Header
                       navigationScreenValue="Products"
                       navigation={this.props.navigation}
-                      navigateValue="SubCategoryScreen"
+                      navigateValue={this.state.isFromSeasonMustHave ? "Home1" : "SubCategoryScreen" }
                     />
                     <View
                       style={{
