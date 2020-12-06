@@ -1,24 +1,11 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer"
-import styles from "./styles";
-import { Avatar, Divider } from 'react-native-elements';
-import { MOTOR_WASH_IMAGE1, MOTOR_WASH_IMAGE8 } from "../assets/index";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Octicons from 'react-native-vector-icons/Octicons';
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import Icon from "react-native-vector-icons/MaterialIcons";
-
-
-
 
 class DrawerMenu extends Component {
-
     state = {
         viewSection: false,
         categoryList:[]

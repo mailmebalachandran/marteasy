@@ -4,7 +4,6 @@ import * as Constants from '../Constants';
 
 const registerUser = async userDetails => {
   let res;
-  console.log(Constants.ADMIN_TOKEN);
   var config = {
     method: 'post',
     url: Constants.GLOBAL_VALUE+'/wp-json/wp/v2/users/register',
@@ -15,7 +14,6 @@ const registerUser = async userDetails => {
     return { "message": "Registered successfully", "isValidated": true }
 
   } catch (err) {
-    console.log("Error",err.response);
     return { "message": err.response.data.message, "isValidated": false };
   }
 };

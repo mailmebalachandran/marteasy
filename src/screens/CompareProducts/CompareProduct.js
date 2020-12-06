@@ -472,7 +472,6 @@ class CompareProduct extends React.Component {
       await AsyncStorage.setItem('Cart', JSON.stringify(storeCount));
       // }
     } catch (err) {
-      console.log('Error Details ' + err);
     }
   };
 

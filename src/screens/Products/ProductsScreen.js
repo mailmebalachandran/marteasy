@@ -38,7 +38,6 @@ class ProductsScreen extends Component {
 
   componentDidMount = async () => {
     this.onPageLoad();
-    console.log("Got from the Season must have");
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.onPageLoad();
     });

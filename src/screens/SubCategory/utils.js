@@ -17,7 +17,6 @@ export const getOrderedRestaurantSubCats = (cats) => {
     RESTAURANTS_SUB_CATS_REGEX.map((catRegex) => {
         cats.map(cat => {
             let name = cat.name.toUpperCase();
-            console.log("name",name,catRegex)
             if(catRegex.test(name)) {
                 restaSubCats.push(cat);
             }
