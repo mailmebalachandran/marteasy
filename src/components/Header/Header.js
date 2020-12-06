@@ -9,6 +9,7 @@ import unescape from "unescape";
 class Header extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.navigateValue);
   }
   render() {
     return (
@@ -17,6 +18,7 @@ class Header extends Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate(this.props.navigateValue);
+              console.log("Hitted" + this.props.navigateValue);
             }}>
             <IconFeather name="arrow-left" size={32} color="white" ic />
           </TouchableOpacity>

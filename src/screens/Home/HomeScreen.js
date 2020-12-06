@@ -68,6 +68,7 @@ class HomeScreen extends Component {
       ],
       homePromo: HOME_PROMO_1,
       isCatLoading: false,
+      seasonMustHaveList:[]
     };
   }
 
@@ -134,6 +135,7 @@ class HomeScreen extends Component {
     }
     else if (result !== undefined) {
       this.getTagDetailsOnLoad(result.motor_wash_tag_id);
+      this.getSeasonMustHaveOnLoad(result.seasons_must_have_id);
       this.setState({ constants: result }, () => {
         this.setState({
           isLoading: false,
@@ -164,6 +166,19 @@ class HomeScreen extends Component {
     this.getStoresOnLoad();
     this.getCategoriesOnLoad();
   }
+
+  getSeasonMustHaveOnLoad = async (id) => {
+    let result = await HomeAPI.getSeasonMustHaveDetails(219);
+    if (result !== undefined && result.isError !== undefined && result.isError === true) {
+
+      this.setState({ isShowError: true, isLoading: false });
+    }
+    else if (result !== undefined) {
+      this.setState({ seasonMustHaveList: result }, () => {
+        this.setState({ isLoading: false, isShowError: false });
+      });
+    }
+  };
 
   render() {
     return (
@@ -223,7 +238,7 @@ class HomeScreen extends Component {
                 <View style={{ marginTop: 10, backgroundColor: 'white' }}>
                   <Image source={SEASONS_MUST_HAVE} style={{ width: "100%" }} resizeMode={"contain"} />
                   <MustHave
-                    dataValues={this.state.ShopList}
+                    dataValues={this.state.seasonMustHaveList}
                     navigation={this.props.navigation}
                   />
                 </View>
