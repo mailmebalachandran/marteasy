@@ -42,10 +42,8 @@ class SubCategoryProductScreen extends Component {
   }
 
   componentDidMount = async () => {
-    console.log("Hitted By Product");
     if(this.props.route.params.isFromSeasonMustHave !== undefined && this.props.route.params.isFromSeasonMustHave !== null){
       this.setState({isFromSeasonMustHave : this.props.route.params.isFromSeasonMustHave});
-      console.log("HItted" + this.props.route.params.isFromSeasonMustHave);
     }
     this.onPageLoad();
   };

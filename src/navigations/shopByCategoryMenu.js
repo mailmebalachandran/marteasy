@@ -2,25 +2,8 @@ import React, { Component } from "react";
 import { View, Text, LayoutAnimation, Platform, UIManager } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer"
 import Accordian from '../components/Accordian/accordian';
-import styles from "./styles";
-import { Avatar, Divider } from 'react-native-elements';
-import { MOTOR_WASH_IMAGE1, MOTOR_WASH_IMAGE8 } from "../assets/index";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Octicons from 'react-native-vector-icons/Octicons';
-import { TouchableOpacity, TouchableNativeFeedback } from "react-native-gesture-handler";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import HomeAPI from '../api/Home/HomeAPI';
-import unescape from "unescape";
-import DrawerMenu from "./drawerMenu";
-import Theme from "../themes/colors";
-let isAlreadyExpanded = false;
-var previousId = 0;
 class ShopByCategory extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -85,11 +68,9 @@ class ShopByCategory extends Component {
             }
         });
         this.setState({isExpanded: tempArr});
-        console.log("after set",this.state.isExpanded);
     }
 
     render() {
-        console.log("render in shop");
         return (
             <DrawerContentScrollView {...this.props}>
                 {<View style={{ flex: 1, flexDirection: "row", backgroundColor: "#4a4a4a" }}>

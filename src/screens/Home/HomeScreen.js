@@ -168,7 +168,7 @@ class HomeScreen extends Component {
   }
 
   getSeasonMustHaveOnLoad = async (id) => {
-    let result = await HomeAPI.getSeasonMustHaveDetails(219);
+    let result = await HomeAPI.getSeasonMustHaveDetails(id);
     if (result !== undefined && result.isError !== undefined && result.isError === true) {
 
       this.setState({ isShowError: true, isLoading: false });

@@ -36,7 +36,6 @@ class DrawerContainer extends Component {
         const subCatList = await getMenuSubcategories(orderedParentCats);
         this.setState({ subCatList: subCatList });
         this.focusListener = this.props.navigation.addListener("focus", async () => {
-            console.log("in focus")
             const userDetails = await testIsUserLoggedIn();
             this.setState({ username: userDetails.user_nicename })
           });
@@ -58,10 +57,8 @@ class DrawerContainer extends Component {
 
     handleCheckUserLogged = () => {
         testIsUserLoggedIn().then((res) => {
-            console.log("in then", res);
             if (res !== false) {
                 this.setState({ username: res.user_email });
-                console.log("state", this.state.username);
             }
         })
     }
@@ -78,7 +75,6 @@ class DrawerContainer extends Component {
                     </View>
                     <View style={styles.userDetail}>
                         <Text style={styles.name}>Welcome</Text>
-                        {console.log("in render", this.state.username)}
                         {this.state.username !== "" && this.state.username !== undefined ?
                             <Text style={styles.email}>{this.state.username}</Text> :
                             <Text style={styles.email}>Guest User</Text>}

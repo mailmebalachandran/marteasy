@@ -9,7 +9,6 @@ import unescape from "unescape";
 class Header extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.navigateValue);
   }
   render() {
     return (
