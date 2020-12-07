@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as ThemeColor from '../themes/colors';
 import { getparentSubCategories } from "../api/Home/SubcategoryAPI";
@@ -6,12 +7,13 @@ import { getparentSubCategories } from "../api/Home/SubcategoryAPI";
 export const getTabIcons = (route, focused, color, size) => {
     let iconName;
     let iconType;
+    console.log("route Name " + route.name);
     if (route.name === 'Home') {
-        iconName = "ios-home";
-        iconType = "ionicon";
+        iconName = Platform.OS === 'ios' ? "ios-home" : "home";
+        iconType = "ionicons";
     } else if (route.name === 'Search') {
-        iconName = "ios-search";
-        iconType = "ionicon";
+        iconName = Platform.OS === 'ios' ? "ios-search" : "search";
+        iconType = "ionicons";
     } else if (route.name === 'Categories') {
         iconName = "appstore-o";
         iconType = "antdesign";
@@ -19,6 +21,7 @@ export const getTabIcons = (route, focused, color, size) => {
         iconName = "shoppingcart";
         iconType = "antdesign";
     }
+    console.log("Icon Name : " + iconName);
     return <Icon type={iconType} name={iconName} size={size} color={color} />;
 }
 
