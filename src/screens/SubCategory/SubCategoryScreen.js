@@ -115,7 +115,7 @@ class SubCategoryScreen extends Component {
             {this.state.isLoading ? <ActivityContainer />
               : (
                 <CategoryList
-                  categories={this.getTransformedList(this.state.SubCategoryList)}
+                  categories={this.state.SubCategoryList}
                   navigation={this.props.navigation}
                   isShowStore={this.state.isShowStore}
                 />
