@@ -8,9 +8,9 @@
                 sh 'sudo npm install -g react-native-cli'
                 sh 'npm install'
                 sh 'react-native link'
-                sh 'export JAVA_HOME=/opt/jdk1.8.0_201'
-                sh 'export JRE_HOME=/opt/jdk1.8.0_201/jre'
-                sh 'export PATH=$PATH:/opt/jdk1.8.0_201/bin:/opt/jdk1.8.0_201/jre/bin'
+                sh 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.7.10-4.amzn2.0.1.x86_64/'
+                sh 'export JRE_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.265.b01-1.amzn2.0.1.x86_64/jre'
+                sh 'export PATH=$PATH:/usr/lib/jvm/java-11-openjdk-11.0.7.10-4.amzn2.0.1.x86_64/bin:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.265.b01-1.amzn2.0.1.x86_64/jre/bin'
                 sh 'echo $JAVA_HOME'
         }
         
