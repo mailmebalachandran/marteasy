@@ -16,8 +16,8 @@ import { Linking } from "react-native";
 
 class LoginScreen extends Component {
   state = {
-    UserName: "stest01",
-    Password: 'stest01',
+    UserName: "",
+    Password: "",
     IsLoaded: false,
   };
 
